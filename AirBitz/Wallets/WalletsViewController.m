@@ -23,7 +23,6 @@
 #import "WalletHeaderView.h"
 
 #define ARCHIVE_COLLAPSED @"archive_collapsed"
-#define HIGHLIGHTED @"_highlighted"
 
 @interface WalletsViewController () <BalanceViewDelegate, UITableViewDataSource, UITableViewDelegate, TransactionsViewControllerDelegate, WalletMakerViewDelegate, OfflineWalletViewControllerDelegate, WalletHeaderViewDelegate>
 {
@@ -119,7 +118,7 @@
     [self reloadWallets];
     [self.walletsTable reloadData];
 	[self updateBalanceView];
-
+	
 /*	NSString *CellIdentifier = @"WalletsHeader";
 	_activeWalletsHeaderView = [self.walletsTable dequeueReusableCellWithIdentifier:CellIdentifier];
 	((UITableViewCell *)_activeWalletsHeaderView).contentView.layer.cornerRadius = 4.0;
@@ -653,49 +652,26 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
 	
 	if((row == 0) && (row == [tableView numberOfRowsInSection:indexPath.section] - 1))
 	{
-        if (row == _highlightedRow && indexPath.section == _highlightedSection)
-        {
-            cell.bkgImage.image = [UIImage imageNamed:@"bd_highlighted_cell_single"];
-        }
-        else
-        {
-            cell.bkgImage.image = [UIImage imageNamed:@"bd_cell_single"];
-        }
+		cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bd_cell_single"]];
+        cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bd_highlighted_bd_cell_single"]];
 	}
 	else
 	{
 		if(row == 0)
 		{
-            if (row == _highlightedRow && indexPath.section == _highlightedSection)
-            {
-                cell.bkgImage.image = [UIImage imageNamed:@"bd_highlighted_cell_top"];
-            }
-            else
-            {
-                cell.bkgImage.image = [UIImage imageNamed:@"bd_cell_top"];
-            }
+            cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bd_cell_top"]];
+            cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bd_highlighted_cell_top"]];
 		}
-		else if(row == [tableView numberOfRowsInSection:indexPath.section] - 1)
+		else
+		if(row == [tableView numberOfRowsInSection:indexPath.section] - 1)
 		{
-            if (row == _highlightedRow && indexPath.section == _highlightedSection)
-            {
-                cell.bkgImage.image = [UIImage imageNamed:@"bd_highlighted_cell_bottom"];
-            }
-            else
-            {
-                cell.bkgImage.image = [UIImage imageNamed:@"bd_cell_bottom"];
-            }
+            cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bd_cell_bottom"]];
+			cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bd_highlighted_cell_bottom"]];
 		}
 		else
 		{
-            if (row == _highlightedRow && indexPath.section == _highlightedSection)
-            {
-                cell.bkgImage.image = [UIImage imageNamed:@"bd_highlighted_cell_middle"];
-            }
-            else
-            {
-                cell.bkgImage.image = [UIImage imageNamed:@"bd_cell_middle"];
-            }
+            cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bd_cell_middle"]];
+			cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bd_highlighted_cell_middle"]];
 		}
 	}
 	return cell;
