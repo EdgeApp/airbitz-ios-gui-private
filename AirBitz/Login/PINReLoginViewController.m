@@ -88,6 +88,7 @@
 - (void)PINCodeView:(APPINView *)view didEnterPIN:(NSString *)PINCode
 {
     [self showSpinner:YES];
+    [view resignFirstResponder];
     [self signIn:PINCode];
 }
 
@@ -372,6 +373,10 @@
                         [[User Singleton] resetPINLoginInvalidEntryCount];
                         [self abortPermanently];
                     }
+                    else
+                    {
+                        [_PINCodeView becomeFirstResponder];
+                    }
                     break;
                 }
                 case ABC_CC_PinExpired:
@@ -385,6 +390,7 @@
                     tABC_Error temp;
                     temp.code = result;
                     [self showFadingError:[Util errorMap:&temp]];
+                    [_PINCodeView becomeFirstResponder];
                     break;
                 }
             }
