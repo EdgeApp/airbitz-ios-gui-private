@@ -52,6 +52,8 @@
 }
 
 @property (nonatomic, weak) IBOutlet CalculatorView     *keypadView;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint *keypadBelowViewConstraint;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint *keypadAboveTabsConstraint;
 @property (nonatomic, weak) IBOutlet UILabel            *BTCLabel_TextField;
 @property (nonatomic, weak) IBOutlet UITextField        *BTC_TextField;
 @property (nonatomic, weak) IBOutlet UILabel            *USDLabel_TextField;
@@ -117,9 +119,7 @@
     // if they are on a 4" screen then move the calculator below the bottom of the screen
     if (IS_IPHONE4 )
     {
-        CGRect frame = self.keypadView.frame;
-        frame.origin.y = frame.origin.y + frame.size.height;
-        self.keypadView.frame = frame;
+//        _keypadAboveTabsConstraint;
     }
     else
     {
@@ -409,9 +409,9 @@
 
 -(void)showQRCodeViewControllerWithQRImage:(UIImage *)image address:(NSString *)address requestURI:(NSString *)strRequestURI withAmount:(SInt64)amountSatoshi  withDonation:(SInt64)donation withRequestState:(RequestState)state
 {
-	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+	UIStoryboard *autolayoutStoryboard = [UIStoryboard storyboardWithName:@"Autolayout_iPhone" bundle: nil];
 
-    _qrViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"ShowWalletQRViewController"];
+    _qrViewController = [autolayoutStoryboard instantiateViewControllerWithIdentifier:@"ShowWalletQRViewController"];
 
     Wallet *wallet = [self.arrayWallets objectAtIndex:_selectedWalletIndex];
 	_qrViewController.delegate = self;

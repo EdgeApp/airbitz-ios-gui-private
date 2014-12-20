@@ -196,6 +196,8 @@
 		7D987AFF1A48BA8C00958AAD /* BitcoinSent.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D987AF91A48BA8C00958AAD /* BitcoinSent.mp3 */; };
 		7D987B011A48BABC00958AAD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D987B001A48BABC00958AAD /* AudioToolbox.framework */; };
 		7D987B021A48BAC300958AAD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D987B001A48BABC00958AAD /* AudioToolbox.framework */; };
+		7D8DB54F1A450E6E008FE1BA /* Autolayout_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D8DB54E1A450E6E008FE1BA /* Autolayout_iPhone.storyboard */; };
+		7D8DB5501A450E6E008FE1BA /* Autolayout_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D8DB54E1A450E6E008FE1BA /* Autolayout_iPhone.storyboard */; };
 		7D989FFA1A0206960094512B /* bd_icon_facebook@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D989FF21A0206960094512B /* bd_icon_facebook@2x~iphone.png */; };
 		7D989FFB1A0206960094512B /* bd_icon_facebook@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D989FF21A0206960094512B /* bd_icon_facebook@2x~iphone.png */; };
 		7D989FFC1A0206960094512B /* bd_icon_facebook~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D989FF31A0206960094512B /* bd_icon_facebook~iphone.png */; };
@@ -1351,6 +1353,7 @@
 		7D987AF81A48BA8C00958AAD /* BitcoinReceivedPartial.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = BitcoinReceivedPartial.mp3; path = Resources/Audio/BitcoinReceivedPartial.mp3; sourceTree = "<group>"; };
 		7D987AF91A48BA8C00958AAD /* BitcoinSent.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = BitcoinSent.mp3; path = Resources/Audio/BitcoinSent.mp3; sourceTree = "<group>"; };
 		7D987B001A48BABC00958AAD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		7D8DB54E1A450E6E008FE1BA /* Autolayout_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Autolayout_iPhone.storyboard; sourceTree = "<group>"; };
 		7D989FF21A0206960094512B /* bd_icon_facebook@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bd_icon_facebook@2x~iphone.png"; sourceTree = "<group>"; };
 		7D989FF31A0206960094512B /* bd_icon_facebook~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bd_icon_facebook~iphone.png"; sourceTree = "<group>"; };
 		7D989FF41A0206960094512B /* bd_icon_foursquare@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bd_icon_foursquare@2x~iphone.png"; sourceTree = "<group>"; };
@@ -2117,6 +2120,23 @@
 			path = "Google Drive";
 			sourceTree = "<group>";
 		};
+		7D06C5911A365E7300FDC8DF /* Interface Layouts */ = {
+			isa = PBXGroup;
+			children = (
+				7D8DB54E1A450E6E008FE1BA /* Autolayout_iPhone.storyboard */,
+				B57C209718C2502D005D7245 /* BalanceView~iphone.xib */,
+				B57C209918C25042005D7245 /* BalanceView~ipad.xib */,
+				B56553F318EDDD26005B35E1 /* ButtonSelectorView~iphone.xib */,
+				B56553EB18ECC8C2005B35E1 /* CalculatorView~iphone.xib */,
+				B561E1A418D2572D002DCDC2 /* InfoView~ipad.xib */,
+				B561E1A518D2572D002DCDC2 /* InfoView~iphone.xib */,
+				B5675B5D18A17F6F002E0703 /* Main_iPhone.storyboard */,
+				B5675B6018A17F6F002E0703 /* Main_iPad.storyboard */,
+				68C3285619804BFE007DA4C2 /* SyncView~iphone.xib */,
+			);
+			name = "Interface Layouts";
+			sourceTree = "<group>";
+		};
 		7D5E1CB919AFB21F00943A81 /* ABC-testnet */ = {
 			isa = PBXGroup;
 			children = (
@@ -2396,14 +2416,10 @@
 				B5FD394618F240E600BE2670 /* AutoCompleteTextField.m */,
 				B57C209418C25011005D7245 /* BalanceView.h */,
 				B57C209518C25011005D7245 /* BalanceView.m */,
-				B57C209718C2502D005D7245 /* BalanceView~iphone.xib */,
-				B57C209918C25042005D7245 /* BalanceView~ipad.xib */,
 				B56553F018EDDCF8005B35E1 /* ButtonSelectorView.h */,
 				B56553F118EDDCF8005B35E1 /* ButtonSelectorView.m */,
-				B56553F318EDDD26005B35E1 /* ButtonSelectorView~iphone.xib */,
 				B56553ED18ECC8E0005B35E1 /* CalculatorView.h */,
 				B56553EE18ECC8E0005B35E1 /* CalculatorView.m */,
-				B56553EB18ECC8C2005B35E1 /* CalculatorView~iphone.xib */,
 				4C3C309E19199B4F006923DE /* CommonTypes.h */,
 				B5C0A8D518E6228E008F302C /* Config.h */,
 				B58FF763199DC879002C3D45 /* Contact.h */,
@@ -2420,15 +2436,12 @@
 				B5137C1918A41A4E00DA4A34 /* DL_URLServer */,
 				B561E1A218D2572D002DCDC2 /* InfoView.h */,
 				B561E1A318D2572D002DCDC2 /* InfoView.m */,
-				B561E1A418D2572D002DCDC2 /* InfoView~ipad.xib */,
-				B561E1A518D2572D002DCDC2 /* InfoView~iphone.xib */,
+				7D06C5911A365E7300FDC8DF /* Interface Layouts */,
 				B5137C1318A40EDA00DA4A34 /* LatoLabel.h */,
 				B5137C1418A40EDA00DA4A34 /* LatoLabel.m */,
 				B5F2E9BC18DA911A008ACF88 /* Login */,
 				B5137C1618A40F3900DA4A34 /* MontserratLabel.h */,
 				B5137C1718A40F3900DA4A34 /* MontserratLabel.m */,
-				B5675B5D18A17F6F002E0703 /* Main_iPhone.storyboard */,
-				B5675B6018A17F6F002E0703 /* Main_iPad.storyboard */,
 				B57C207818C14687005D7245 /* MainViewController.h */,
 				B57C207918C14687005D7245 /* MainViewController.m */,
 				B55D0FE618E233A80035DCC8 /* MinCharTextField.h */,
@@ -2449,7 +2462,6 @@
 				4C3C309A19199AB6006923DE /* StrokeGradientButton */,
 				B5FD393218F06FD800BE2670 /* StylizedTextField.h */,
 				B5FD393318F06FD800BE2670 /* StylizedTextField.m */,
-				68C3285619804BFE007DA4C2 /* SyncView~iphone.xib */,
 				6893E6C819783FED0092DA04 /* SyncView.h */,
 				6893E6C919783FED0092DA04 /* SyncView.m */,
 				B5628BF5199BEC7C0077DA1C /* TransferService.h */,
@@ -3440,6 +3452,7 @@
 				7D98ADF619A7C550003D2BF6 /* logo~iphone.png in Resources */,
 				7D98ADF719A7C550003D2BF6 /* SyncView~iphone.xib in Resources */,
 				7D98ADF819A7C550003D2BF6 /* btn_5@2x~iphone.png in Resources */,
+				7D8DB5501A450E6E008FE1BA /* Autolayout_iPhone.storyboard in Resources */,
 				7D98ADF919A7C550003D2BF6 /* btn_add@2x~iphone.png in Resources */,
 				7D98ADFA19A7C550003D2BF6 /* ConfirmationSliderView.xib in Resources */,
 				7D98ADFB19A7C550003D2BF6 /* Lato-BoldItalic.ttf in Resources */,
@@ -3803,6 +3816,7 @@
 				7D989FFC1A0206960094512B /* bd_icon_facebook~iphone.png in Resources */,
 				7DE6D9D819EDFF6700C6FB8E /* btn_expand~iphone.png in Resources */,
 				B58FF739199C3D7B002C3D45 /* BLE_photo@2x.png in Resources */,
+				7D8DB54F1A450E6E008FE1BA /* Autolayout_iPhone.storyboard in Resources */,
 				7D8270B719F8976E003F275D /* btn_td_red~iphone.png in Resources */,
 				B516C1F018C7E7F2008CC6A1 /* btn_locateMe@2x~iphone.png in Resources */,
 				B5F2E9DB18DCE475008ACF88 /* Red-X~iphone.png in Resources */,
