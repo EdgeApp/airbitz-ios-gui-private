@@ -145,11 +145,11 @@ typedef enum eAppMode
  */
 - (void)loadUserViews
 {
-	UIStoryboard *autolayoutStoryboard = [UIStoryboard storyboardWithName:@"Autolayout_iPhone" bundle: nil];
-	_requestViewController = [autolayoutStoryboard instantiateViewControllerWithIdentifier:@"RequestViewController"];
-	_requestViewController.delegate = self;
+//	UIStoryboard *autolayoutStoryboard = [UIStoryboard storyboardWithName:@"Autolayout_iPhone" bundle: nil];
 
 	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+	_requestViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"RequestViewController"];
+	_requestViewController.delegate = self;
 	_sendViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"SendViewController"];
 	_walletsViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"WalletsViewController"];
 	_settingsViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"SettingsViewController"];
