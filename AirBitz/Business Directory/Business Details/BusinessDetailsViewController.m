@@ -1059,5 +1059,12 @@ typedef NS_ENUM(NSUInteger, CellType) {
     return UIPhotoGalleryDoubleTapHandlerNone;
 }
 
+#pragma mark - Rotation Methods
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
 @end
 

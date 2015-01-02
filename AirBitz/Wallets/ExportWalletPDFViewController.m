@@ -132,4 +132,11 @@
     }
 }
 
+#pragma mark - Rotation Methods
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
 @end

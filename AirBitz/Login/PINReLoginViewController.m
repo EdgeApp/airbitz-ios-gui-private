@@ -420,4 +420,11 @@
     _bTouchesEnabled = _spinnerView.hidden;
 }
 
+#pragma mark - Rotation Methods
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
 @end

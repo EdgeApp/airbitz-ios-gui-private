@@ -2318,4 +2318,11 @@ typedef enum eMapDisplayState
     businessDetailsController = nil;
 }
 
+#pragma mark - Rotation Methods
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
 @end

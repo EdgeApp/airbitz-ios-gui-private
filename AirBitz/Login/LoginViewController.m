@@ -592,4 +592,11 @@ void ABC_Request_Callback(const tABC_RequestResults *pResults)
     }
 }
 
+#pragma mark - Rotation Methods
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
 @end

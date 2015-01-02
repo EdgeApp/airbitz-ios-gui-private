@@ -877,4 +877,11 @@ void ABC_SignUp_Request_Callback(const tABC_RequestResults *pResults)
     [self Back:nil];
 }
 
+#pragma mark - Rotation Methods
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
 @end

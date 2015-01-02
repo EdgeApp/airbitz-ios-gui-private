@@ -1664,4 +1664,11 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
 	_debugViewController = nil;
 }
 
+#pragma mark - Rotation Methods
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
 @end

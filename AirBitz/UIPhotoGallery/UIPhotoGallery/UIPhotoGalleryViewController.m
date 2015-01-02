@@ -253,4 +253,11 @@
     [vPhotoGallery scrollToBesidePage:1 animated:YES];
 }
 
+#pragma mark - Rotation Methods
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
 @end

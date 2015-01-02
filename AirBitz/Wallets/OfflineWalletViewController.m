@@ -343,4 +343,11 @@ extern void QRcode_free(QRcode *qrcode);
 	[self.delegate offlineWalletViewControllerDidFinish:self];
 }
 
+#pragma mark - Rotation Methods
+
+- (BOOL)shouldAutorotate
+{
+    return NO;
+}
+
 @end
