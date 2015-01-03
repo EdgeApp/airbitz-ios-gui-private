@@ -778,11 +778,4 @@ shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
     [self.view setNeedsDisplay];
 }
 
-#pragma mark - Rotation Methods
-
-- (BOOL)shouldAutorotate
-{
-    return NO;
-}
-
 @end

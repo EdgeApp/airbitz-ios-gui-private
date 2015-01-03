@@ -69,11 +69,5 @@
     self.messageLabel.frame = frame;
 }
 
-#pragma mark - Rotation Methods
-
-- (BOOL)shouldAutorotate
-{
-    return NO;
-}
 
 @end

@@ -943,11 +943,4 @@ typedef enum eAppMode
     [self displayNextNotification];
 }
 
-#pragma mark - Rotation Methods
-
-- (BOOL)shouldAutorotate
-{
-    return NO;
-}
-
 @end

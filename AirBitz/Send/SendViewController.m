@@ -1734,11 +1734,5 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
     }
 }
 
-#pragma mark - Rotation Methods
-
-- (BOOL)shouldAutorotate
-{
-    return NO;
-}
 
 @end

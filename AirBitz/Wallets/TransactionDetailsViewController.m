@@ -1790,11 +1790,4 @@ typedef enum eRequestType
     [self exit:YES];
 }
 
-#pragma mark - Rotation Methods
-
-- (BOOL)shouldAutorotate
-{
-    return NO;
-}
-
 @end
