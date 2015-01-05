@@ -943,4 +943,29 @@ typedef enum eAppMode
     [self displayNextNotification];
 }
 
+#pragma mark - Rotation methods
+
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    // defaults to this controller's allowed orientation(s)
+    NSUInteger orientations = UIInterfaceOrientationMaskPortrait;
+    
+/*  the following code will function after we've switched to a
+    UINavigationController and UITabBar navigation hierarchy
+ 
+    // include allowed orientations of child view controllers
+    orientations = orientations | [self.presentedViewController supportedInterfaceOrientations];
+    for (UIViewController *controller in self.childViewControllers)
+    {
+        orientations = orientations | [controller supportedInterfaceOrientations];
+    }*/
+ 
+    return orientations;
+}
+
 @end

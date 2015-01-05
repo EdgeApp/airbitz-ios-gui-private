@@ -1328,4 +1328,11 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     }
 }
 
+#pragma mark - Rotation methods
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
 @end

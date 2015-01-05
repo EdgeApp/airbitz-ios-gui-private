@@ -122,6 +122,8 @@
 		7D05AB831A0304DD00AFA5F7 /* bd_cell_middle_white@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D05AB801A0304DD00AFA5F7 /* bd_cell_middle_white@2x~iphone.png */; };
 		7D05AB841A0304DD00AFA5F7 /* bd_cell_middle_white~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D05AB811A0304DD00AFA5F7 /* bd_cell_middle_white~iphone.png */; };
 		7D05AB851A0304DD00AFA5F7 /* bd_cell_middle_white~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D05AB811A0304DD00AFA5F7 /* bd_cell_middle_white~iphone.png */; };
+		7D0724091A5779B6007F9FAD /* UINavigationController+Rotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0724081A5779B6007F9FAD /* UINavigationController+Rotation.m */; };
+		7D07240A1A5779B6007F9FAD /* UINavigationController+Rotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0724081A5779B6007F9FAD /* UINavigationController+Rotation.m */; };
 		7D23D56319BD612F0042B87A /* background-errormessage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D23D56219BD612F0042B87A /* background-errormessage@2x.png */; };
 		7D23D56419BD612F0042B87A /* background-errormessage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D23D56219BD612F0042B87A /* background-errormessage@2x.png */; };
 		7D23D57019BE8E130042B87A /* bd_highlighted_cell_bottom@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D23D56A19BE8E130042B87A /* bd_highlighted_cell_bottom@2x~iphone.png */; };
@@ -188,6 +190,8 @@
 		7D8B59C51A328895000AC178 /* HockeySDK.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 7D8B59C01A328895000AC178 /* HockeySDK.xcconfig */; };
 		7D8B59C61A328895000AC178 /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7D8B59C11A328895000AC178 /* HockeySDKResources.bundle */; };
 		7D8B59C71A328895000AC178 /* HockeySDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7D8B59C11A328895000AC178 /* HockeySDKResources.bundle */; };
+		7D8DB54F1A450E6E008FE1BA /* Autolayout_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D8DB54E1A450E6E008FE1BA /* Autolayout_iPhone.storyboard */; };
+		7D8DB5501A450E6E008FE1BA /* Autolayout_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D8DB54E1A450E6E008FE1BA /* Autolayout_iPhone.storyboard */; };
 		7D987AFA1A48BA8C00958AAD /* BitcoinReceived.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D987AF71A48BA8C00958AAD /* BitcoinReceived.mp3 */; };
 		7D987AFB1A48BA8C00958AAD /* BitcoinReceived.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D987AF71A48BA8C00958AAD /* BitcoinReceived.mp3 */; };
 		7D987AFC1A48BA8C00958AAD /* BitcoinReceivedPartial.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D987AF81A48BA8C00958AAD /* BitcoinReceivedPartial.mp3 */; };
@@ -196,8 +200,6 @@
 		7D987AFF1A48BA8C00958AAD /* BitcoinSent.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7D987AF91A48BA8C00958AAD /* BitcoinSent.mp3 */; };
 		7D987B011A48BABC00958AAD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D987B001A48BABC00958AAD /* AudioToolbox.framework */; };
 		7D987B021A48BAC300958AAD /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D987B001A48BABC00958AAD /* AudioToolbox.framework */; };
-		7D8DB54F1A450E6E008FE1BA /* Autolayout_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D8DB54E1A450E6E008FE1BA /* Autolayout_iPhone.storyboard */; };
-		7D8DB5501A450E6E008FE1BA /* Autolayout_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D8DB54E1A450E6E008FE1BA /* Autolayout_iPhone.storyboard */; };
 		7D989FFA1A0206960094512B /* bd_icon_facebook@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D989FF21A0206960094512B /* bd_icon_facebook@2x~iphone.png */; };
 		7D989FFB1A0206960094512B /* bd_icon_facebook@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D989FF21A0206960094512B /* bd_icon_facebook@2x~iphone.png */; };
 		7D989FFC1A0206960094512B /* bd_icon_facebook~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D989FF31A0206960094512B /* bd_icon_facebook~iphone.png */; };
@@ -1304,6 +1306,8 @@
 		6BECB1B8C9CE1002526F24AB /* Pods-Airbitz.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Airbitz.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Airbitz/Pods-Airbitz.debug.xcconfig"; sourceTree = "<group>"; };
 		7D05AB801A0304DD00AFA5F7 /* bd_cell_middle_white@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bd_cell_middle_white@2x~iphone.png"; sourceTree = "<group>"; };
 		7D05AB811A0304DD00AFA5F7 /* bd_cell_middle_white~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bd_cell_middle_white~iphone.png"; sourceTree = "<group>"; };
+		7D0724071A5779B6007F9FAD /* UINavigationController+Rotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Rotation.h"; sourceTree = "<group>"; };
+		7D0724081A5779B6007F9FAD /* UINavigationController+Rotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Rotation.m"; sourceTree = "<group>"; };
 		7D23D56219BD612F0042B87A /* background-errormessage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background-errormessage@2x.png"; sourceTree = "<group>"; };
 		7D23D56A19BE8E130042B87A /* bd_highlighted_cell_bottom@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bd_highlighted_cell_bottom@2x~iphone.png"; sourceTree = "<group>"; };
 		7D23D56B19BE8E130042B87A /* bd_highlighted_cell_bottom~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bd_highlighted_cell_bottom~iphone.png"; sourceTree = "<group>"; };
@@ -1349,11 +1353,11 @@
 		7D8B59BE1A328895000AC178 /* HockeySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = HockeySDK.framework; sourceTree = "<group>"; };
 		7D8B59C01A328895000AC178 /* HockeySDK.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = HockeySDK.xcconfig; sourceTree = "<group>"; };
 		7D8B59C11A328895000AC178 /* HockeySDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HockeySDKResources.bundle; sourceTree = "<group>"; };
+		7D8DB54E1A450E6E008FE1BA /* Autolayout_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Autolayout_iPhone.storyboard; sourceTree = "<group>"; };
 		7D987AF71A48BA8C00958AAD /* BitcoinReceived.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = BitcoinReceived.mp3; path = Resources/Audio/BitcoinReceived.mp3; sourceTree = "<group>"; };
 		7D987AF81A48BA8C00958AAD /* BitcoinReceivedPartial.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = BitcoinReceivedPartial.mp3; path = Resources/Audio/BitcoinReceivedPartial.mp3; sourceTree = "<group>"; };
 		7D987AF91A48BA8C00958AAD /* BitcoinSent.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = BitcoinSent.mp3; path = Resources/Audio/BitcoinSent.mp3; sourceTree = "<group>"; };
 		7D987B001A48BABC00958AAD /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		7D8DB54E1A450E6E008FE1BA /* Autolayout_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Autolayout_iPhone.storyboard; sourceTree = "<group>"; };
 		7D989FF21A0206960094512B /* bd_icon_facebook@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bd_icon_facebook@2x~iphone.png"; sourceTree = "<group>"; };
 		7D989FF31A0206960094512B /* bd_icon_facebook~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bd_icon_facebook~iphone.png"; sourceTree = "<group>"; };
 		7D989FF41A0206960094512B /* bd_icon_foursquare@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bd_icon_foursquare@2x~iphone.png"; sourceTree = "<group>"; };
@@ -2472,9 +2476,11 @@
 				B5137C2518A435BD00DA4A34 /* TouchJSON */,
 				B5376E1B18B55D920099EF8F /* UIImage+Colorize.h */,
 				B5376E1C18B55D920099EF8F /* UIImage+Colorize.m */,
-				B5C0A9B618EA0DD8008F302C /* Wallets */,
+				7D0724071A5779B6007F9FAD /* UINavigationController+Rotation.h */,
+				7D0724081A5779B6007F9FAD /* UINavigationController+Rotation.m */,
 				4C5D8C59192AB8E70015BB3C /* Util.h */,
 				4C5D8C5A192AB8E70015BB3C /* Util.m */,
+				B5C0A9B618EA0DD8008F302C /* Wallets */,
 				4C90461818C91DF200179D9C /* ZBarSDK */,
 				B5675B6618A17F6F002E0703 /* Images.xcassets */,
 				B5675B8718A180D9002E0703 /* Resources */,
@@ -4173,6 +4179,7 @@
 				7D98ACC719A7C550003D2BF6 /* TabBarView.m in Sources */,
 				7D98ACC819A7C550003D2BF6 /* CommonOverviewCell.m in Sources */,
 				7D98ACC919A7C550003D2BF6 /* AppDelegate.m in Sources */,
+				7D07240A1A5779B6007F9FAD /* UINavigationController+Rotation.m in Sources */,
 				7D98ACCA19A7C550003D2BF6 /* CategoriesViewController.m in Sources */,
 				7D98ACCB19A7C550003D2BF6 /* InfoView.m in Sources */,
 				7D98ACCC19A7C550003D2BF6 /* WalletMakerView.m in Sources */,
@@ -4295,6 +4302,7 @@
 				B59C161B18C1436300AEA789 /* TabBarView.m in Sources */,
 				B5C0A99E18EA0C10008F302C /* CommonOverviewCell.m in Sources */,
 				B5675B5C18A17F6F002E0703 /* AppDelegate.m in Sources */,
+				7D0724091A5779B6007F9FAD /* UINavigationController+Rotation.m in Sources */,
 				B55A031D18EB569000845090 /* CategoriesViewController.m in Sources */,
 				B561E1A618D2572D002DCDC2 /* InfoView.m in Sources */,
 				B5FD392F18EFC30E00BE2670 /* WalletMakerView.m in Sources */,
