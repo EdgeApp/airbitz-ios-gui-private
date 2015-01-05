@@ -952,20 +952,14 @@ typedef enum eAppMode
 
 - (NSUInteger)supportedInterfaceOrientations
 {
-    // defaults to this controller's allowed orientation(s)
-    NSUInteger orientations = UIInterfaceOrientationMaskPortrait;
-    
-/*  the following code will function after we've switched to a
-    UINavigationController and UITabBar navigation hierarchy
- 
-    // include allowed orientations of child view controllers
-    orientations = orientations | [self.presentedViewController supportedInterfaceOrientations];
-    for (UIViewController *controller in self.childViewControllers)
+    // undo this temp hack by re-implementing the view navigation hierarchy to
+    // use a UINavigationController and its pushViewController: method
+    if (_appMode == APP_MODE_REQUEST && [User isLoggedIn])
     {
-        orientations = orientations | [controller supportedInterfaceOrientations];
-    }*/
- 
-    return orientations;
+        return UIInterfaceOrientationMaskAllButUpsideDown;
+    }
+
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 @end
