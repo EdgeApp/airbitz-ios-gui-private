@@ -76,6 +76,7 @@ static NSString *kTimerStart = @"start";
 #define SUB_SCREEN_HEIGHT   (SCREEN_HEIGHT - TOOLBAR_HEIGHT)
 #define HEADER_HEIGHT       64
 #define DISPLAY_AREA_HEIGHT (SUB_SCREEN_HEIGHT - HEADER_HEIGHT)
+#define STATUS_BAR_HEIGHT   20
 
 #define KEYBOARD_HEIGHT     216
 
@@ -110,6 +111,7 @@ typedef enum eTabBarButton
 #define NOTIFICATION_NOTIFICATION_RECEIVED              @"Notification_Received"
 #define NOTIFICATION_SWEEP                              @"Notification_Sweep"
 #define NOTIFICATION_VIEW_SWEEP_TX                      @"Notification_View_Sweep_Transaction_Details"
+#define NOTIFICATION_STATUS_BAR_CHANGE                  @"Notification_Status_Bar_Change"
 
 #define KEY_ERROR_CODE                                  @"Error_Code"
 #define KEY_TX_DETAILS_EXITED_TX                        @"transaction"
