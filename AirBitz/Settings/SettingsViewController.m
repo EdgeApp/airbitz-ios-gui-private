@@ -16,6 +16,7 @@
 #import "ButtonCell.h"
 #import "ButtonOnlyCell.h"
 #import "SignUpViewController.h"
+#import "PluginViewController.h"
 #import "DebugViewController.h"
 #import "PasswordRecoveryViewController.h"
 #import "PopupPickerView.h"
@@ -41,12 +42,13 @@
 #define SECTION_DEFAULT_EXCHANGE        4
 #define SECTION_LOGOUT                  5
 #define SECTION_DEBUG                   6
+#define SECTION_PLUGIN                  7
 
 // If we are in debug include the DEBUG section in settings
 #if (DEBUG || 1) // Always enable debug section for now
-#define SECTION_COUNT                   7
+#define SECTION_COUNT                   8
 #else 
-#define SECTION_COUNT                   6
+#define SECTION_COUNT                   7
 #endif
 
 #define DENOMINATION_CHOICES            3
@@ -141,6 +143,7 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
     SpendingLimitsViewController    *_spendLimitsController;
     TwoFactorShowViewController     *_tfaViewController;
     DebugViewController             *_debugViewController;
+    PluginViewController            *_pluginViewController;
     BOOL                            _bKeyboardIsShown;
 	BOOL							_showBluetoothOption;
     CGRect                          _frameStart;
@@ -497,6 +500,35 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
                      completion:^(BOOL finished) {
                          [[UIApplication sharedApplication] endIgnoringInteractionEvents];
     }];
+}
+
+- (void)bringUpPluginView
+{
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Plugins" bundle: nil];
+    _pluginViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"PluginViewController"];
+    _pluginViewController.delegate = self;
+
+    CGRect frame = self.view.bounds;
+    frame.origin.x = frame.size.width;
+    _pluginViewController.view.frame = frame;
+    [self.view addSubview:_pluginViewController.view];
+
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+    [UIView animateWithDuration:0.35
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^
+    {
+        _pluginViewController.view.frame = self.view.bounds;
+    }
+                     completion:^(BOOL finished) {
+                         [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+    }];
+}
+
+- (void)PluginViewControllerDone:(PluginViewController *)controller
+{
+    _pluginViewController = nil;
 }
 
 // returns how much the current first responder is obscured by the keyboard
@@ -1134,6 +1166,21 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
 	return cell;
 }
 
+- (ButtonOnlyCell *)getPluginButton:(UITableView *)tableView withIndexPath:(NSIndexPath *)indexPath
+{
+    ButtonOnlyCell *cell;
+    static NSString *cellIdentifier = @"ButtonOnlyCell";
+    cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (nil == cell)
+    {
+        cell = [[ButtonOnlyCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
+    cell.delegate = self;
+    [cell.button setTitle:NSLocalizedString(@"Plugin", @"plugin text") forState:UIControlStateNormal];
+    cell.tag = (indexPath.section << 8) | (indexPath.row);
+	return cell;
+}
+
 #pragma mark - UITableView Delegates
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -1180,6 +1227,10 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
         case SECTION_DEBUG:
             return 1;
             break;
+
+        case SECTION_PLUGIN:
+            return 1;
+            break;
             
         default:
             return 0;
@@ -1191,7 +1242,8 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
 {
 	if ((indexPath.section == SECTION_OPTIONS) 
         || (indexPath.section == SECTION_LOGOUT)
-            || (indexPath.section == SECTION_DEBUG))
+        || (indexPath.section == SECTION_DEBUG)
+        || (indexPath.section == SECTION_PLUGIN))
 	{
 		return 47.0;
 	}
@@ -1201,7 +1253,7 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-	if (section == SECTION_LOGOUT || section == SECTION_DEBUG)
+	if (section == SECTION_LOGOUT || section == SECTION_DEBUG || section == SECTION_PLUGIN)
 	{
 		return 0.0;
 	}
@@ -1249,6 +1301,8 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
 		cell = [self getLogoutButton:tableView withIndexPath:indexPath];
 	} else if (indexPath.section == SECTION_DEBUG) {
 		cell = [self getDebugButton:tableView withIndexPath:indexPath];
+	} else if (indexPath.section == SECTION_PLUGIN) {
+		cell = [self getPluginButton:tableView withIndexPath:indexPath];
 	}
 	else
 	{
@@ -1393,6 +1447,9 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
             break;
 
         case SECTION_DEBUG:
+            break;
+
+        case SECTION_PLUGIN:
             break;
 
         default:
@@ -1615,6 +1672,8 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
         });
     } else if (section == SECTION_DEBUG) {
         [self bringUpDebugView];
+    } else if (section == SECTION_PLUGIN) {
+        [self bringUpPluginView];
     }
 }
 
