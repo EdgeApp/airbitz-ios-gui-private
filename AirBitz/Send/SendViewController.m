@@ -331,7 +331,13 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
 	}
 }
 
-#if !TARGET_IPHONE_SIMULATOR
+#if TARGET_IPHONE_SIMULATOR
+
+-(void)startQRReader
+{
+}
+
+#else
 
 -(void)startQRReader
 {
