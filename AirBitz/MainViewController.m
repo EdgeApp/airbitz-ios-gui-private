@@ -1299,7 +1299,7 @@ typedef enum eAppMode
 }
 
 - (void)handlePan:(UIPanGestureRecognizer *) recognizer {
-    [slideoutView handleRecognizer:recognizer];
+    [slideoutView handleRecognizer:recognizer fromBlock:NO];
 }
 
 @end
