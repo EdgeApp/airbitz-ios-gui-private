@@ -1254,7 +1254,7 @@ typedef enum eAppMode
 
 - (void)slideoutAccount
 {
-    [slideoutView showSlideout:NO];
+    NSLog(@"MainViewController.slideoutAccount");
 }
 
 - (void)slideoutSettings
@@ -1273,6 +1273,7 @@ typedef enum eAppMode
         [[User Singleton] clear];
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [self SettingsViewControllerDone:nil];
+            [self launchViewControllerBasedOnAppMode];
         });
     });
 }
@@ -1367,8 +1368,9 @@ typedef enum eAppMode
 
     if(self->slideoutView.center.x < self.view.bounds.size.width - self->slideoutView.bounds.size.width / 2)
     {
+        
     }
-    else{
+    else {
         self->slideoutView.center = CGPointMake(self->slideoutView.center.x + translation.x,
                                          self->slideoutView.center.y);
         [recognizer setTranslation:CGPointMake(0, 0) inView:self.view];
