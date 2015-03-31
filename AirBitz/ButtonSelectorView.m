@@ -15,7 +15,9 @@
 	CGRect      _originalButtonFrame;
 	UITableView *_selectionTable;
 	CGRect      _originalFrame;
-	float       _amountToGrow;
+    float       _amountToGrow;
+    UIButton                    *_blockingButton;
+    UIView                      *_parentView;
 }
 
 @end
@@ -46,8 +48,6 @@
 		
 		_originalButtonFrame = self.button.frame;
 		_originalFrame = self.frame;
-		//cw temp
-		//self.arrayItemsToSelect = [NSArray arrayWithObjects:@"item 1", @"item 2", @"item 3", @"item 4", @"item 5", @"item 6", @"item 7", @"item 8", @"item 9", @"item 10", @"item 11", @"item 12" , nil];
     }
     return self;
 }
@@ -132,22 +132,50 @@
 	}
 }
 
+- (void)addBlockingButton:(UIView *)view
+{
+    if(!_blockingButton)
+    {
+        _blockingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        CGRect frame = view.bounds;
+        _blockingButton.frame = frame;
+        _blockingButton.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.3];
+        [view insertSubview:_blockingButton belowSubview:view];
+        
+        [_blockingButton addTarget:self
+                            action:@selector(blockingButtonHit:)
+                  forControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+- (void)removeBlockingButton:(UIView *)view
+{
+    [_blockingButton removeFromSuperview];
+    _blockingButton = nil;
+}
+
+- (void)blockingButtonHit:(UIButton *)button
+{
+    [self hideTable];
+}
+
+
 - (void)showTable
 {
     float yOriginOffset;
-    if ([self.textLabel.text isEqualToString:@""])
-    {
+//    if ([self.textLabel.text isEqualToString:@""])
+//    {
          yOriginOffset = self.button.frame.size.height;
-    }
-    else
-    {
-        yOriginOffset = self.button.frame.size.height / 2;
-    }
+//    }
+//    else
+//    {
+//        yOriginOffset = self.button.frame.size.height / 2;
+//    }
 	
 	CGRect tableFrame = self.button.frame;
-	tableFrame.origin.x += 1.0;
+	tableFrame.origin.x += 1.0 + self.frame.origin.x;
 	tableFrame.size.width -= 2.0;
-	tableFrame.origin.y += yOriginOffset;
+	tableFrame.origin.y += yOriginOffset + self.frame.origin.y;
 	tableFrame.size.height = 0.0;
 	
 	_selectionTable = [[UITableView alloc] initWithFrame:tableFrame];
@@ -156,8 +184,9 @@
 	_selectionTable.layer.cornerRadius = 6.0;
 	_selectionTable.scrollEnabled = YES;
 	_selectionTable.allowsSelection = YES;
-	_selectionTable.userInteractionEnabled = YES;
-	[self.button.superview insertSubview:_selectionTable belowSubview:self.button];
+    _selectionTable.userInteractionEnabled = YES;
+    [self addBlockingButton:self.superview];
+	[self.superview insertSubview:_selectionTable aboveSubview:_blockingButton];
 	
     [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
 	//make the table expand from the bottom of the button
@@ -200,7 +229,7 @@
 	 completion:^(BOOL finished)
 	 {
          [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-		 [_selectionTable reloadData];
+         [_selectionTable reloadData];
 	 }];
 	
 }
@@ -251,6 +280,8 @@
 		  {
 			  [_selectionTable removeFromSuperview];
 			  _selectionTable = nil;
+              
+              [self removeBlockingButton:_selectionTable];
 		  }];
 
 	 }];

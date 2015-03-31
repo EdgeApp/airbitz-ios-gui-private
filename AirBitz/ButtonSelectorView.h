@@ -26,6 +26,7 @@
 
 - (void)setButtonWidth:(CGFloat)width;
 - (void)close; /* closes button table and shrinks button if open */
+- (void)addBlockingButton:(UIView *)view;
 
 @end
 
