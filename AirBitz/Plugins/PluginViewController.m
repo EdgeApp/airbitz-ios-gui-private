@@ -293,17 +293,17 @@ static const NSString *PROTOCOL = @"bridge://";
     NSString *category = [args objectForKey:@"category"];
     NSString *notes = [args objectForKey:@"notes"];
 
-	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
-	_sendConfirmationViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"SendConfirmationViewController"];
-	_sendConfirmationViewController.delegate = self;
-	_sendConfirmationViewController.sendToAddress = toAddress;
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+    _sendConfirmationViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"SendConfirmationViewController"];
+    _sendConfirmationViewController.delegate = self;
+    _sendConfirmationViewController.sendToAddress = toAddress;
     _sendConfirmationViewController.bAddressIsWalletUUID = NO;
     _sendConfirmationViewController.wallet = _sendWallet;
-	_sendConfirmationViewController.amountToSendSatoshi = amountSatoshi;
-	_sendConfirmationViewController.overrideCurrency = amountFiat;
-	_sendConfirmationViewController.nameLabel = label;
-	_sendConfirmationViewController.category = category;
-	_sendConfirmationViewController.notes = notes;
+    _sendConfirmationViewController.amountToSendSatoshi = amountSatoshi;
+    _sendConfirmationViewController.overrideCurrency = amountFiat;
+    _sendConfirmationViewController.nameLabel = label;
+    _sendConfirmationViewController.category = category;
+    _sendConfirmationViewController.notes = notes;
     _sendConfirmationViewController.bAdvanceToTx = NO;
     [Util animateController:_sendConfirmationViewController parentController:self];
 }
@@ -313,7 +313,7 @@ static const NSString *PROTOCOL = @"bridge://";
     NSString *cbid = [params objectForKey:@"cbid"];
     NSDictionary *args = [params objectForKey:@"args"];
 
-	tABC_Error error;
+    tABC_Error error;
     NSDictionary *results = nil;
 
     Wallet *wallet = [CoreBridge getWallet:[args objectForKey:@"id"]];
@@ -322,22 +322,22 @@ static const NSString *PROTOCOL = @"bridge://";
     memset(&details, 0, sizeof(tABC_TxDetails));
     details.amountSatoshi = [[args objectForKey:@"amountSatoshi"] longValue];
     details.amountCurrency = [[args objectForKey:@"amountFiat"] doubleValue];
-	details.amountFeesAirbitzSatoshi = 0;
-	details.amountFeesMinersSatoshi = 0;
+    details.amountFeesAirbitzSatoshi = 0;
+    details.amountFeesMinersSatoshi = 0;
     details.szName = (char *)[[args objectForKey:@"label"] UTF8String];
     details.szNotes = (char *)[[args objectForKey:@"notes"] UTF8String];
     details.szCategory = (char *)[[args objectForKey:@"category"] UTF8String];
-	details.attributes = 0x0;
+    details.attributes = 0x0;
     details.bizId = 0;
 
-	char *pRequestID;
+    char *pRequestID;
 
     // create the request
-	ABC_CreateReceiveRequest([[User Singleton].name UTF8String],
+    ABC_CreateReceiveRequest([[User Singleton].name UTF8String],
                              [[User Singleton].password UTF8String],
                              [wallet.strUUID UTF8String],
                              &details, &pRequestID, &error);
-	if (error.code == ABC_CC_Ok) {
+    if (error.code == ABC_CC_Ok) {
         NSString *requestId = [NSString stringWithUTF8String:pRequestID];
         NSString *address = [self getRequestAddress:pRequestID withWallet:wallet];
         NSDictionary *d = @{@"requestId": requestId, @"address": address};
@@ -345,9 +345,9 @@ static const NSString *PROTOCOL = @"bridge://";
         if (pRequestID) {
             free(pRequestID);
         }
-	} else {
+    } else {
         results = [self jsonError];
-	}
+    }
     [self callJsFunction:cbid withArgs:results];
 }
 
