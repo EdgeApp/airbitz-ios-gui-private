@@ -8,6 +8,7 @@
 
 #import "Location.h"
 #import "AppDelegate.h"
+#import "Theme.h"
 
 #define ACCURACY_METERS 100
 
@@ -109,8 +110,8 @@ static Location *singleton = nil;  // this will be the one and only object this 
     
     if (NO == [CLLocationManager locationServicesEnabled])
     {
-        [self showAlert:@"Your location services are not currently enabled. Therefore, this application will not be able to calculate distances. If you would like this feature, please go to the device settings under \"General / Location Services\" and enable it."
-              withTitle:@"Location Warning"];
+        [self showAlert:[Theme Singleton].locationAlert
+              withTitle:[Theme Singleton].LocationWarningTitle];
     }
     else
     {
@@ -156,7 +157,7 @@ static Location *singleton = nil;  // this will be the one and only object this 
                             initWithTitle:strTitle
                             message:strMsg
                             delegate:nil
-                            cancelButtonTitle:@"OK"
+                            cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                             otherButtonTitles:nil];
         [alert show];
     });
@@ -197,7 +198,7 @@ static Location *singleton = nil;  // this will be the one and only object this 
 // the location manager had an issue with obtaining the location
 -(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {	
-	NSMutableString *msg = [[NSMutableString alloc] initWithString:@"The application is having difficulty obtaining your location. Please try again later."];
+    NSMutableString *msg = [[NSMutableString alloc] initWithString:[Theme Singleton].LocationNSMutalableString];
 	
     NSLog(@"Location error: %ld", (long)[error code]);
     
@@ -209,7 +210,7 @@ static Location *singleton = nil;  // this will be the one and only object this 
 				// "Don't Allow" on two successive app launches is the same as saying "never allow". The user
 				// can reset this for all apps by going to Settings > General > Reset > Reset Location Warnings.
 			case kCLErrorDenied:
-				[msg setString:@"You have not allowed this application to obtain your location. Therefore, this application will not be able to calculate distances. If you would like this feature, please go to the device settings under \"General / Location Servies\" and enable it for this application"];
+				[msg setString:[Theme Singleton].locationAlert];
 				break;
 				
 			case kCLErrorLocationUnknown:
@@ -222,7 +223,7 @@ static Location *singleton = nil;  // this will be the one and only object this 
 
     self.bHaveLocation = NO;
     
-    [self showAlert:msg withTitle:@"Location Warning"];
+    [self showAlert:msg withTitle:[Theme Singleton].LocationWarningTitle];
 	if([self.delegate respondsToSelector:@selector(DidReceiveLocation)])
 	{
 		[self.delegate DidReceiveLocation];

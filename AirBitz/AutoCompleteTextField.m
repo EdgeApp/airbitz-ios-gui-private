@@ -12,6 +12,7 @@
 #import "Server.h"
 #import "Location.h"
 #import "CJSONDeserializer.h"
+#import "Theme.h"
 
 #define USE_AUTOCOMPLETE_QUERY 0
 
@@ -441,7 +442,7 @@
 	
 	NSArray *searchResultsArray;
 	//NSLog(@"Got search results: %@", [dictFromServer objectForKey:@"results"]);
-	searchResultsArray = [[dictFromServer objectForKey:@"results"] mutableCopy];
+	searchResultsArray = [[dictFromServer objectForKey:[Theme Singleton].resultscategoryText] mutableCopy];
 
 	//build array of business (prune categories out of list)
 	[foundBusinessNames removeAllObjects];
@@ -450,13 +451,13 @@
 	for(NSDictionary *dict in searchResultsArray)
 	{
 #if USE_AUTOCOMPLETE_QUERY
-		NSString *type = [dict objectForKey:@"type"];
-		if([type isEqualToString:@"business"])
+		NSString *type = [dict objectForKey:[Theme Singleton].typeAutocomplete];
+		if([type isEqualToString:[Theme Singleton].businessAutocomplete])
 		{
 			[foundBusinessNames addObject:[dict objectForKey:@"text"]];
 		}
 #else
-		NSString *name = [dict objectForKey:@"name"];
+		NSString *name = [dict objectForKey:[Theme Singleton].nameLocationDict];
 		if(name && name != (id)[NSNull null])
 		{
 			[foundBusinessNames addObject:name];

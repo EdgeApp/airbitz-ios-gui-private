@@ -69,6 +69,28 @@
 @property (nonatomic) NSString *twoFactorText;
 @property (nonatomic) NSString *importText;
 @property (nonatomic) NSString *passwordRecoveryText;
+@property (nonatomic) NSString *debugOptionsHeaderText;
+@property (nonatomic) NSString *PrevButtonText;
+@property (nonatomic) NSString *NextButtonText;
+@property (nonatomic) NSString *locationObjectKey;
+@property (nonatomic) NSString *locationAlert;
+@property (nonatomic) NSString *LocationWarningTitle;
+@property (nonatomic) NSString *OkCancelButtonTitle;
+@property (nonatomic) NSString *LocationNSMutalableString;
+@property (nonatomic) NSString *nameLocationDict;
+@property (nonatomic) NSString *addressLocationDict;
+@property (nonatomic) NSString *latitudeLocationDict;
+@property (nonatomic) NSString *longitudeLocationDict;
+@property (nonatomic) NSString *changeNavBarTitle;
+@property (nonatomic) NSString *LevelcategoryKey;
+@property (nonatomic) NSString *categoryCellText;
+@property (nonatomic) NSString *resultscategoryText;
+@property (nonatomic) NSString *presentAddAnimationText;
+@property (nonatomic) NSString *presentingAddAnimationText;
+@property (nonatomic) NSString *dismissAnimationText;
+@property (nonatomic) NSString *typeAutocomplete;
+@property (nonatomic) NSString *businessAutocomplete;
+
 
 
 @property (nonatomic) CGFloat fadingAlertDropdownHeight;

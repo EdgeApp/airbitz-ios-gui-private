@@ -101,6 +101,38 @@ static Theme *singleton = nil;  // this will be the one and only object this sta
     self.twoFactorText                                      = NSLocalizedString(@"Two Factor", nil);
     self.importText                                         = NSLocalizedString(@"Import", nil);
     self.passwordRecoveryText                               = NSLocalizedString(@"Password Recovery", nil);
+    self.debugOptionsHeaderText                             = NSLocalizedString(@"Debug Options", @"Debug screen header title");
+    self.PrevButtonText                                     = NSLocalizedString(@"Prev", nil);
+    self.NextButtonText                                     = NSLocalizedString(@"Next", nil);
+    self.locationObjectKey                                  = NSLocalizedString(@"location", nil);
+    self.locationAlert                                      = NSLocalizedString(@"Your location services are not currently enabled. Therefore, this application will not be able to calculate distances. If you would like this feature, please go to the device settings under \"General / Location Services\" and enable it.",nil);
+    self.LocationWarningTitle                               = NSLocalizedString(@"Location Warning", nil);
+    self.OkCancelButtonTitle                                = NSLocalizedString(@"OK", nil);
+    self.LocationNSMutalableString                          = NSLocalizedString(@"The application is having difficulty obtaining your location. Please try again later.", nil);
+    self.nameLocationDict                                   = NSLocalizedString(@"name", nil);
+    self.addressLocationDict                                = NSLocalizedString(@"address", nil);
+    self.latitudeLocationDict                               = NSLocalizedString(@"latitude", nil);
+    self.longitudeLocationDict                              = NSLocalizedString(@"longitude", nil);
+    self.changeNavBarTitle                                  = NSLocalizedString(@"More Categories", @"");
+    self.LevelcategoryKey                                   = NSLocalizedString(@"level", nil);
+    self.categoryCellText                                   = NSLocalizedString(@"categoryCell", nil);
+    self.resultscategoryText                                = NSLocalizedString(@"results", nil);
+    self.presentAddAnimationText                            = NSLocalizedString(@"present", nil);
+    self.presentingAddAnimationText                         = NSLocalizedString(@"presenting", nil);
+    self.dismissAnimationText                               = NSLocalizedString(@"dismiss", nil);
+    self.typeAutocomplete                                   = NSLocalizedString(@"type", nil);
+    self.businessAutocomplete                               = NSLocalizedString(@"business", nil);
+    
+
+
+
+
+
+    
+    
+    
+    
+    
 
     self.sendRequestButtonDisabled = 0.4f;
 

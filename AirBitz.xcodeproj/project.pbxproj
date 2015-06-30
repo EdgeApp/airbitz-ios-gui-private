@@ -419,6 +419,7 @@
 		B5FD393618F0A67100BE2670 /* transactionDetails.html in Resources */ = {isa = PBXBuildFile; fileRef = B5FD393518F0A67100BE2670 /* transactionDetails.html */; };
 		B5FD394718F240E600BE2670 /* AutoCompleteTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FD394618F240E600BE2670 /* AutoCompleteTextField.m */; };
 		C40BC5D5199479CF00149E12 /* libcsv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C40BC5D4199479CF00149E12 /* libcsv.a */; };
+		C6A238E91B336C7800BC8B57 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C6A238EB1B336C7800BC8B57 /* Localizable.strings */; };
 		DA0239831B17B258002B9810 /* libprotobuf-lite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA02397D1B17B1B7002B9810 /* libprotobuf-lite.a */; };
 		DA0239841B17B267002B9810 /* libprotobuf-lite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA02397D1B17B1B7002B9810 /* libprotobuf-lite.a */; };
 		DA06F7581B0BDD79000BCA46 /* 0-bars@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA06F6241B0BDD77000BCA46 /* 0-bars@2x.png */; };
@@ -1815,6 +1816,9 @@
 		B5FD394518F240E600BE2670 /* AutoCompleteTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoCompleteTextField.h; sourceTree = "<group>"; };
 		B5FD394618F240E600BE2670 /* AutoCompleteTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutoCompleteTextField.m; sourceTree = "<group>"; };
 		C40BC5D4199479CF00149E12 /* libcsv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcsv.a; path = AirBitz/ABC/libcsv.a; sourceTree = "<group>"; };
+		C6A238E61B33657700BC8B57 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Main_iPhone.strings; sourceTree = "<group>"; };
+		C6A238EA1B336C7800BC8B57 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C6A238EC1B336C7800BC8B57 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DA02397D1B17B1B7002B9810 /* libprotobuf-lite.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libprotobuf-lite.a"; path = "../builds/develop-mainnet/abc/abc-ios-universal/lib/libprotobuf-lite.a"; sourceTree = "<group>"; };
 		DA06F6241B0BDD77000BCA46 /* 0-bars@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "0-bars@2x.png"; path = "Resources/Artwork/0-bars@2x.png"; sourceTree = "<group>"; };
 		DA06F6251B0BDD77000BCA46 /* 1-bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "1-bar@2x.png"; path = "Resources/Artwork/1-bar@2x.png"; sourceTree = "<group>"; };
@@ -2027,7 +2031,7 @@
 		DA13339B1A7B203C0051DE14 /* ScanView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanView.h; sourceTree = "<group>"; };
 		DA13339C1A7B203C0051DE14 /* ScanView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanView.m; sourceTree = "<group>"; };
 		DA13339F1A7B20840051DE14 /* ScanView~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ScanView~iphone.xib"; sourceTree = "<group>"; };
-		DA14ABCA1A8066A300C30F08 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main_iPhone.strings; sourceTree = "<group>"; };
+		DA14ABCA1A8066A300C30F08 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; lineEnding = 0; name = en; path = en.lproj/Main_iPhone.strings; sourceTree = "<group>"; };
 		DA15B98A1AC0D72500B229A5 /* Plugins.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Plugins.storyboard; sourceTree = "<group>"; };
 		DA15B98B1AC0D72500B229A5 /* PluginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginViewController.h; sourceTree = "<group>"; };
 		DA15B98C1AC0D72500B229A5 /* PluginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PluginViewController.m; sourceTree = "<group>"; };
@@ -2782,6 +2786,7 @@
 		B5675B5218A17F6F002E0703 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C6A238EB1B336C7800BC8B57 /* Localizable.strings */,
 				B5675B5318A17F6F002E0703 /* AirBitz-Info.plist */,
 				7D687D8819AFFBF20077BD5A /* Airbitz-Testnet-Info.plist */,
 				B5675B5418A17F6F002E0703 /* InfoPlist.strings */,
@@ -3436,6 +3441,7 @@
 			knownRegions = (
 				en,
 				Base,
+				hi,
 			);
 			mainGroup = B5675B3F18A17F6F002E0703;
 			productRefGroup = B5675B4918A17F6F002E0703 /* Products */;
@@ -3948,6 +3954,7 @@
 				DAA8E9F41B1EDCB400BC870C /* ico_nav_directory_dark@2x.png in Resources */,
 				DAA8E9E41B1ED50B00BC870C /* icon_category_shopping@2x.png in Resources */,
 				DA06F8721B0BDD79000BCA46 /* btn_checkmark@2x.png in Resources */,
+				C6A238E91B336C7800BC8B57 /* Localizable.strings in Resources */,
 				68C4AA251A0B4DD70010C837 /* FadingAlertView.xib in Resources */,
 				DAA8E9E71B1ED50B00BC870C /* icon_category_shopping@3x.png in Resources */,
 				DA06F9CB1B0BDD79000BCA46 /* icon_directory_dark.png in Resources */,
@@ -4964,6 +4971,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				B5675B5518A17F6F002E0703 /* en */,
+				C6A238EC1B336C7800BC8B57 /* hi */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -4973,8 +4981,17 @@
 			children = (
 				B5675B5E18A17F6F002E0703 /* Base */,
 				DA14ABCA1A8066A300C30F08 /* en */,
+				C6A238E61B33657700BC8B57 /* hi */,
 			);
 			name = Main_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		C6A238EB1B336C7800BC8B57 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C6A238EA1B336C7800BC8B57 /* hi */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

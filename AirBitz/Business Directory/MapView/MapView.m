@@ -8,6 +8,7 @@
 
 #import "MapView.h"
 #import "Annotation.h"
+#import "Theme.h"
 
 @interface MKMapView (UIGestureRecognizer)
 
@@ -77,17 +78,17 @@
 	
 	CLLocationCoordinate2D coord;
 	
-	NSDictionary* locationDict = [business objectForKey:@"location"];
+	NSDictionary* locationDict = [business objectForKey:[Theme Singleton].locationObjectKey];
 	if(locationDict && (locationDict != (id)[NSNull null]))
 	{
 		
-		coord.latitude = [[locationDict objectForKey:@"latitude"] floatValue];
-		coord.longitude = [[locationDict objectForKey:@"longitude"] floatValue];
+		coord.latitude = [[locationDict objectForKey:[Theme Singleton].latitudeLocationDict] floatValue];
+		coord.longitude = [[locationDict objectForKey:[Theme Singleton].longitudeLocationDict] floatValue];
 		
 		ann = (Annotation*)[[Annotation alloc] initWithCoordinate:coord]; //loc.m_latlong
 
-		((Annotation *)ann).title = [business objectForKey:@"name"];
-		((Annotation *)ann).subtitle = [business objectForKey:@"address"];
+		((Annotation *)ann).title = [business objectForKey:[Theme Singleton].nameLocationDict];
+		((Annotation *)ann).subtitle = [business objectForKey:[Theme Singleton].addressLocationDict];
 		((Annotation *)ann).business = business;
 
 		[self addAnnotation:ann];
@@ -100,11 +101,11 @@
 {
 	CLLocationCoordinate2D coord;
 	
-	NSDictionary* locationDict = [business objectForKey:@"location"];
-	if(locationDict && (locationDict != (id)[NSNull null]))
+	NSDictionary* locationDict = [business objectForKey:[Theme Singleton].locationObjectKey];
+    if(locationDict && (locationDict != (id)[NSNull null]))
 	{
-		coord.latitude = [[locationDict objectForKey:@"latitude"] floatValue];
-		coord.longitude = [[locationDict objectForKey:@"longitude"] floatValue];
+		coord.latitude = [[locationDict objectForKey:[Theme Singleton].latitudeLocationDict] floatValue];
+		coord.longitude = [[locationDict objectForKey:[Theme Singleton].longitudeLocationDict] floatValue];
 		
 		NSObject <MKAnnotation> *ann;
 		for (ann in self.annotations)

@@ -1,0 +1,1151 @@
+/* Class = "UITextField"; placeholder = "Current Password"; ObjectID = "0Ma-6E-cjS"; */
+"0Ma-6E-cjS.placeholder" = "वर्तमान पासवर्ड";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "0QH-Cd-JVq"; */
+"0QH-Cd-JVq.text" = "लेबल";
+
+/* Class = "UILabel"; text = "mBTC"; ObjectID = "0WP-4K-TNl"; */
+"0WP-4K-TNl.text" = "mBTC";
+
+/* Class = "IBUILabel"; text = "Email Recipient"; ObjectID = "0b6-ws-V2S"; */
+"0b6-ws-V2S.text" = "ईमेल प्राप्तकर्ता”";
+
+/* Class = "IBUILabel"; text = "Scanning for Bluetooth  Requests..."; ObjectID = "21p-YC-LN1"; */
+"21p-YC-LN1.text" = "ब्लूटूथ अनुरोध के लिए स्कैन...";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "2FV-6E-gId"; */
+"2FV-6E-gId.text" = "लेबल";
+
+/* Class = "IBUILabel"; text = "Send Confirmation"; ObjectID = "2LK-LX-sOp"; */
+"2LK-LX-sOp.text" = "पुष्टि भेजें” ";
+
+/* Class = "IBUILabel"; text = "10/15/2014"; ObjectID = "2Rj-4b-xgk"; */
+"2Rj-4b-xgk.text" = "10/15/2014";
+
+/* Class = "UITextField"; placeholder = "User Name"; ObjectID = "2cx-Qx-XQc"; */
+"2cx-Qx-XQc.placeholder" = "प्रयोक्ता नाम";
+
+/* Class = "UIButton"; normalTitle = "Advanced"; ObjectID = "3Py-nn-1AR"; */
+"3Py-nn-1AR.normalTitle" = "विकसित";
+
+/* Class = "IBUITextField"; placeholder = "Business Name or Category"; ObjectID = "3S0-VF-OIs"; */
+"3S0-VF-OIs.placeholder" = "व्यवसाय के नाम या श्रेणी";
+
+/* Class = "UILabel"; text = "Offline Wallet"; ObjectID = "4KX-hj-tJA"; */
+"4KX-hj-tJA.text" = "ऑफलाइन बटुआ";
+
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "4Li-R2-dUi"; */
+"4Li-R2-dUi.text" = "लेबल";
+
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "4ab-Wa-eS4"; */
+"4ab-Wa-eS4.placeholder" = "पासवर्ड";
+
+/* Class = "IBUILabel"; text = "Core Version:"; ObjectID = "4md-ob-Ttv"; */
+"4md-ob-Ttv.text" = "मूल संस्करण";
+
+/* Class = "IBUILabel"; text = "Import Wallet"; ObjectID = "51g-oU-QIB"; */
+"51g-oU-QIB.text" = "आयात बटुआ";
+
+/* Class = "IBUILabel"; text = "Invalid user name or password"; ObjectID = "5wy-Mi-whP"; */
+"5wy-Mi-whP.text" = "अमान्य उपयोगकर्ता नाम या पासवर्ड";
+
+/* Class = "IBUILabel"; text = "Export"; ObjectID = "6dp-0x-wlF"; */
+"6dp-0x-wlF.text" = "निर्यात";
+
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "6qu-Co-pyz"; */
+"6qu-Co-pyz.text" = "लेबल";
+
+/* Class = "UILabel"; text = "BTC"; ObjectID = "7wl-Lb-K8l"; */
+"7wl-Lb-K8l.text" = "BTC";
+
+/* Class = "IBUIButton"; normalTitle = "Cancel"; ObjectID = "810-FP-oTH"; */
+"810-FP-oTH.normalTitle" = "रद्द करना";
+
+/* Class = "IBUILabel"; text = "10/15/2014"; ObjectID = "828-lV-dxc"; */
+"828-lV-dxc.text" = "10/15/2014";
+
+/* Class = "UILabel"; text = "External Storage / Print"; ObjectID = "8Nr-wB-OaB"; */
+"8Nr-wB-OaB.text" = "बाहरी भंडारण/ प्रिंट";
+
+/* Class = "UIButton"; normalTitle = "Sign Up"; ObjectID = "8iz-Uc-LTS"; */
+"8iz-Uc-LTS.normalTitle" = "साइन अप करें";
+
+/* Class = "IBUILabel"; text = "1.00 BTC - $876.13 USD"; ObjectID = "9aX-Dw-7XD"; */
+"9aX-Dw-7XD.text" = "1.00 BTC - $876.13 USD";
+
+/* Class = "IBUILabel"; text = "Password Recovery Setup"; ObjectID = "9kf-YJ-8Zz"; */
+"9kf-YJ-8Zz.text" = "पासवर्ड रिकवरी सेटअप";
+
+/* Class = "IBUILabel"; text = "Address 1234 Orange"; ObjectID = "9nk-xb-nVD"; */
+"9nk-xb-nVD.text" = "पता 1234 ऑरेंज";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "9ur-p7-oPb"; */
+"9ur-p7-oPb.text" = "लेबल";
+
+/* Class = "IBUILabel"; text = "Debug View"; ObjectID = "9vG-sw-IPy"; */
+"9vG-sw-IPy.text" = "डिबग देखें";
+
+/* Class = "IBUILabel"; text = "Request Bitcoin"; ObjectID = "AX6-P8-c2L"; */
+"AX6-P8-c2L.text" = "Bitcoin का अनुरोध करें";
+
+/* Class = "IBUIButton"; normalTitle = "Clear Watcher Cache"; ObjectID = "Ag5-Xn-Vpg"; */
+"Ag5-Xn-Vpg.normalTitle" = "साफ़ चौकीदार कैश";
+
+/* Class = "IBUILabel"; text = "m฿ 0.00847778"; ObjectID = "B9X-O3-QF3"; */
+"B9X-O3-QF3.text" = "m฿ 0.00847778";
+
+/* Class = "UILabel"; text = "Password must have an upper and lower case letter, a number, and a minimum of 10 characters"; ObjectID = "BED-Cf-F1n"; */
+"BED-Cf-F1n.text" = "पासवर्ड एक ऊपरी और निचले मामले पत्र, एक संख्या है, और अक्षरों का एक न्यूनतम 10 होनी चाहिए";
+
+/* Class = "IBUIButton"; normalTitle = "(coming soon)        ."; ObjectID = "BET-uK-exQ"; */
+"BET-uK-exQ.normalTitle" ="(शीघ्र आ रहा है) .";
+
+/* Class = "IBUILabel"; text = "From:"; ObjectID = "BW5-4o-QhE"; */
+"BW5-4o-QhE.text" = "से:";
+
+/* Class = "IBUIButton"; normalTitle = "Upload Log Files"; ObjectID = "Bs1-Yi-SIh"; */
+"Bs1-Yi-SIh.normalTitle" = "लॉग फ़ाइलें अपलोड करें";
+
+
+/* Class = "UILabel"; text = "Phone"; ObjectID = "Bxa-tB-mk3"; */
+"Bxa-tB-mk3.text" = "फ़ोन";
+/* Class = "UILabel"; text = "Category"; ObjectID = "ClG-um-kmI"; */
+"ClG-um-kmI.text" = "श्रेणी;
+
+/* Class = "UILabel"; text = "Enter password to decode wallet"; ObjectID = "CuI-Tj-a8q"; */
+"CuI-Tj-a8q.text" = "बटुए को डिकोड करने के लिए पासवर्ड दर्ज करें";
+
+/* Class = "UILabel"; text = "B"; ObjectID = "D9Y-q9-3fh"; */
+"D9Y-q9-3fh.text" = "बी";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "DFL-Hc-ld2"; */
+"DFL-Hc-ld2.text" = "लेबल";
+
+/* Class = "UIButton"; normalTitle = "Next Step"; ObjectID = "Det-Mr-8a9"; */
+"Det-Mr-8a9.normalTitle" = "अगला कदम";
+
+/* Class = "UITextView"; text = "Test"; ObjectID = "Dh6-PA-WGi"; */
+"Dh6-PA-WGi.text" = "टेस्ट";
+
+/* Class = "IBUILabel"; text = "Business Name"; ObjectID = "DlF-tR-T08"; */
+"DlF-tR-T08.text" = "व्यवसाय का नाम";
+
+/* Class = "IBUILabel"; text = "Enter PIN for (airbitz)"; ObjectID = "Dn2-OV-6cd"; */
+"Dn2-OV-6cd.text" = "के लिए पिन दर्ज करें";
+
+
+/* Class = "IBUILabel"; text = "Send Bitcoin"; ObjectID = "ESa-8m-WoY"; */
+"ESa-8m-WoY.text" = "Bitcoin भेजें";
+
+/* Class = "IBUILabel"; text = "This Year"; ObjectID = "EcC-tD-Jnf"; */
+"EcC-tD-Jnf.text" = "इस साल";
+
+/* Class = "UILabel"; text = "USD"; ObjectID = "EuE-s0-NQ2"; */
+"EuE-s0-NQ2.text" = "USD";
+
+/* Class = "UILabel"; text = "BTC"; ObjectID = "Fic-d9-oDx"; */
+"Fic-d9-oDx.text" = "BTC";
+
+/* Class = "UILabel"; text = "From:"; ObjectID = "GFx-1Z-kFg"; */
+"GFx-1Z-kFg.text" = "से:";
+
+/* Class = "IBUILabel"; text = "$"; ObjectID = "GNf-rJ-hJ5"; */
+"GNf-rJ-hJ5.text" = "$";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "Gf7-s5-OZS"; */
+"Gf7-s5-OZS.text" = "लेबल";
+
+/* Class = "IBUILabel"; text = "10/15/2014"; ObjectID = "HBM-Sv-Tz3"; */
+"HBM-Sv-Tz3.text" = "10/15/2014";
+
+/* Class = "UILabel"; text = "USD"; ObjectID = "HKk-4P-SL1"; */
+"HKk-4P-SL1.text" = "USD";
+
+/* Class = "UILabel"; text = "(Duplicate Names)"; ObjectID = "Hba-dd-to8"; */
+"Hba-dd-to8.text" = "(नकली नामों)";
+
+/* Class = "IBUILabel"; text = "BTC"; ObjectID = "Hk5-ol-0gD"; */
+"Hk5-ol-0gD.text" = "BTC";
+
+/* Class = "UILabel"; text = "Export"; ObjectID = "HzM-6V-ckO"; */
+"HzM-6V-ckO.text" = "निर्यात";
+
+/* Class = "IBUILabel"; text = "Share"; ObjectID = "IKa-up-adT"; */
+"IKa-up-adT.text" = "शेयर";
+
+/* Class = "IBUILabel"; text = "Camera unavailable"; ObjectID = "IrC-mj-iIB"; */
+"IrC-mj-iIB.text" = "कैमरा पहुंच के बाहर";
+
+/* Class = "IBUILabel"; text = "Invalid PIN"; ObjectID = "Ise-AL-ggT"; */
+"Ise-AL-ggT.text" = "उपयोगकर्ता पिन";
+
+/* Class = "UILabel"; text = "PRIVATE KEY"; ObjectID = "JZ8-MW-EwQ"; */
+"JZ8-MW-EwQ.text" = "निजी की";
+
+/* Class = "IBUILabel"; text = "1WWM5ZWX"; ObjectID = "KUE-S9-d9J"; */
+"KUE-S9-d9J.text" = "1WWM5ZWX";
+
+/* Class = "IBUILabel"; text = "         Details..."; ObjectID = "Kgm-MH-DvG"; */
+"Kgm-MH-DvG.text" = "विवरण";
+
+/* Class = "UILabel"; text = "Notes"; ObjectID = "L8T-Xw-aVE"; */
+"L8T-Xw-aVE.text" = "नोट्स";
+
+/* Class = "IBUIButton"; normalTitle = "Done"; ObjectID = "LAg-aY-W5b"; */
+"LAg-aY-W5b.normalTitle" = "पूरा होगया ";
+
+/* Class = "IBUILabel"; text = "Payment received"; ObjectID = "MKi-zS-5GZ"; */
+"MKi-zS-5GZ.text" = "भुगतान प्राप्त";
+
+/* Class = "IBUILabel"; text = "Social"; ObjectID = "MT9-P3-r5I"; */
+"MT9-P3-r5I.text" = "सामाजिक";
+
+/* Class = "IBUILabel"; text = "Wallet"; ObjectID = "MUU-w2-x0B"; */
+"MUU-w2-x0B.text" = "बटुआ ";
+
+/* Class = "UILabel"; text = "Copy Public Address"; ObjectID = "Maf-2U-Gv8"; */
+"Maf-2U-Gv8.text" = "कॉपी करें सार्वजनिक उद्घोषणा";
+
+/* Class = "IBUIButton"; normalTitle = "(coming soon)        ."; ObjectID = "McH-2Y-GJx"; */
+"McH-2Y-GJx.normalTitle" = "शीघ्र आ रहा है  .";
+
+/* Class = "IBUILabel"; text = "Version:"; ObjectID = "Myh-H6-aDd"; */
+"Myh-H6-aDd.text" = "संस्करण:";
+
+/* Class = "IBUILabel"; text = "Wallet:"; ObjectID = "N0S-HZ-7RS"; */
+"N0S-HZ-7RS.text" = "बटुआ:";
+
+/* Class = "IBUILabel"; text = "User Name:"; ObjectID = "NdY-co-ret"; */
+"NdY-co-ret.text" = "प्रयोक्ता नाम";
+
+/* Class = "IBUIButton"; normalTitle = "Import"; ObjectID = "NzT-rU-bq0"; */
+"NzT-rU-bq0.normalTitle" = "आयात";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "O1G-gR-pT0"; */
+"O1G-gR-pT0.text" = "लेबल";
+
+/* Class = "IBUILabel"; text = "BTC Amount"; ObjectID = "OfK-AQ-g7A"; */
+"OfK-AQ-g7A.text" = "BTC Amount";
+
+/* Class = "IBUILabel"; text = "To:"; ObjectID = "P8W-G0-G18"; */
+"P8W-G0-G18.text" = "को:";
+
+/* Class = "UILabel"; text = "PUBLIC ADDRESS"; ObjectID = "PDc-Am-Qmc"; */
+"PDc-Am-Qmc.text" = "सार्वजनिक उद्घोषणा";
+
+/* Class = "UITextField"; placeholder = "Current Password"; ObjectID = "PI3-NW-bVF"; */
+"PI3-NW-bVF.placeholder" = "वर्तमान पासवर्ड";
+
+/* Class = "UILabel"; text = "Sending..."; ObjectID = "PY5-r2-zeB"; */
+"PY5-r2-zeB.text" = "भेजा जा रहा है";
+
+/* Class = "IBUILabel"; text = "Request Bitcoin"; ObjectID = "PYX-iO-gJ9"; */
+"PYX-iO-gJ9.text" = "Bitcoin का अनुरोध करें";
+
+/* Class = "IBUIButton"; normalTitle = "Income"; ObjectID = "PmL-d6-vpJ"; */
+"PmL-d6-vpJ.normalTitle" = "आय";
+
+/* Class = "IBUIButton"; normalTitle = "Sign In"; ObjectID = "Q2G-61-ExK"; */
+"Q2G-61-ExK.normalTitle" = "साइन इन करें";
+
+/* Class = "UITextField"; placeholder = "Re-enter Password"; ObjectID = "QzV-Gk-Vrs"; */
+"QzV-Gk-Vrs.placeholder" = "पासवर्ड फिर से दर्ज करें";
+/* Class = "UIButton"; normalTitle = "Forgot Password"; ObjectID = "RVo-M5-ZXk"; */
+"RVo-M5-ZXk.normalTitle" = "पासवर्ड भूल गए?";
+/* Class = "UILabel"; text = "Require PIN above amount"; ObjectID = "Rid-6B-Lv4"; */
+"Rid-6B-Lv4.text" = "राशि से ऊपर पिन की आवश्यकता होती";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "RqX-ow-U05"; */
+"RqX-ow-U05.text" = "लेबल";
+
+/* Class = "IBUILabel"; text = "Transaction Details"; ObjectID = "S6o-KK-lbq"; */
+"S6o-KK-lbq.text" = "लेनदेन का विवरण";
+
+/* Class = "IBUILabel"; text = "BTC"; ObjectID = "S8Q-An-svf"; */
+"S8Q-An-svf.text" = "BTC";
+
+/* Class = "IBUILabel"; text = "From:"; ObjectID = "SMT-jD-Uec"; */
+"SMT-jD-Uec.text" = "से:";
+
+/* Class = "IBUILabel"; text = "0.1.0-mainnet"; ObjectID = "SXK-F7-NoK"; */
+"SXK-F7-NoK.text" = "0.1.0-mainnet";
+
+/* Class = "UILabel"; text = "4 Digit PIN"; ObjectID = "ScE-Ny-R3i"; */
+"ScE-Ny-R3i.text" = "4 अंकों का पिन";
+
+/* Class = "IBUIButton"; normalTitle = "Login With Password"; ObjectID = "Szb-Pc-bx6"; */
+"Szb-Pc-bx6.normalTitle" = "पासवर्ड के साथ लॉगिन";
+
+/* Class = "IBUITextField"; placeholder = "User Name"; ObjectID = "TCB-w9-Wgd"; */
+"TCB-w9-Wgd.placeholder" = "प्रयोक्ता नाम";
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "TJ3-SX-hen"; */
+"TJ3-SX-hen.text" = "लेबल";
+
+/* Class = "IBUITextField"; placeholder = "Password"; ObjectID = "TJm-Ie-PWq"; */
+"TJm-Ie-PWq.placeholder" = "पासवर्ड";
+
+/* Class = "IBUILabel"; text = "5Kb8kLf9zgWQnogidDA76MzPL6TsZZY36hWXMssSzNydYXYB9KF"; ObjectID = "U2R-0A-Vdq"; */
+"U2R-0A-Vdq.text" = "5Kb8kLf9zgWQnogidDA76MzPL6TsZZY36hWXMssSzNydYXYB9KF";
+
+/* Class = "IBUITextField"; text = "0.0"; ObjectID = "UHx-LD-t4M"; */
+"UHx-LD-t4M.text" = "0.0";
+
+/* Class = "IBUILabel"; text = "To:"; ObjectID = "Uak-ip-kgV"; */
+"Uak-ip-kgV.text" = "To:";
+
+/* Class = "IBUILabel"; text = "Phone"; ObjectID = "Uf1-Hd-oNr"; */
+"Uf1-Hd-oNr.text" = " फ़ोन";
+
+/* Class = "IBUITextField"; placeholder = "Amt (optional)"; ObjectID = "Ug3-Vw-VAD"; */
+"Ug3-Vw-VAD.placeholder" = "Amt (optional)";
+
+/* Class = "IBUITextField"; text = "0.00000"; ObjectID = "Ug3-Vw-VAD"; */
+"Ug3-Vw-VAD.text" = "0.00000";
+
+/* Class = "IBUITextField"; placeholder = "Password"; ObjectID = "V5e-1n-K9Z"; */
+"V5e-1n-K9Z.placeholder" = "पासवर्ड";
+
+/* Class = "IBUILabel"; text = "Categories"; ObjectID = "Vde-og-tHg"; */
+"Vde-og-tHg.text" = "Categories";
+
+/* Class = "IBUILabel"; text = "4 Digit PIN"; ObjectID = "WB0-Ox-RAw"; */
+"WB0-Ox-RAw.text" = "4 अंकों का पिन";
+
+/* Class = "IBUIButton"; normalTitle = "Email"; ObjectID = "WCA-P7-L3q"; */
+"WCA-P7-L3q.normalTitle" = "Email";
+
+/* Class = "IBUITextField"; placeholder = "Search"; ObjectID = "WMa-Cy-YRr"; */
+"WMa-Cy-YRr.placeholder" = "खोज";
+
+/* Class = "IBUILabel"; text = "fee"; ObjectID = "WU8-fS-VMb"; */
+"WU8-fS-VMb.text" = "शुल्क";
+
+/* Class = "IBUITextField"; placeholder = "Search"; ObjectID = "X6G-HD-WUv"; */
+"X6G-HD-WUv.placeholder" = "खोज";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "XJN-At-Qod"; */
+"XJN-At-Qod.text" = "लेबल";
+
+/* Class = "IBUILabel"; text = "Web"; ObjectID = "XeE-e1-pX7"; */
+"XeE-e1-pX7.text" = "Web";
+
+/* Class = "IBUILabel"; text = "Wallet:"; ObjectID = "Xq1-GY-d2Y"; */
+"Xq1-GY-d2Y.text" = "बटुआ:";
+
+/* Class = "IBUILabel"; text = "Send Status"; ObjectID = "XxH-iI-cot"; */
+"XxH-iI-cot.text" = "स्थिति भेजें ";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "Yfp-gi-q8F"; */
+"Yfp-gi-q8F.text" = "लेबल";
+
+/* Class = "IBUITextField"; placeholder = "City, State/Province, or Country"; ObjectID = "ZBb-rD-XHs"; */
+"ZBb-rD-XHs.placeholder" = "City, State/Province, or Country";
+
+/* Class = "IBUITextField"; placeholder = "Private key"; ObjectID = "ZTK-Sq-FqJ"; */
+"ZTK-Sq-FqJ.placeholder" = "प्चाबी की";
+
+/* Class = "IBUILabel"; text = "Sent From:"; ObjectID = "ZW8-Za-VVy"; */
+"ZW8-Za-VVy.text" = "सेंट From:";
+
+/* Class = "IBUILabel"; text = "Total Balance"; ObjectID = "ZgP-7Q-PoB"; */
+"ZgP-7Q-PoB.text" = "पूरा Balance";
+
+/* Class = "IBUILabel"; text = "Sign Up"; ObjectID = "ZkD-2s-BfP"; */
+"ZkD-2s-BfP.text" = "साइन अप करें";
+
+/* Class = "IBUILabel"; text = "This Month"; ObjectID = "Zsg-Mo-aHL"; */
+"Zsg-Mo-aHL.text" = "थिस Month";
+
+/* Class = "IBUILabel"; text = "Mainnet"; ObjectID = "Zw4-k1-a82"; */
+"Zw4-k1-a82.text" = "मैंनेट ";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "a3J-4E-YSl"; */
+"a3J-4E-YSl.text" = "लेबल";
+
+/* Class = "IBUITextField"; text = "0.0"; ObjectID = "aWm-mP-gxj"; */
+"aWm-mP-gxj.text" = "0.0";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "beI-FV-03P"; */
+"beI-FV-03P.text" = "लेबल";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "bu9-4x-j6f"; */
+"bu9-4x-j6f.text" = "लेबल";
+
+/* Class = "IBUILabel"; text = "Swipe to View Business Directory"; ObjectID = "bv5-eJ-aMl"; */
+"bv5-eJ-aMl.text" = "व्यापार निर्देशिका देखने के लिए स्वाइप";
+
+/* Class = "IBUILabel"; text = "Wallets"; ObjectID = "c6k-sf-dw2"; */
+"c6k-sf-dw2.text" = "बटुआ";
+
+/* Class = "IBUILabel"; text = "1CC3X2gu58d6wXUWMffpuzN9JAfTUWu4Kj"; ObjectID = "cIH-5H-WKu"; */
+"cIH-5H-WKu.text" = "1CC3X2gu58d6wXUWMffpuzN9JAfTUWu4Kj";
+
+/* Class = "IBUIButton"; normalTitle = "Skip This Step"; ObjectID = "cix-f2-i3I"; */
+"cix-f2-i3I.normalTitle" = "Skip This स्टेप ";
+
+/* Class = "IBUIButton"; normalTitle = "Forgot PIN"; ObjectID = "dAN-gQ-Vd0"; */
+"dAN-gQ-Vd0.normalTitle" = "फॉरगॉट  PIN";
+
+/* Class = "IBUILabel"; text = "Near You"; ObjectID = "dJQ-W9-yUR"; */
+"dJQ-W9-yUR.text" = "नियर यू ";
+
+/* Class = "IBUILabel"; text = "$3.15"; ObjectID = "dSV-XA-npo"; */
+"dSV-XA-npo.text" = "$3.15";
+
+/* Class = "IBUITextField"; placeholder = "Amt (optional)"; ObjectID = "dY3-MX-MNV"; */
+"dY3-MX-MNV.placeholder" = "Amt (ऑप्शनल )";
+
+/* Class = "IBUITextField"; text = "0.00"; ObjectID = "dY3-MX-MNV"; */
+"dY3-MX-MNV.text" = "0.00";
+
+/* Class = "IBUILabel"; text = "Export"; ObjectID = "df7-Ds-9wI"; */
+"df7-Ds-9wI.text" = "निर्यात";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "djr-fy-moN"; */
+"djr-fy-moN.text" = "लेबल";
+
+/* Class = "IBUIButton"; normalTitle = "Next"; ObjectID = "e3p-Sp-KAc"; */
+"e3p-Sp-KAc.normalTitle" = "अगला";
+
+/* Class = "IBUILabel"; text = "Categories"; ObjectID = "eQh-NG-MLn"; */
+"eQh-NG-MLn.text" = "श्रेणियाँ";
+
+/* Class = "IBUILabel"; text = "Directory"; ObjectID = "efU-iU-0QP"; */
+"efU-iU-0QP.text" = "निर्देशिका";
+
+/* Class = "IBUITextField"; placeholder = "PIN Spending Limit"; ObjectID = "egu-Uy-luw"; */
+"egu-Uy-luw.placeholder" = "खर्च हद के लिए पिन ";
+
+/* Class = "IBUILabel"; text = "10/15/2014"; ObjectID = "elg-44-b1O"; */
+"elg-44-b1O.text" = "10/15/2014";
+
+/* Class = "IBUILabel"; text = "Always confirm for future transactions"; ObjectID = "eoS-dN-sXy"; */
+"eoS-dN-sXy.text" = "हमेशा भविष्य के लिए की पुष्टि लेन-देन";
+
+/* Class = "IBUILabel"; text = "Type BTC"; ObjectID = "foH-la-zuu"; */
+"foH-la-zuu.text" = "टाइप BTC";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "g6f-f3-w6p"; */
+"g6f-f3-w6p.text" = "लेबल";
+
+/* Class = "IBUILabel"; text = "Hours..."; ObjectID = "gA3-Mp-du2"; */
+"gA3-Mp-du2.text" = "घंटे...";
+
+/* Class = "IBUIButton"; normalTitle = "Complete Signup"; ObjectID = "gIX-pR-SaU"; */
+"gIX-pR-SaU.normalTitle" = "Complete सिग्नूप";
+
+/* Class = "IBUILabel"; text = "Type BTC"; ObjectID = "ga1-R0-wof"; */
+"ga1-R0-wof.text" = "टाइप BTC";
+
+/* Class = "IBUILabel"; text = "Settings"; ObjectID = "h7A-2J-B9v"; */
+"h7A-2J-B9v.text" = "सेटिंग्स ";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "iE3-Jv-3vs"; */
+"iE3-Jv-3vs.text" = "लेबल";
+
+/* Class = "IBUILabel"; text = "Camera unavailable"; ObjectID = "iXW-st-n5q"; */
+"iXW-st-n5q.text" = "कैमरा पहुंच के बाहर";
+
+/* Class = "IBUILabel"; text = "(Requires password above daily limit)"; ObjectID = "ifv-G8-Cxe"; */
+"ifv-G8-Cxe.text" = "(Requires पासवर्ड above daily limit)";
+
+/* Class = "IBUILabel"; text = "This Week"; ObjectID = "ihd-bm-hZb"; */
+"ihd-bm-hZb.text" = " इस हफ़्ते";
+
+/* Class = "IBUILabel"; text = "1.00 mBTC = $0.60 USD"; ObjectID = "jwC-1c-veH"; */
+"jwC-1c-veH.text" = "एक्सचेंज रेट लोडिंग ...";
+
+/* Class = "IBUILabel"; text = "Transactions"; ObjectID = "k2v-Gd-mWv"; */
+"k2v-Gd-mWv.text" = "लेन-देन";
+
+/* Class = "IBUILabel"; text = "To:"; ObjectID = "k2x-c8-HxP"; */
+"k2x-c8-HxP.text" = " से:";
+
+/* Class = "IBUIButton"; normalTitle = "Save"; ObjectID = "kjs-dz-76a"; */
+"kjs-dz-76a.normalTitle" = "सेव";
+
+/* Class = "IBUILabel"; text = "Business Name"; ObjectID = "lCQ-mB-Xjh"; */
+"lCQ-mB-Xjh.text" = "व्यवसाय के नाम";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "lFC-s8-IJT"; */
+"lFC-s8-IJT.text" = "लेबल";
+
+/* Class = "IBUIButton"; normalTitle = "SMS"; ObjectID = "mkM-bm-hN8"; */
+"mkM-bm-hN8.normalTitle" = "संस SMS";
+
+/* Class = "IBUILabel"; text = "From:"; ObjectID = "n3h-9z-3tD"; */
+"n3h-9z-3tD.text" = "से:";
+
+/* Class = "IBUIButton"; normalTitle = "Done"; ObjectID = "n7B-WE-395"; */
+"n7B-WE-395.normalTitle" = "पूरा होगया ";
+
+/* Class = "IBUILabel"; text = "John Smith"; ObjectID = "nLx-fU-Gvx"; */
+"nLx-fU-Gvx.text" = "John स्मिथ";
+
+/* Class = "IBUILabel"; text = "Bitcoin Wallet"; ObjectID = "nae-d6-xoW"; */
+"nae-d6-xoW.text" = "Bitcoin बटुआ";
+
+/* Class = "IBUITextField"; placeholder = "Daily Spend Limit"; ObjectID = "o7c-0i-ioy"; */
+"o7c-0i-ioy.placeholder" = "Daily Spend हद";
+
+/* Class = "IBUIButton"; normalTitle = "(coming soon)        ."; ObjectID = "o9H-k9-0fs"; */
+"o9H-k9-0fs.normalTitle" = "(coming जल्दी ही)        .";
+
+/* Class = "IBUILabel"; text = "Address"; ObjectID = "oPG-fA-f9b"; */
+"oPG-fA-f9b.text" = "पता";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "pX1-NU-49a"; */
+"pX1-NU-49a.text" = "लेबल";
+
+/* Class = "IBUITextField"; placeholder = "Create PIN"; ObjectID = "puA-fb-r0H"; */
+"puA-fb-r0H.placeholder" = "PIN बना";
+
+/* Class = "IBUILabel"; text = "Network:"; ObjectID = "qLK-qd-7qg"; */
+"qLK-qd-7qg.text" = "Network:";
+
+/* Class = "IBUILabel"; text = "USD"; ObjectID = "rDW-FH-GD0"; */
+"rDW-FH-GD0.text" = "USD";
+
+/* Class = "IBUILabel"; text = "App Version"; ObjectID = "sZm-Gx-M8r"; */
+"sZm-Gx-M8r.text" = "App संस्करण";
+
+/* Class = "IBUILabel"; text = "Daily Spending Limit"; ObjectID = "sgY-Eq-QTK"; */
+"sgY-Eq-QTK.text" = "रोज खर्च की सीमा";
+
+/* Class = "IBUIButton"; normalTitle = "Max"; ObjectID = "shF-7X-2GL"; */
+"shF-7X-2GL.normalTitle" = "ज्यादा";
+
+/* Class = "IBUIButton"; normalTitle = "Cancel"; ObjectID = "th1-bn-E4x"; */
+"th1-bn-E4x.normalTitle" = "रद्द करना";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "uD8-yl-zpf"; */
+"uD8-yl-zpf.text" = "लेबल";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "urJ-xg-F01"; */
+"urJ-xg-F01.text" = "लेबल";
+
+/* Class = "IBUILabel"; text = "Scan QR Code or use photo"; ObjectID = "vVZ-Kb-RwQ"; */
+"vVZ-Kb-RwQ.text" = "स्कैन करो या फोटो उपयोग करो";
+
+/* Class = "IBUILabel"; text = "Label"; ObjectID = "wrf-OC-DKs"; */
+"wrf-OC-DKs.text" = "लेबल";
+
+/* Class = "IBUILabel"; text = "Address 1234"; ObjectID = "wy7-Kv-3ap"; */
+"wy7-Kv-3ap.text" = "पता 1234";
+
+/* Class = "IBUIButton"; normalTitle = "Done"; ObjectID = "x8T-QG-WiU"; */
+"x8T-QG-WiU.normalTitle" = "पूरा होगया ";
+
+/* Class = "IBUILabel"; text = "Scan QR Code or use photo"; ObjectID = "xGm-o9-j7u"; */
+"xGm-o9-j7u.text" = "स्कैन करो या फोटो उपयोग करो";
+
+/* Class = "IBUILabel"; text = "To:"; ObjectID = "xKp-jc-8KT"; */
+"xKp-jc-8KT.text" = "को:";
+
+/* Class = "IBUILabel"; text = "Spending Limits"; ObjectID = "ysZ-jm-fOP"; */
+"ysZ-jm-fOP.text" = "खर्च की सीमा";
+
+/*  
+ 
+ */
+
+
+
+/* No comment provided by engineer. */
+" Please choose a wallet to receive funds." = " Please choose a wallet to receive funds.";
+
+/* No comment provided by engineer. */
+"%@ / %@ requested via %@ on %@." = "%1$@ / %2$@ के माध्यम से अनुरोध %3$@ on %4$@.";
+
+/* No comment provided by engineer. */
+"%@ has requested a bitcoin address to send money to." = "%@ has requested a bitcoin address to send money to.";
+
+/* ** Warning ** text on partial payment */
+"** Warning **" = "** चेतावनी**";
+
+/* No comment provided by engineer. */
+"**WARNING** You will NEVER be able to recover your password if it is forgotten!!" = "**चेतावनी** You will NEVER be able to recover your password if it is forgotten!!";
+
+/* No comment provided by engineer. */
+"2 Factor (Enhanced Security)" = "2 Factor (Enhanced Security)";
+
+/* No comment provided by engineer. */
+"4 Digit PIN" = "4 अंकों का पिन";
+
+/* Title of account signin error alert */
+"Account Sign Up" = "Account Sign Up";
+
+/* section header in settings table */
+"ACCOUNT: " = "ACCOUNT: ";
+
+/* No comment provided by engineer. */
+"Add New" = "नया जोडो";
+
+/* No comment provided by engineer. */
+"Airbitz" = "Airbitz";
+
+/* No comment provided by engineer. */
+"AirBitz" = "AirBitz";
+
+/* No comment provided by engineer. */
+"AirBitz Bitcoin Wallet Transactions" = "AirBitz Bitcoin Wallet Transactions";
+
+/* No comment provided by engineer. */
+"Amount is too small" = "Amount बहुत छोटा है";
+
+/* No comment provided by engineer. */
+"An app has requested a bitcoin address to send money to." = "An app has requested a bitcoin address to send money to.";
+
+/* title of archived wallets table */
+"ARCHIVE" = "ARCHIVE";
+
+/* No comment provided by engineer. */
+"Are you sure you want to cancel any changes you've made?" = "Are you sure you want to cancel any changes you've made?";
+
+/* No comment provided by engineer. */
+"ATM" = "ATM";
+
+/* No comment provided by engineer. */
+"Attached are the transactions for the AirBitz Bitcoin Wallet: " = "Attached are the transactions for the AirBitz Bitcoin Wallet: ";
+
+/* settings text */
+"Auto log off after" = "Auto log off after";
+
+/* settings text */
+"Bitcoin" = "Bitcoin";
+
+/* No comment provided by engineer. */
+"Bitcoin address mismatch" = "Bitcoin address mismatch";
+
+/* section header in settings table */
+"BITCOIN DENOMINATION" = "BITCOIN DENOMINATION";
+
+/* No comment provided by engineer. */
+"Bitcoin received. Tap for details." = "Bitcoin received. Tap for details.";
+
+/* settings text */
+"bits = (0.000001 Bitcoin)" = "bits = (0.000001 Bitcoin)";
+
+/* settings text */
+"Bluetooth" = "ब्लूटूथ";
+
+/* No comment provided by engineer. */
+"Bluetooth disconnected" = "Bluetooth disconnected";
+
+/* No comment provided by engineer. */
+"Bluetooth payment requests are listed here. Tap on a user to send them a payment" = "Bluetooth payment requests are listed here. Tap on a user to send them a payment";
+
+/* Business Name or Category placeholder */
+"Business Name or Category" = "Business Name or Category";
+
+/* No comment provided by engineer. */
+"Camera unavailable" = "Camera unavailable";
+
+/* No comment provided by engineer. */
+"Camera unavailable. Please enable camera access on your phone's Privacy Settings" = "Camera unavailable. Please enable camera access on your phone's Privacy Settings";
+
+/* No comment provided by engineer. */
+"Can't connect to server.  Check your internet connection" = "Can't connect to server.  Check your internet connection";
+
+/* cancel button title */
+"Cancel" = "रद्द करना";
+
+/* No comment provided by engineer. */
+"Cancel Changes" = "परिवर्तन रद्द करना ";
+
+/* settings text */
+"Change Categories" = "परिवर्तन श्रेणियाँ";
+
+/* settings text */
+"Change password" = "परिवर्तन पासवर्ड";
+
+/* settings text */
+"Change PIN" = "परिवर्तन PIN";
+
+/* settings text */
+"Change recovery questions" = "परिवर्तन वसूली सवाल";
+
+/* City, State/Province, or Country placeholder */
+"City, State/Province, or Country" = "शहर, राज्य / प्रांत, या देश";
+
+/* No comment provided by engineer. */
+"Coffee & Tea" = "कॉफी और चाय";
+
+/* No comment provided by engineer. */
+"Complete Signup" = "पूरा साइन अप करें";
+
+/* No comment provided by engineer. */
+"Confirmed" = "इस बात की पुष्टि";
+
+/* No comment provided by engineer. */
+"Congratulations" = "बधाई हो";
+
+/* Popup text when BLE connects */
+"Connected" = "लॉग इन";
+
+/* No comment provided by engineer. */
+"Create Wallet" = "बटुए बनाना";
+
+/* No comment provided by engineer. */
+"Creating and securing account" = "Creating and securing account";
+
+/* No comment provided by engineer. */
+"CSV Export failed" = "CSV Export failed";
+
+/* name of button on wallets view */
+"Currency:" = "Currency:";
+
+/* No comment provided by engineer. */
+"Current Location" = "Current Location";
+
+/* No comment provided by engineer. */
+"Current Password" = "Current Password";
+
+/* debug text */
+"Debug" = "Debug";
+
+/* settings text */
+"Default Currency" = "Default Currency";
+
+/* settings text */
+"Default Exchange" = "Default Exchange";
+
+/* section header in settings table */
+"DEFAULT EXCHANGE RATE" = "DEFAULT EXCHANGE RATE";
+
+/* Delete Account */
+"Delete Account" = "Delete Account";
+
+/* Directory title bar text */
+"Directory" = "निर्देशिका";
+
+/* No comment provided by engineer. */
+"Disabled" = "Disabled";
+
+/* done button title */
+"Done" = "Done";
+
+/* No comment provided by engineer. */
+"Electronics" = "Electronics";
+
+/* No comment provided by engineer. */
+"Email cancelled" = "Email cancelled";
+
+/* No comment provided by engineer. */
+"Email cancelled." = "Email cancelled.";
+
+/* No comment provided by engineer. */
+"Email saved to send later" = "Email saved to send later";
+
+/* No comment provided by engineer. */
+"Email saved to send later." = "Email saved to send later.";
+
+/* No comment provided by engineer. */
+"Email sent" = "Email sent";
+
+/* No comment provided by engineer. */
+"Email sent." = "Email sent.";
+
+/* No comment provided by engineer. */
+"Enabled" = "Enabled";
+
+/* Placeholder text for Receive screen amount */
+"Enter Amount (optional)" = "Enter Amount (optional)";
+
+/* No comment provided by engineer. */
+"Enter password to decode wallet" = "Enter password to decode wallet";
+
+/* No comment provided by engineer. */
+"Enter Payee" = "Enter Payee";
+
+/* No comment provided by engineer. */
+"Error" = "Error";
+
+/* No comment provided by engineer. */
+"Error during send" = "Error during send";
+
+/* No comment provided by engineer. */
+"Error sending Email" = "Error sending Email";
+
+/* No comment provided by engineer. */
+"Error sending Email." = "Error sending Email.";
+
+/* No comment provided by engineer. */
+"Export Wallet Transactions" = "Export Wallet Transactions";
+
+/* No comment provided by engineer. */
+"Export Wallet Transactions error" = "Export Wallet Transactions error";
+
+/* No comment provided by engineer. */
+"Failed to import because there is 0 bitcoin remaining at this address" = "Failed to import because there is 0 bitcoin remaining at this address";
+
+/* settings text */
+"First Name (optional)" = "First Name (optional)";
+
+/* No comment provided by engineer. */
+"Gift Cards" = "Gift Cards";
+
+/* Hide */
+"Hide" = "Hide";
+
+/* No comment provided by engineer. */
+"Import failed" = "Import failed";
+
+/* No comment provided by engineer. */
+"Import the private key again to retry Twitter" = "Import the private key again to retry Twitter";
+
+/* No comment provided by engineer. */
+"Importing funds from %@ into wallet..." = "Importing funds from %@ into wallet...";
+
+/* No comment provided by engineer. */
+"Incorrect current password" = "Incorrect current password";
+
+/* No comment provided by engineer. */
+"Incorrect password" = "Incorrect password";
+
+/* No comment provided by engineer. */
+"Incorrect password.\nTry again" = "Incorrect password.\nTry again";
+
+/* No comment provided by engineer. */
+"Incorrect PIN" = "Incorrect PIN";
+
+/* No comment provided by engineer. */
+"Incorrect PIN. Please wait %.0f seconds and try again." = "Incorrect PIN. Please wait %.0f seconds and try again.";
+
+/* Title of password check popup alert */
+"Insufficient Password" = "Insufficient Password";
+
+/* No comment provided by engineer. */
+"Invalid Bitcoin Address" = "Invalid Bitcoin Address";
+
+/* No comment provided by engineer. */
+"Invalid Bluetooth Request" = "Invalid Bluetooth Request";
+
+/* No comment provided by engineer. */
+"Invalid PIN" = "Invalid PIN";
+
+/* No comment provided by engineer. */
+"Invalid PIN. Please log in." = "Invalid PIN. Please log in.";
+
+/* No comment provided by engineer. */
+"Invalid private key" = "Invalid private key";
+
+/* settings text */
+"Last Name (optional)" = "Last Name (optional)";
+
+/* No comment provided by engineer. */
+"Level" = "Level";
+
+/* title of wallets table balance header */
+"Loading Balance..." = "Loading Balance...";
+
+/* No comment provided by engineer. */
+"Loading..." = "Loading...";
+
+/* settings text */
+"mBitcoin = (0.001 Bitcoin)" = "mBitcoin = (0.001 Bitcoin)";
+
+/* settings text */
+"Merchant Mode" = "Merchant Mode";
+
+/* No comment provided by engineer. */
+"More Categories" = "More Categories";
+
+/* section header in settings table */
+"NAME" = "NAME";
+
+/* No comment provided by engineer. */
+"Name" = "Name";
+
+/* No comment provided by engineer. */
+"New Password" = "New Password";
+
+/* No comment provided by engineer. */
+"New PIN" = "New PIN";
+
+/* settings text */
+"Nickname / Handle (optional)" = "Nickname / Handle (optional)";
+
+/* Alert title that warns user couldn't connect to server */
+"No Connection" = "No Connection";
+
+/* No comment provided by engineer. */
+"No thanks" = "No thanks";
+
+/* No comment provided by engineer. */
+"No Transactions in Wallet" = "No Transactions in Wallet";
+
+/* No comment provided by engineer. */
+"No, I'll type in manually" = "No, I'll type in manually";
+
+/* No comment provided by engineer. */
+"No, I'll type it manually" = "No, I'll type it manually";
+
+/* No comment provided by engineer. */
+"Offline Wallet" = "Offline Wallet";
+
+/* No comment provided by engineer. */
+"OK" = "OK";
+
+/* No comment provided by engineer. */
+"On The Web" = "On The Web";
+
+/* No comment provided by engineer. */
+"On the Web" = "On the Web";
+
+/* section header in settings table */
+"OPTIONS" = "OPTIONS";
+
+/* Text on partial payment */
+"Partial Payment" = "Partial Payment";
+
+/* No comment provided by engineer. */
+"Password" = "Password";
+
+/* No comment provided by engineer. */
+"Password Correct.\n" = "Password Correct.\n";
+
+/* No comment provided by engineer. */
+"Password does not match re-entered password" = "Password does not match re-entered password";
+
+/* No comment provided by engineer. */
+"Password mismatch" = "Password mismatch";
+
+/* No comment provided by engineer. */
+"Password Recovery" = "Password Recovery";
+
+/* No comment provided by engineer. */
+"Password Recovery Setup" = "Password Recovery Setup";
+
+/* No comment provided by engineer. */
+"Password successfully changed. DO NOT FORGET YOUR PASSWORD OR RECOVERY ANSWERS! THEY CANNOT BE RECOVERED!" = "Password successfully changed. DO NOT FORGET YOUR PASSWORD OR RECOVERY ANSWERS! THEY CANNOT BE RECOVERED!";
+
+/* Text on payment recived popup */
+"Payment received" = "Payment received";
+
+/* No comment provided by engineer. */
+"PIN must be 4 digits" = "4 अंकों का पिन दर्ज होना चाहिए";
+
+/* settings text */
+"PIN Re-Login" = "PIN Re-Login";
+
+/* No comment provided by engineer. */
+"PIN successfully changed." = "PIN successfully changed.";
+
+/* No comment provided by engineer. */
+"Please enter a User Name" = "Please enter a User Name";
+
+/* No comment provided by engineer. */
+"Please enter an amount to send" = "Please enter an amount to send";
+
+/* No comment provided by engineer. */
+"Please enter your correct password." = "Please enter your correct password.";
+
+/* No comment provided by engineer. */
+"Please enter your PIN" = "Please enter your PIN";
+
+/* No comment provided by engineer. */
+"Please have Requestor contact support" = "Please have Requestor contact support";
+
+/* No comment provided by engineer. */
+"Please wait %.0f seconds before retrying %@" = "Please wait %1$.0f seconds before retrying %2$@";
+
+/* No comment provided by engineer. */
+"Please wait 1 second before retrying %@" = "Please wait 1 second before retrying %@";
+
+/* No comment provided by engineer. */
+"Present QR code to Sender and have them scan to send you payment" = "Present QR code to Sender and have them scan to send you payment";
+
+/* No comment provided by engineer. */
+"Public Key copied to clipboard" = "Public Key copied to clipboard";
+
+/* No comment provided by engineer. */
+"QR Code Scan Failure" = "QR Code Scan Failure";
+
+/* No comment provided by engineer. */
+"Re-enter New Password" = "Re-enter New Password";
+
+/* No comment provided by engineer. */
+"Received Funds" = "Received Funds";
+
+/* Received string on Request screen */
+"Received..." = "Received...";
+
+/* No comment provided by engineer. */
+"Recovery Password Reminder" = "Recovery Password Reminder";
+
+/* Title of recovery questions setup error alert */
+"Recovery Questions Not Set" = "Recovery Questions Not Set";
+
+/* Title of recovery questions setup complete alert */
+"Recovery Questions Set" = "Recovery Questions Set";
+
+/* Remaining string on Request screen */
+"Remaining..." = "Remaining...";
+
+/* No comment provided by engineer. */
+"Rename Wallet" = "बटुए का नाम बदलें";
+
+/* No comment provided by engineer. */
+"Request confirmed, Two Factor off." = "Request confirmed, Two Factor off.";
+
+/* No comment provided by engineer. */
+"Request is copied to the clipboard" = "Request is copied to the clipboard";
+
+/* Requested string on Request screen */
+"Requested..." = "Requested...";
+
+/* No comment provided by engineer. */
+"Reset Cancelled" = "Reset Cancelled";
+
+/* No comment provided by engineer. */
+"Reset Date" = "Reset Date";
+
+/* No comment provided by engineer. */
+"Reset requested. Please retry login after 7 days." = "Reset requested. Please retry login after 7 days.";
+
+/* No comment provided by engineer. */
+"Restaurants & Food Trucks" = "Restaurants & Food Trucks";
+
+/* SearchBarSearch placeholder */
+"Search" = "Search";
+
+/* No comment provided by engineer. */
+"Select Email from Contact List?" = "Select Email from Contact List?";
+
+/* No comment provided by engineer. */
+"Select from Contact List?" = "Select from Contact List?";
+
+/* No comment provided by engineer. */
+"Send Email" = "Send Email";
+
+/* settings text */
+"Send name on payment request" = "Send name on payment request";
+
+/* No comment provided by engineer. */
+"Send SMS" = "SMS  भेज्ना";
+
+/* status message */
+"Sending..." = "Sending...";
+
+/* No comment provided by engineer. */
+"Shopping" = "खरीदारी करें";
+
+/* Show */
+"Show" = "प्रदर्शन";
+
+/* Sign Up
+ Sign Up title bar text */
+"Sign Up" = "साइन अप करें";
+
+/* Title of Skip this step alert */
+"Skip this step" = "Skip this step";
+
+/* No comment provided by engineer. */
+"Sorry" = "माफ कीजिए";
+
+/* spending limits text */
+"Spending Limits" = "Spending Limits";
+
+/* No comment provided by engineer. */
+"Synchronizing" = "Synchronizing";
+
+/* No comment provided by engineer. */
+"The given answers were incorrect. Please try again." = "The given answers were incorrect. Please try again.";
+
+/* No comment provided by engineer. */
+"The two factor authentication token import failed. Please ensure you have the correct token!" = "The two factor authentication token import failed. Please ensure you have the correct token!";
+
+/* text in password verification popup */
+"Time to crack:" = "Time to crack:";
+
+/* No comment provided by engineer. */
+"To:" = "को:";
+
+/* Transaction Details header text */
+"Transaction Details" = "Transaction Details";
+
+/* No comment provided by engineer. */
+"Transfer:Wallet:" = "Transfer:Wallet:";
+
+/* No comment provided by engineer. */
+"Try Again?" = "पुनः प्रयास करें?";
+
+/* No comment provided by engineer. */
+"Two Factor Disabled" = "Two Factor Disabled";
+
+/* No comment provided by engineer. */
+"Two Factor Enabled" = "Two Factor Enabled";
+
+/* No comment provided by engineer. */
+"Unable to determine two factor status" = "Unable to determine two factor status";
+
+/* No comment provided by engineer. */
+"Unable to import secret" = "Unable to import secret";
+
+/* No comment provided by engineer. */
+"Unable to import token" = "Unable to import token";
+
+/* No comment provided by engineer. */
+"Unable to save Settings" = "Unable to save Settings";
+
+/* No comment provided by engineer. */
+"Unable to scan QR code" = "Unable to scan QR code";
+
+/* No comment provided by engineer. */
+"Unable to update Settings" = "Unable to update Settings";
+
+/* No comment provided by engineer. */
+"User cancelled the request." = "उपयोगकर्ता अनुरोध रद्द किया हे .";
+
+/* Username */
+"Username" = "उपयोगकर्ता नाम";
+
+/* No comment provided by engineer. */
+"Username must be at least %d characters." = "Username must be at least %d characters.";
+
+/* Status on Request screen */
+"Waiting for Payment..." = "Waiting for Payment...";
+
+/* No comment provided by engineer. */
+"Wallet Export" = "बटुआ निर्यात";
+
+/* No comment provided by engineer. */
+"Wallet Private Seed" = "Wallet Private Seed";
+
+/* No comment provided by engineer. */
+"Wallet:" = "बटुआ:";
+
+/* title of active wallets table */
+"WALLETS" = "बटुआ";
+/* No comment provided by engineer. */
+"Warning!" = "चेतावनी!";
+
+/* No comment provided by engineer. */
+"We are sorry we are unable to import the token at this time." = "We are sorry we are unable to import the token at this time.";
+
+/* No comment provided by engineer. */
+"Wrong Answers" = "गलत जवाब";
+
+/* No comment provided by engineer. */
+"Yes" = "हाँ";
+
+/* No comment provided by engineer. */
+"Yes, Contacts" = "हाँ, संपर्कों";
+
+/* No comment provided by engineer. */
+"You are about to exit password recovery and questions & answers have not yet been set." = "You are about to exit password recovery and questions & answers have not yet been set.";
+
+/* No comment provided by engineer. */
+"You must enter a user name" = "आप एक उपयोगकर्ता नाम दर्ज करना होगा
+";
+
+/* No comment provided by engineer. */
+"You've received Bitcoin! We STRONGLY recommend setting up Password Recovery questions and answers. Otherwise you will NOT be able to access your account if your password is forgotten." = "You've received Bitcoin! We STRONGLY recommend setting up Password Recovery questions and answers. Otherwise you will NOT be able to access your account if your password is forgotten.";
+
+
+
+

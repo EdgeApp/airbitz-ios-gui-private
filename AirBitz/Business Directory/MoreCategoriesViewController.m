@@ -54,7 +54,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [MainViewController changeNavBarOwner:self];
-    [MainViewController changeNavBarTitle:self title:NSLocalizedString(@"More Categories", @"")];
+    [MainViewController changeNavBarTitle:self title:[Theme Singleton].changeNavBarTitle];
     [MainViewController changeNavBar:self title:[Theme Singleton].backButtonText side:NAV_BAR_LEFT button:true enable:true action:@selector(back) fromObject:self];
     [MainViewController changeNavBar:self title:[Theme Singleton].helpButtonText side:NAV_BAR_RIGHT button:true enable:false action:nil fromObject:self];
 
@@ -94,7 +94,7 @@
 	for(int i=0; i<categoriesArray.count; i++)
 	{
 		category = [categoriesArray objectAtIndex:i];
-		NSNumber *num = [category objectForKey:@"level"];
+		NSNumber *num = [category objectForKey:[Theme Singleton].LevelcategoryKey];
 		if(num && num != (id)[NSNull null])
 		{
 			if([num intValue] < 4)
@@ -167,11 +167,11 @@
 	NSDictionary *dict = [categoriesArray objectAtIndex:indexPath.row];
 	if(mode == MODE_NAME)
 	{
-		cell.categoryLabel.text = [dict objectForKey:@"name"];
+		cell.categoryLabel.text = [dict objectForKey:[Theme Singleton].nameLocationDict];
 	}
 	else
 	{
-		cell.categoryLabel.text = [dict objectForKey:@"name"];
+		cell.categoryLabel.text = [dict objectForKey:[Theme Singleton].nameLocationDict];
 	}
 	
 	return cell;
@@ -185,7 +185,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSDictionary *dict = [categoriesArray objectAtIndex:indexPath.row];
-	[self.delegate moreCategoriesViewControllerDone:self withCategory:[dict objectForKey:@"name"]];
+	[self.delegate moreCategoriesViewControllerDone:self withCategory:[dict objectForKey:[Theme Singleton].nameLocationDict]];
 }
 
 #pragma mark - DLURLServer Callbacks

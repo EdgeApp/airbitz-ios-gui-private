@@ -134,7 +134,7 @@ typedef NS_ENUM(NSUInteger, CellType) {
     [MainViewController changeNavBar:self title:[Theme Singleton].backButtonText side:NAV_BAR_RIGHT button:true enable:false action:@selector(Back:) fromObject:self];
 
     if (self.businessDetails)
-        [MainViewController changeNavBarTitle:self title:[self.businessDetails objectForKey:@"name"]];
+        [MainViewController changeNavBarTitle:self title:[self.businessDetails objectForKey:[Theme Singleton].nameLocationDict]];
 }
 
 - (void)transactionDetailsExit
@@ -170,7 +170,7 @@ typedef NS_ENUM(NSUInteger, CellType) {
 		{
 			[categoriesString appendString:@" | "];
 		}
-		[categoriesString appendString:[dict objectForKey:@"name"]];
+		[categoriesString appendString:[dict objectForKey:[Theme Singleton].nameLocationDict]];
 		firstObject = NO;
 	}
 	self.categoriesLabel.text = categoriesString;
@@ -240,13 +240,13 @@ typedef NS_ENUM(NSUInteger, CellType) {
 
 -(void)launchMapApp
 {
-	NSDictionary *locationDict = [self.businessDetails objectForKey:@"location"];
+	NSDictionary *locationDict = [self.businessDetails objectForKey:[Theme Singleton].locationObjectKey];
 	if(locationDict.count == 2)
 	{
 		//launch with specific coordinate
 		CLLocationCoordinate2D coordinate;
-		coordinate.latitude = [[locationDict objectForKey:@"latitude"] floatValue];
-		coordinate.longitude = [[locationDict objectForKey:@"longitude"] floatValue];
+		coordinate.latitude = [[locationDict objectForKey:[Theme Singleton].latitudeLocationDict] floatValue];
+		coordinate.longitude = [[locationDict objectForKey:[Theme Singleton].longitudeLocationDict] floatValue];
 		
 		NSMutableDictionary *addressDict = [[NSMutableDictionary alloc] init];
 		[addressDict setObject:[self.businessDetails objectForKey:@"city"] forKey:@"City"];
@@ -258,7 +258,7 @@ typedef NS_ENUM(NSUInteger, CellType) {
 		
 		// Create a map item for the geocoded address to pass to Maps app
 		MKMapItem *mapItem = [[MKMapItem alloc] initWithPlacemark:placemark];
-		[mapItem setName:[self.businessDetails objectForKey:@"name"]];
+		[mapItem setName:[self.businessDetails objectForKey:[Theme Singleton].nameLocationDict]];
 		
 		// Set the directions mode to "Driving"
 		// Can use MKLaunchOptionsDirectionsModeWalking instead

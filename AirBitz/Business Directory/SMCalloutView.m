@@ -1,5 +1,6 @@
 #import "SMCalloutView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "Theme.h"
 
 //
 // UIView frame helpers - we do a lot of UIView frame fiddling in this class; these functions help keep things readable.
@@ -338,11 +339,11 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     animation.beginTime = CACurrentMediaTime() + delay;
     animation.delegate = self;
     
-    [self.layer addAnimation:animation forKey:@"present"];
+    [self.layer addAnimation:animation forKey:[Theme Singleton].presentAddAnimationText];
 }
 
 - (void)animationDidStart:(CAAnimation *)anim {
-    BOOL presenting = [[anim valueForKey:@"presenting"] boolValue];
+    BOOL presenting = [[anim valueForKey:[Theme Singleton].presentingAddAnimationText] boolValue];
 	
     if (presenting)
         // ok, animation is on, let's make ourselves visible!
@@ -350,7 +351,7 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
 }
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)finished {
-    BOOL presenting = [[anim valueForKey:@"presenting"] boolValue];
+    BOOL presenting = [[anim valueForKey:[Theme Singleton].presentingAddAnimationText] boolValue];
     
     if (presenting) {
         if ([_delegate respondsToSelector:@selector(calloutViewDidAppear:)])
@@ -359,7 +360,7 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     else if (!presenting) {
         
         [self removeFromParent];
-        [self.layer removeAnimationForKey:@"dismiss"];
+        [self.layer removeAnimationForKey:[Theme Singleton].dismissAnimationText];
 		
         if ([_delegate respondsToSelector:@selector(calloutViewDidDisappear:)])
             [_delegate calloutViewDidDisappear:self];
@@ -377,14 +378,14 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
 }
 
 - (void)dismissCalloutAnimated:(BOOL)animated {
-    [self.layer removeAnimationForKey:@"present"];
+    [self.layer removeAnimationForKey:[Theme Singleton].presentAddAnimationText];
     
     popupCancelled = YES;
     
     if (animated) {
         CAAnimation *animation = [self animationWithType:self.dismissAnimation presenting:NO];
         animation.delegate = self;
-        [self.layer addAnimation:animation forKey:@"dismiss"];
+        [self.layer addAnimation:animation forKey:[Theme Singleton].dismissAnimationText];
     }
     else [self removeFromParent];
 }
@@ -434,7 +435,7 @@ NSTimeInterval kSMCalloutViewRepositionDelayForUIScrollView = 1.0/3.0;
     }
     
     // CAAnimation is KVC compliant, so we can store whether we're presenting for lookup in our delegate methods
-    [animation setValue:@(presenting) forKey:@"presenting"];
+    [animation setValue:@(presenting) forKey:[Theme Singleton].presentingAddAnimationText];
     
     animation.fillMode = kCAFillModeForwards;
     animation.removedOnCompletion = NO;

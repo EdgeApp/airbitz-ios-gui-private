@@ -70,7 +70,7 @@
 - (void)setupNavBar
 {
     [MainViewController changeNavBarOwner:self];
-    [MainViewController changeNavBarTitle:self title:NSLocalizedString(@"Debug Options", @"Debug screen header title")];
+    [MainViewController changeNavBarTitle:self title:[Theme Singleton].debugOptionsHeaderText];
     [MainViewController changeNavBar:self title:[Theme Singleton].backButtonText side:NAV_BAR_LEFT button:true enable:true action:@selector(back) fromObject:self];
     [MainViewController changeNavBar:self title:[Theme Singleton].helpButtonText side:NAV_BAR_RIGHT button:true enable:false action:nil fromObject:self];
 }

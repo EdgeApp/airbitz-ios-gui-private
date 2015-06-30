@@ -214,12 +214,12 @@
 
 /* Class = "IBUILabel"; text = "Version:"; ObjectID = "Myh-H6-aDd"; */
 "Myh-H6-aDd.text" = "Version:";
-
 /* Class = "IBUILabel"; text = "Wallet:"; ObjectID = "N0S-HZ-7RS"; */
 "N0S-HZ-7RS.text" = "Wallet:";
 
 /* Class = "IBUILabel"; text = "User Name:"; ObjectID = "NdY-co-ret"; */
 "NdY-co-ret.text" = "User Name:";
+
 
 /* Class = "IBUIButton"; normalTitle = "Import"; ObjectID = "NzT-rU-bq0"; */
 "NzT-rU-bq0.normalTitle" = "Import";

@@ -8,6 +8,7 @@
 
 #import "UIPhotoGalleryViewController.h"
 #import "CommonTypes.h"
+#import "Theme.h"
 
 @interface UIPhotoGalleryViewController () {
     BOOL statusBarHidden;
@@ -228,14 +229,14 @@
     bottomViewBar.barStyle = UIBarStyleBlackTranslucent;
     bottomViewBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     
-    UIBarButtonItem *btnPrev = [[UIBarButtonItem alloc] initWithTitle:@"Prev"
+    UIBarButtonItem *btnPrev = [[UIBarButtonItem alloc] initWithTitle:[Theme Singleton].PrevButtonText
                                                                 style:UIBarButtonItemStylePlain
                                                                target:self
                                                                action:@selector(btnPrevPressed)];
     UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
                                                                                target:nil
                                                                                action:nil];
-    UIBarButtonItem *btnNext = [[UIBarButtonItem alloc] initWithTitle:@"Next"
+    UIBarButtonItem *btnNext = [[UIBarButtonItem alloc] initWithTitle:[Theme Singleton].NextButtonText
                                                                 style:UIBarButtonItemStylePlain
                                                                target:self
                                                                action:@selector(btnNextPressed)];
