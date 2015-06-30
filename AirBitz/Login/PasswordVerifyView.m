@@ -9,6 +9,7 @@
 #import "PasswordVerifyView.h"
 #import "ABC.h"
 #import "Util.h"
+#import "Theme.h"
 
 @interface PasswordVerifyView ()
 
@@ -102,8 +103,9 @@
 	
     printf("Password results:\n");
     printf("Time to crack: %lf seconds\n", secondsToCrack);
-	NSMutableString *crackString = [[NSMutableString alloc] initWithString:NSLocalizedString(@"Time to crack:", @"text in password verification popup")];
-	if(secondsToCrack < 60.0)
+    NSMutableString *crackString = [[NSMutableString alloc] initWithString:[Theme Singleton].TimeToCrackPassword];
+    
+    if(secondsToCrack < 60.0)
 	{
 		[crackString appendFormat:@"%.2lf seconds", secondsToCrack];
 	}

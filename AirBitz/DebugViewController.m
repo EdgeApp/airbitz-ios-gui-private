@@ -46,12 +46,12 @@
     self.versionLabel.text = [NSString stringWithFormat:@"%@ %@", version, build];
     self.coreLabel.text = [NSString stringWithFormat:@"%@", [CoreBridge coreVersion]];
 #if NETWORK_FAKE
-    self.networkLabel.text = @"Fake";
+    self.networkLabel.text = [Theme Singleton].FakeNetworkLabelText;
 #else
     if ([CoreBridge isTestNet]) {
-        self.networkLabel.text = @"Testnet";
+        self.networkLabel.text = [Theme Singleton].TestnetNetworkLabelText;
     } else {
-        self.networkLabel.text = @"Mainnet";
+        self.networkLabel.text = [Theme Singleton].MainnetNetworkLabelText;
     }
 #endif
 
@@ -108,19 +108,19 @@
         dispatch_async(dispatch_get_main_queue(), ^(void){
             if (ABC_CC_Ok == Error.code)
             {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Debug Log File"
-                                                                message:@"Upload Succeeded"
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[Theme Singleton].DebugLogFileText
+                                                                message:[Theme Singleton].UploadSucceededText
                                                                delegate:self
-                                                      cancelButtonTitle:@"Ok"
+                                                      cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                                                       otherButtonTitles:nil];
                 [alert show];
             }
             else
             {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Debug Log File"
-                                                                message:@"Upload Failed. Please check your network connection or contact support@airbitz.co"
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[Theme Singleton].DebugLogFileText
+                                                                message:[Theme Singleton].UploadFailedText
                                                                delegate:self
-                                                      cancelButtonTitle:@"Ok"
+                                                      cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                                                       otherButtonTitles:nil];
                 [alert show];
             }
@@ -138,7 +138,7 @@
 //    [CoreBridge loadWallets:wallets archived:archived];
     [CoreBridge refreshWallets];
 
-    self.clearWatcherButton.titleLabel.text = @"Restarting watcher service";
+    self.clearWatcherButton.titleLabel.text = [Theme Singleton].RestartingWatcherServiceText;
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         [CoreBridge stopWatchers];

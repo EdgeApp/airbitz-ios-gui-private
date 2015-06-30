@@ -41,6 +41,7 @@
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import "DropDownAlertView.h"
+#import "Theme.h"
 
 typedef enum eAppMode
 {
@@ -876,14 +877,14 @@ MainViewController *singleton;
 
 - (void)showPasswordCheckAlert
 {
-    NSString *title = NSLocalizedString(@"Remember your password?", nil);
-    NSString *message = NSLocalizedString(@"Do you still remember your password? You will need your password if your device gets lost or if your PIN is incorrectly entered 3 times.\nEnter it below to make sure:", nil);
+    NSString *title = [Theme Singleton].RememberYourPasswordTitle;
+    NSString *message = [Theme Singleton].RememberYourPasswordMessage;
     // show password reminder test
     _passwordCheckAlert = [[UIAlertView alloc] initWithTitle:title
                                                      message:message
                                                     delegate:self
-                                           cancelButtonTitle:@"Later"
-                                           otherButtonTitles:@"Check Password", nil];
+                                           cancelButtonTitle:[Theme Singleton].LaterText
+                                           otherButtonTitles:[Theme Singleton].CheckPasswordText];
     _passwordCheckAlert.alertViewStyle = UIAlertViewStyleSecureTextInput;
     [_passwordCheckAlert show];
     [User Singleton].needsPasswordCheck = NO;
@@ -924,15 +925,15 @@ MainViewController *singleton;
 
 - (void)showPasswordSetAlert
 {
-    NSString *title = NSLocalizedString(@"No password set", nil);
+    NSString *title = [Theme Singleton].NoPasswordSetText;
     NSString *message = [Theme Singleton].createPasswordForAccountText;
     // show password reminder test
     _passwordSetAlert = [[UIAlertView alloc]
             initWithTitle:title
                   message:message
                  delegate:self
-        cancelButtonTitle:NSLocalizedString(@"Skip", nil)
-        otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+        cancelButtonTitle:[Theme Singleton].SkipText
+        otherButtonTitles:[Theme Singleton].OkCancelButtonTitle];
     [_passwordSetAlert show];
 }
 
@@ -940,14 +941,14 @@ MainViewController *singleton;
 {
     BOOL bAuthenticated = [authenticated boolValue];
     if (bAuthenticated) {
-        [MainViewController fadingAlert:NSLocalizedString(@"Great job remembering your password.", nil)];
+        [MainViewController fadingAlert:[Theme Singleton].GreatJobRememberingText];
     } else {
         _passwordIncorrectAlert = [[UIAlertView alloc]
-                initWithTitle:NSLocalizedString(@"Incorrect Password", nil)
+                initWithTitle:[Theme Singleton].IncorrectCurrentPassword
                       message:NSLocalizedString(@"Incorrect Password. Try again, or change it now?", nil)
                      delegate:self
-            cancelButtonTitle:@"NO"
-            otherButtonTitles:@"YES", @"CHANGE", nil];
+            cancelButtonTitle:[Theme Singleton].NoDescriptionText
+            otherButtonTitles:[Theme Singleton].YesDescriptionText, [Theme Singleton].ChangeText, nil];
         [_passwordIncorrectAlert show];
     }
 }

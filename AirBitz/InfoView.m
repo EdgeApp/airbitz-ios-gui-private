@@ -8,6 +8,7 @@
 #import "InfoView.h"
 #import "DarkenView.h"
 #import "MainViewController.h"
+#import "Theme.h"
 
 @interface InfoView () <UIWebViewDelegate>
 {
@@ -53,7 +54,7 @@
 	iv.delegate = nil;
 
     [iv enableScrolling:YES];
-	NSString* path = [[NSBundle mainBundle] pathForResource:strHTML ofType:@"html"];
+	NSString* path = [[NSBundle mainBundle] pathForResource:strHTML ofType: [Theme Singleton].HtmlFrame];
 	iv.htmlInfoToDisplay = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
     [theView addSubview:iv];
 	return iv;

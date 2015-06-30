@@ -56,7 +56,7 @@ static UIView *alert;
     if (!bInitialized)
     {
         singleton = [[FadingAlertView alloc] init];
-        singleton = [[[NSBundle mainBundle] loadNibNamed:@"FadingAlertViewNew" owner:nil options:nil] objectAtIndex:0];
+        singleton = [[[NSBundle mainBundle] loadNibNamed: [Theme Singleton].FadingAlertViewNewText owner:nil options:nil] objectAtIndex:0];
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:singleton action:@selector(hideAlertByTap:)];
         tapGesture.numberOfTapsRequired = 1;
         tapGesture.numberOfTouchesRequired = 1;

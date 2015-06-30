@@ -20,6 +20,7 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #import "APPINView.h"
+#import "Theme.h"
 
 @interface APPINView () {
     NSArray *_PINViewsArray;
@@ -59,8 +60,8 @@
         // You can freely use background color in XIBs
         self.backgroundColor = [UIColor clearColor];
         
-        _normalPINImage = [UIImage imageNamed:@"large-digit-input"];
-        _selectedPINImage = [UIImage imageNamed:@"large-digit-input_selected"];
+        _normalPINImage = [UIImage imageNamed:[Theme Singleton].LargeDigitInput];
+        _selectedPINImage = [UIImage imageNamed:[Theme Singleton].LargeDigitInputSelected];
         
         // Fake text field
         _fakeTextField = [[UITextField alloc] initWithFrame:CGRectZero];

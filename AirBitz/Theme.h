@@ -72,15 +72,11 @@
 @property (nonatomic) NSString *debugOptionsHeaderText;
 @property (nonatomic) NSString *PrevButtonText;
 @property (nonatomic) NSString *NextButtonText;
-@property (nonatomic) NSString *locationObjectKey;
 @property (nonatomic) NSString *locationAlert;
 @property (nonatomic) NSString *LocationWarningTitle;
 @property (nonatomic) NSString *OkCancelButtonTitle;
 @property (nonatomic) NSString *LocationNSMutalableString;
-@property (nonatomic) NSString *nameLocationDict;
 @property (nonatomic) NSString *addressLocationDict;
-@property (nonatomic) NSString *latitudeLocationDict;
-@property (nonatomic) NSString *longitudeLocationDict;
 @property (nonatomic) NSString *changeNavBarTitle;
 @property (nonatomic) NSString *LevelcategoryKey;
 @property (nonatomic) NSString *categoryCellText;
@@ -90,6 +86,108 @@
 @property (nonatomic) NSString *dismissAnimationText;
 @property (nonatomic) NSString *typeAutocomplete;
 @property (nonatomic) NSString *businessAutocomplete;
+@property (nonatomic) NSString *DebugLogFileText;
+@property (nonatomic) NSString *UploadSucceededText;
+@property (nonatomic) NSString *UploadFailedText;
+@property (nonatomic) NSString *RestartingWatcherServiceText;
+@property (nonatomic) NSString *PleaseWaitProgressAlertText;
+@property (nonatomic) NSString *FakeNetworkLabelText;
+@property (nonatomic) NSString *TestnetNetworkLabelText;
+@property (nonatomic) NSString *MainnetNetworkLabelText;
+@property (nonatomic) NSString *FadingAlertViewNewText;
+@property (nonatomic) NSString *DropDownAlertView;
+@property (nonatomic) NSString *UploadedFromAirBitzText;
+@property (nonatomic) NSString *UploadingToGoogleDrive;
+@property (nonatomic) NSString *YesDescriptionText;
+@property (nonatomic) NSString *NoDescriptionText;
+@property (nonatomic) NSString *HtmlFrame;
+@property (nonatomic) NSString *LargeDigitInput;
+@property (nonatomic) NSString *LargeDigitInputSelected;
+@property (nonatomic) NSString *UsernameSelectorText;
+@property (nonatomic) NSString *PleaseEnteraUsernameText;
+@property (nonatomic) NSString *InvalidPINText;
+@property (nonatomic) NSString *InvalidPINAbortText;
+@property (nonatomic) NSString *DeleteAccountText;
+@property (nonatomic) NSString *TimeToCrackPassword;
+@property (nonatomic) NSString *WarningInitWithTitle;
+@property (nonatomic) NSString *MessagePasswordRecoveryExit;
+@property (nonatomic) NSString *SkipThisStepTitle;
+@property (nonatomic) NSString *SkipThisStepMessage;
+@property (nonatomic) NSString *GoBackSkipThisStep;
+@property (nonatomic) NSString *AlertMessageToAnswerAllQuestions;
+@property (nonatomic) NSString *AlertMessageToChooseAllQuestionsProcedding;
+@property (nonatomic) NSString *CompleteSignupText;
+@property (nonatomic) NSString *PasswordRecoverySetupText;
+@property (nonatomic) NSString *WrongAnswersCheckRecoveryResponse;
+@property (nonatomic) NSString *GivenAnswersIncorrectCheckRecoveryResponse;
+@property (nonatomic) NSString *UnableToImportTokenTitle;
+@property (nonatomic) NSString *UnableToImportTokenMessage;
+@property (nonatomic) NSString *PasswordMismatchTitle;
+@property (nonatomic) NSString *PasswordMismatchMessage;
+@property (nonatomic) NSString *QuestionKey;
+@property (nonatomic) NSString *MustQuestionChoicesText;
+@property (nonatomic) NSString *NumericQuestionChoicesText;
+@property (nonatomic) NSString *StringQuestionChoicesText;
+@property (nonatomic) NSString *MinLengthQuestionChoicesText;
+@property (nonatomic) NSString *RecoverCompleteTitle;
+@property (nonatomic) NSString *RecoverCompleteMessage;
+@property (nonatomic) NSString *SettingRecoveryFailed;
+@property (nonatomic) NSString *RecoveryQuestionsNotSet;
+@property (nonatomic) NSString *NameCategoryButtonText;
+@property (nonatomic) NSString *LevelCategoryText;
+@property (nonatomic) NSString *PinSuccessfullyChangedText;
+@property (nonatomic) NSString *UsernameLabelText;
+@property (nonatomic) NSString *NewPasswordTextField;
+@property (nonatomic) NSString *ReEnterNewPasswordTextField;
+@property (nonatomic) NSString *CurrentPasswordTextField;
+@property (nonatomic) NSString *NewPinTextField;
+@property (nonatomic) NSString *FailedText;
+@property (nonatomic) NSString *IncorrectCurrentPassword;
+@property (nonatomic) NSString *InsufficientPasswordText;
+@property (nonatomic) NSString *PasswordDoesNotMatchText;
+@property (nonatomic) NSString *UsernameAlertTextField;
+@property (nonatomic) NSString *PINMustBeAlertText;
+@property (nonatomic) NSString *PasswordSuccessfullyChangedText;
+@property (nonatomic) NSString *AccountSignUpText;
+@property (nonatomic) NSString *SignUpFailedText;
+@property (nonatomic) NSString *PasswordChangeFailed;
+@property (nonatomic) NSString *RememberYourPasswordTitle;
+@property (nonatomic) NSString *RememberYourPasswordMessage;
+@property (nonatomic) NSString *LaterText;
+@property (nonatomic) NSString *CheckPasswordText;
+@property (nonatomic) NSString *NoPasswordSetText;
+@property (nonatomic) NSString *SkipText;
+@property (nonatomic) NSString *ChangeText;
+@property (nonatomic) NSString *GreatJobRememberingText;
+@property (nonatomic) NSString *IncorrectPasswordText;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

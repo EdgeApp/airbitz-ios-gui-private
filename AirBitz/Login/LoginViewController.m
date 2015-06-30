@@ -26,6 +26,7 @@
 #import "APPINView.h"
 #import "Theme.h"
 #import "FadingAlertView.h"
+#import "Theme.h"
 
 typedef enum eLoginMode
 {
@@ -178,7 +179,7 @@ static BOOL bInitialized = false;
     self.forgotPassworddButton.layer.shadowColor = [[UIColor darkGrayColor] CGColor];
     self.forgotPassworddButton.layer.shadowOffset = CGSizeMake(0.0, 0.0);
 
-    self.usernameSelector.textField.placeholder = NSLocalizedString(@"Username", @"Username");
+    self.usernameSelector.textField.placeholder =[Theme Singleton].UsernameSelectorText;
     self.usernameSelector.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.usernameSelector.textField.placeholder attributes:@{NSForegroundColorAttributeName: [UIColor lightTextColor]}];
 
     [self.usernameSelector setTopMostView:self.view];
@@ -190,7 +191,7 @@ static BOOL bInitialized = false;
     [self.PINusernameSelector.button setBackgroundImage:nil forState:UIControlStateSelected];
     [self.PINusernameSelector.button setBackgroundColor:[UIColor clearColor]];
 
-    self.PINusernameSelector.textLabel.text = NSLocalizedString(@"", @"username");
+    self.PINusernameSelector.textLabel.text =@"";
     [self.PINusernameSelector setButtonWidth:_originalPINSelectorWidth];
     self.PINusernameSelector.accessoryImage = [UIImage imageNamed:@"btn_close.png"];
 
@@ -440,7 +441,7 @@ static BOOL bInitialized = false;
     }
     else
     {
-        [MainViewController fadingAlert:NSLocalizedString(@"Please enter a User Name", nil)];
+        [MainViewController fadingAlert:[Theme Singleton].PleaseEnteraUsernameText];
     }
 }
 
@@ -507,7 +508,7 @@ static BOOL bInitialized = false;
                     }
                     else
                     {
-                        [MainViewController fadingAlert:NSLocalizedString(@"Invalid PIN", nil)];
+                        [MainViewController fadingAlert:[Theme Singleton].InvalidPINText];
                         [self.PINCodeView becomeFirstResponder];
                     }
                     break;
@@ -528,7 +529,7 @@ static BOOL bInitialized = false;
 
 - (void)PINabortPermanently
 {
-    [MainViewController fadingAlert:NSLocalizedString(@"Invalid PIN. Please log in.", nil)];
+    [MainViewController fadingAlert:[Theme Singleton].InvalidPINAbortText];
 
     bPINModeEnabled = false;
     [self viewDidLoad];
@@ -851,7 +852,7 @@ static BOOL bInitialized = false;
 
 - (void)launchTwoFactorMenu
 {
-    _tfaMenuViewController = (TwoFactorMenuViewController *)[Util animateIn:@"TwoFactorMenuViewController" storyboard:@"Settings" parentController:self];
+    _tfaMenuViewController = (TwoFactorMenuViewController *)[Util animateIn:@"TwoFactorMenuViewController" storyboard:[Theme Singleton].settingsText parentController:self];
     _tfaMenuViewController.delegate = self;
     _tfaMenuViewController.username = self.usernameSelector.textField.text;
     _tfaMenuViewController.bStoreSecret = NO;
@@ -1034,11 +1035,11 @@ static BOOL bInitialized = false;
     NSString *message = [NSString stringWithFormat:[Theme Singleton].deleteAccountWarning,
                        string];
     UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:NSLocalizedString(@"Delete Account", nil)
+                          initWithTitle:[Theme Singleton].DeleteAccountText
                           message:NSLocalizedString(message, nil)
                           delegate:self
-                          cancelButtonTitle:@"No"
-                          otherButtonTitles:@"Yes", nil];
+                          cancelButtonTitle:[Theme Singleton].NoDescriptionText
+                          otherButtonTitles:[Theme Singleton].YesDescriptionText];
     [alert show];
     [self.usernameSelector dismissPopupPicker];
 }
@@ -1137,11 +1138,11 @@ static BOOL bInitialized = false;
     NSString *message = [NSString stringWithFormat:[Theme Singleton].deleteAccountWarning,
                                                    string];
     UIAlertView *alert = [[UIAlertView alloc]
-            initWithTitle:NSLocalizedString(@"Delete Account", @"Delete Account")
+            initWithTitle:[Theme Singleton].DeleteAccountText
                   message:NSLocalizedString(message, nil)
                  delegate:self
-        cancelButtonTitle:@"No"
-        otherButtonTitles:@"Yes", nil];
+        cancelButtonTitle:[Theme Singleton].NoDescriptionText
+        otherButtonTitles:[Theme Singleton].YesDescriptionText];
     [alert show];
     [self.PINCodeView becomeFirstResponder];
 

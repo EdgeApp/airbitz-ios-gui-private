@@ -125,11 +125,11 @@
 {
 	if(mode == MODE_NAME)
 	{
-		[self.modeButton setTitle:NSLocalizedString(@"Name", nil) forState:UIControlStateNormal];
+		[self.modeButton setTitle:[Theme Singleton].NameCategoryButtonText forState:UIControlStateNormal];
 	}
 	else
 	{
-		[self.modeButton setTitle:NSLocalizedString(@"Level", nil) forState:UIControlStateNormal];
+		[self.modeButton setTitle:[Theme Singleton].LevelcategoryKey forState:UIControlStateNormal];
 	}
 }
 
@@ -167,11 +167,11 @@
 	NSDictionary *dict = [categoriesArray objectAtIndex:indexPath.row];
 	if(mode == MODE_NAME)
 	{
-		cell.categoryLabel.text = [dict objectForKey:[Theme Singleton].nameLocationDict];
+		cell.categoryLabel.text = [dict objectForKey:@"name"];
 	}
 	else
 	{
-		cell.categoryLabel.text = [dict objectForKey:[Theme Singleton].nameLocationDict];
+		cell.categoryLabel.text = [dict objectForKey:@"name"];
 	}
 	
 	return cell;
@@ -185,7 +185,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSDictionary *dict = [categoriesArray objectAtIndex:indexPath.row];
-	[self.delegate moreCategoriesViewControllerDone:self withCategory:[dict objectForKey:[Theme Singleton].nameLocationDict]];
+	[self.delegate moreCategoriesViewControllerDone:self withCategory:[dict objectForKey:@"name"]];
 }
 
 #pragma mark - DLURLServer Callbacks

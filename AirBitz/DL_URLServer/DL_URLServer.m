@@ -11,6 +11,7 @@
 #import <netinet/in.h>
 #import "DL_URLServer.h"
 #import <AFNetworking/AFSecurityPolicy.h>
+#import "Theme.h"
 
 #define LIBRARY_VERSION		@"2.3"
 
@@ -106,7 +107,7 @@ __strong static DL_URLServer *singleton = nil;  // this will be the one and only
             self.status,
             self.dateCreated,
             self.dateComplete,
-            self.bCache ? @"YES" : @"NO",           
+            self.bCache ? [Theme Singleton].YesDescriptionText: [Theme Singleton].NoDescriptionText,
             self.cacheAgeAccepted]);
 }
 

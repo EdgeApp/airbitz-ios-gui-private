@@ -172,11 +172,11 @@ typedef enum eAlertType
         if ([self isFormDirty]) {
             _alertType = ALERT_TYPE_EXIT;
             UIAlertView *alert = [[UIAlertView alloc]
-                initWithTitle:NSLocalizedString(@"Warning!", nil)
-                message:NSLocalizedString(@"You are about to exit password recovery and questions & answers have not yet been set.", nil)
+                initWithTitle:[Theme Singleton].WarningInitWithTitle
+                message:[Theme Singleton].MessagePasswordRecoveryExit
                 delegate:self
-                cancelButtonTitle:@"Cancel"
-                otherButtonTitles:@"OK", nil];
+                cancelButtonTitle:[Theme Singleton].cancelButtonText
+                otherButtonTitles:[Theme Singleton].OkCancelButtonTitle];
             [alert show];
         } else {
             [self exit];
@@ -189,11 +189,11 @@ typedef enum eAlertType
 	_alertType = ALERT_TYPE_SKIP_THIS_STEP;
 	
 	UIAlertView *alert = [[UIAlertView alloc]
-						  initWithTitle:NSLocalizedString(@"Skip this step", @"Title of Skip this step alert")
-						  message:NSLocalizedString(@"**WARNING** You will NEVER be able to recover your password if it is forgotten!!", @"")
+						  initWithTitle:[Theme Singleton].SkipThisStepTitle
+						  message:[Theme Singleton].SkipThisStepMessage
 						  delegate:self
-						  cancelButtonTitle:@"Go Back"
-						  otherButtonTitles:@"OK", nil];
+						  cancelButtonTitle:[Theme Singleton].GoBackSkipThisStep
+						  otherButtonTitles:[Theme Singleton].OkCancelButtonTitle];
 	[alert show];
 }
 
@@ -270,9 +270,9 @@ typedef enum eAlertType
 		{
 			UIAlertView *alert = [[UIAlertView alloc]
 								  initWithTitle:self.labelTitle.text
-								  message:@"You must answer all six questions. Make sure your answers are long enough."
+								  message:[Theme Singleton].AlertMessageToAnswerAllQuestions
 								  delegate:nil
-								  cancelButtonTitle:@"OK"
+								  cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
 								  otherButtonTitles:nil];
 			[alert show];
 		}
@@ -281,9 +281,9 @@ typedef enum eAlertType
 	{
 		UIAlertView *alert = [[UIAlertView alloc]
 							  initWithTitle:self.labelTitle.text
-							  message:@"You must choose all six questions before proceeding."
+							  message:[Theme Singleton].AlertMessageToChooseAllQuestionsProcedding
 							  delegate:nil
-							  cancelButtonTitle:@"OK"
+							  cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
 							  otherButtonTitles:nil];
 		[alert show];
 	}
@@ -308,8 +308,8 @@ typedef enum eAlertType
         self.imageSkip.hidden = NO;
         self.passwordView.hidden = YES;
         self.buttonBack.hidden = YES;
-        [self.completeSignupButton setTitle:NSLocalizedString(@"Complete Signup", @"") forState:UIControlStateNormal];
-        [self.labelTitle setText:NSLocalizedString(@"Password Recovery Setup", @"")];
+        [self.completeSignupButton setTitle:[Theme Singleton].CompleteSignupText forState:UIControlStateNormal];
+        [self.labelTitle setText:[Theme Singleton].PasswordRecoverySetupText];
     }
     else if (mode == PassRecovMode_Change)
     {
@@ -317,8 +317,8 @@ typedef enum eAlertType
         self.imageSkip.hidden = YES;
         self.buttonBack.hidden = NO;
         self.passwordView.hidden = ![CoreBridge passwordExists];
-        [self.completeSignupButton setTitle:NSLocalizedString(@"Done", @"") forState:UIControlStateNormal];
-        [self.labelTitle setText:NSLocalizedString(@"Password Recovery Setup", @"")];
+        [self.completeSignupButton setTitle:[Theme Singleton].doneButtonText forState:UIControlStateNormal];
+        [self.labelTitle setText:[Theme Singleton].PasswordRecoverySetupText];
     }
     else if (mode == PassRecovMode_Recover)
     {
@@ -326,8 +326,8 @@ typedef enum eAlertType
         self.imageSkip.hidden = YES;
         self.buttonBack.hidden = NO;
         self.passwordView.hidden = YES;
-        [self.completeSignupButton setTitle:NSLocalizedString(@"Done", @"") forState:UIControlStateNormal];
-        [self.labelTitle setText:NSLocalizedString(@"Password Recovery", @"")];
+        [self.completeSignupButton setTitle:[Theme Singleton].doneButtonText forState:UIControlStateNormal];
+        [self.labelTitle setText:[Theme Singleton].passwordRecoveryText];
     }
 }
 
@@ -368,10 +368,10 @@ typedef enum eAlertType
             [self launchTwoFactorMenu];
         } else {
             UIAlertView *alert = [[UIAlertView alloc]
-                                initWithTitle:NSLocalizedString(@"Wrong Answers", nil)
-                                message:NSLocalizedString(@"The given answers were incorrect. Please try again.", nil)
+                                initWithTitle:[Theme Singleton].WrongAnswersCheckRecoveryResponse
+                                message:[Theme Singleton].GivenAnswersIncorrectCheckRecoveryResponse
                                 delegate:nil
-                                cancelButtonTitle:@"OK"
+                                cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                                 otherButtonTitles:nil];
             [alert show];
         }
@@ -380,7 +380,7 @@ typedef enum eAlertType
 
 - (void)launchTwoFactorMenu
 {
-    _tfaMenuViewController = (TwoFactorMenuViewController *)[Util animateIn:@"TwoFactorMenuViewController" storyboard:@"Settings" parentController:self];
+    _tfaMenuViewController = (TwoFactorMenuViewController *)[Util animateIn:@"TwoFactorMenuViewController" storyboard:[Theme Singleton].settingsText parentController:self];
     _tfaMenuViewController.delegate = self;
     _tfaMenuViewController.username = self.strUserName;
     _tfaMenuViewController.bStoreSecret = NO;
@@ -408,10 +408,10 @@ typedef enum eAlertType
         }
         if (!success && !bBack) {
             UIAlertView *alert = [[UIAlertView alloc]
-                                initWithTitle:NSLocalizedString(@"Unable to import token", nil)
-                                message:NSLocalizedString(@"We are sorry we are unable to import the token at this time.", nil)
+                                initWithTitle:[Theme Singleton].UnableToImportTokenTitle
+                                message:[Theme Singleton].UnableToImportTokenMessage
                                 delegate:nil
-                                cancelButtonTitle:@"OK"
+                                cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                                 otherButtonTitles:nil];
             [alert show];
         }
@@ -429,10 +429,10 @@ typedef enum eAlertType
     }
     if ([CoreBridge passwordExists] && ![CoreBridge passwordOk:password]) {
         UIAlertView *alert = [[UIAlertView alloc]
-                             initWithTitle:NSLocalizedString(@"Password mismatch", nil)
-                             message:NSLocalizedString(@"Please enter your correct password.", nil)
+                             initWithTitle:[Theme Singleton].PasswordMismatchTitle
+                             message:[Theme Singleton].PasswordMismatchMessage
                              delegate:nil
-                             cancelButtonTitle:@"OK"
+                             cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                              otherButtonTitles:nil];
         [alert show];
         return;
@@ -462,7 +462,7 @@ typedef enum eAlertType
 		BOOL wasChosen = NO;
 		for (NSString *string in self.arrayChosenQuestions)
 		{
-			if ([string isEqualToString:[question objectForKey:@"question"]])
+			if ([string isEqualToString:[question objectForKey:[Theme Singleton].QuestionKey]])
 			{
 				wasChosen = YES;
 				break;
@@ -686,7 +686,7 @@ typedef enum eAlertType
 
         //position complete Signup button below QA views
         self.completeSignupButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.completeSignupButton setTitle:@"Complete Sign Up" forState:UIControlStateNormal];
+        [self.completeSignupButton setTitle:[Theme Singleton].CompleteSignupText forState:UIControlStateNormal];
         self.completeSignupButton.backgroundColor = [Theme Singleton].colorButtonGreen;
         [self.completeSignupButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         self.completeSignupButton.hidden = NO;
@@ -727,7 +727,7 @@ typedef enum eAlertType
 							  initWithTitle:self.labelTitle.text
 							  message:[NSString stringWithFormat:@"%@ failed:\n%@", self.labelTitle.text, self.strReason]
 							  delegate:nil
-							  cancelButtonTitle:@"OK"
+							  cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
 							  otherButtonTitles:nil];
 		[alert show];
     }
@@ -745,21 +745,21 @@ typedef enum eAlertType
                 tABC_QuestionChoice *pChoice = pChoices->aChoices[i];
 				NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
 				
-				[dict setObject: [NSString stringWithFormat:@"%s", pChoice->szQuestion] forKey:@"question"];
-				[dict setObject: [NSNumber numberWithInt:pChoice->minAnswerLength] forKey:@"minLength"];
+				[dict setObject: [NSString stringWithFormat:@"%s", pChoice->szQuestion] forKey:[Theme Singleton].QuestionKey];
+				[dict setObject: [NSNumber numberWithInt:pChoice->minAnswerLength] forKey:[Theme Singleton].MinLengthQuestionChoicesText];
 				
                 //printf("question: %s, category: %s, min: %d\n", pChoice->szQuestion, pChoice->szCategory, pChoice->minAnswerLength);
 				
 				NSString *category = [NSString stringWithFormat:@"%s", pChoice->szCategory];
-				if([category isEqualToString:@"string"])
+				if([category isEqualToString:[Theme Singleton].StringQuestionChoicesText])
 				{
 					[self.arrayCategoryString addObject:dict];
 				}
-				else if([category isEqualToString:@"numeric"])
+				else if([category isEqualToString:[Theme Singleton].NumericQuestionChoicesText])
 				{
 					[self.arrayCategoryNumeric addObject:dict];
 				}
-				else if([category isEqualToString:@"must"])
+				else if([category isEqualToString:[Theme Singleton].MustQuestionChoicesText])
 				{
 					[self.arrayCategoryMust addObject:dict];
 				}
@@ -776,20 +776,20 @@ typedef enum eAlertType
     {
 		_alertType = ALERT_TYPE_SETUP_COMPLETE;
 		UIAlertView *alert = [[UIAlertView alloc]
-							  initWithTitle:NSLocalizedString(@"Recovery Questions Set", @"Title of recovery questions setup complete alert")
-							  message:@"Your password recovery questions and answers are now set up.  When recovering your password, your answers must match exactly. **DO NOT FORGET YOUR PASSWORD AND RECOVERY ANSWERS** YOUR ACCOUNT CANNOT BE RECOVERED WITHOUT THEM!!"
+							  initWithTitle:[Theme Singleton].RecoverCompleteTitle
+							  message:[Theme Singleton].RecoverCompleteMessage
 							  delegate:self
-							  cancelButtonTitle:(_mode == PassRecovMode_SignUp ? @"Back" : nil)
-							  otherButtonTitles:@"OK", nil];
+							  cancelButtonTitle:(_mode == PassRecovMode_SignUp ? [Theme Singleton].backButtonText : nil)
+							  otherButtonTitles:[Theme Singleton].OkCancelButtonTitle];
 		[alert show];
     }
     else
     {
 		UIAlertView *alert = [[UIAlertView alloc]
-							  initWithTitle:NSLocalizedString(@"Recovery Questions Not Set", @"Title of recovery questions setup error alert")
-							  message:[NSString stringWithFormat:@"Setting recovery questions failed:\n%@", self.strReason]
+							  initWithTitle:[Theme Singleton].RecoveryQuestionsNotSet
+							  message:[NSString stringWithFormat:[Theme Singleton].SettingRecoveryFailed, self.strReason]
 							  delegate:nil
-							  cancelButtonTitle:@"OK"
+							  cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
 							  otherButtonTitles:nil];
 		[alert show];
     }
@@ -868,7 +868,7 @@ typedef enum eAlertType
 - (void)QuestionAnswerView:(QuestionAnswerView *)view didSelectQuestion:(NSDictionary *)question oldQuestion:(NSString *)oldQuestion
 {
 	//NSLog(@"Selected Question: %@", [question objectForKey:@"question"]);
-	[self.arrayChosenQuestions addObject:[question objectForKey:@"question"]];
+	[self.arrayChosenQuestions addObject:[question objectForKey:[Theme Singleton].QuestionKey]];
 	
 	[self.arrayChosenQuestions removeObject:oldQuestion];
 

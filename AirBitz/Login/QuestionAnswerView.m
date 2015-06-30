@@ -7,6 +7,7 @@
 //
 
 #import "QuestionAnswerView.h"
+#import "Theme.h"
 
 
 #define QA_TABLE_HEIGHT     200.0
@@ -276,7 +277,7 @@
 	//cell.textLabel.minimumScaleFactor = 0.5;
 	cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.numberOfLines = 0;
-	cell.textLabel.text = [dict objectForKey:@"question"];
+	cell.textLabel.text = [dict objectForKey:[Theme Singleton].QuestionKey];
 	//NSLog(@"Row: %i, text: %@", indexPath.row, cell.textLabel.text);
 	return cell;
 }
@@ -289,8 +290,8 @@
     [self QuestionButton];
 
     self.strPrevQuestion = self.labelQuestion.text;
-    self.labelQuestion.text = [_dict objectForKey:@"question"];
-	self.answerField.minimumCharacters = [[_dict objectForKey:@"minLength"] intValue];
+    self.labelQuestion.text = [_dict objectForKey:[Theme Singleton].QuestionKey];
+	self.answerField.minimumCharacters = [[_dict objectForKey:[Theme Singleton].MinLengthQuestionChoicesText] intValue];
 	_questionSelected = YES;
 
     [self performSelector:@selector(notifyQuestionSelected) withObject:nil afterDelay:QA_ANIM_TIME_SECS];

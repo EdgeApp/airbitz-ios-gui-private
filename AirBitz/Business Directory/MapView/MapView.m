@@ -78,17 +78,17 @@
 	
 	CLLocationCoordinate2D coord;
 	
-	NSDictionary* locationDict = [business objectForKey:[Theme Singleton].locationObjectKey];
+	NSDictionary* locationDict = [business objectForKey:@"location"];
 	if(locationDict && (locationDict != (id)[NSNull null]))
 	{
 		
-		coord.latitude = [[locationDict objectForKey:[Theme Singleton].latitudeLocationDict] floatValue];
-		coord.longitude = [[locationDict objectForKey:[Theme Singleton].longitudeLocationDict] floatValue];
+		coord.latitude = [[locationDict objectForKey:@"Latitude"] floatValue];
+		coord.longitude = [[locationDict objectForKey:@"longitude"]floatValue];
 		
 		ann = (Annotation*)[[Annotation alloc] initWithCoordinate:coord]; //loc.m_latlong
 
-		((Annotation *)ann).title = [business objectForKey:[Theme Singleton].nameLocationDict];
-		((Annotation *)ann).subtitle = [business objectForKey:[Theme Singleton].addressLocationDict];
+		((Annotation *)ann).title = [business objectForKey:@"name"];
+		((Annotation *)ann).subtitle = [business objectForKey:@"aadress"];
 		((Annotation *)ann).business = business;
 
 		[self addAnnotation:ann];
@@ -101,11 +101,11 @@
 {
 	CLLocationCoordinate2D coord;
 	
-	NSDictionary* locationDict = [business objectForKey:[Theme Singleton].locationObjectKey];
+	NSDictionary* locationDict = [business objectForKey:@"location"];
     if(locationDict && (locationDict != (id)[NSNull null]))
 	{
-		coord.latitude = [[locationDict objectForKey:[Theme Singleton].latitudeLocationDict] floatValue];
-		coord.longitude = [[locationDict objectForKey:[Theme Singleton].longitudeLocationDict] floatValue];
+		coord.latitude = [[locationDict objectForKey:@"Latitude"]floatValue];
+		coord.longitude = [[locationDict objectForKey:@"longitude"] floatValue];
 		
 		NSObject <MKAnnotation> *ann;
 		for (ann in self.annotations)

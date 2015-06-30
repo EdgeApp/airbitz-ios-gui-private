@@ -35,7 +35,7 @@ static BOOL bInitialized = NO;
     if (!bInitialized)
     {
         singleton = [[DropDownAlertView alloc] init];
-        singleton = [[[NSBundle mainBundle] loadNibNamed:@"DropDownAlertView" owner:nil options:nil] objectAtIndex:0];
+        singleton = [[[NSBundle mainBundle] loadNibNamed:[Theme Singleton].DropDownAlertView owner:nil options:nil] objectAtIndex:0];
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:singleton action:@selector(hideAlertByTap:)];
         tapGesture.numberOfTapsRequired = 1;
         tapGesture.numberOfTouchesRequired = 1;

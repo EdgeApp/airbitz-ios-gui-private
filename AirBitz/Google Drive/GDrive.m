@@ -10,6 +10,7 @@
 #import "GDrive.h"
 #import "GTMOAuth2ViewControllerTouch.h"
 #import "GTLDrive.h"
+#import "Theme.h"
 
 static NSString *const kKeychainItemName = @"Google Drive AirBitz";
 static NSString *const kClientID = @"23790723117-ae9hg18f53mqk0gr6ufu5mbflsuu442o.apps.googleusercontent.com";
@@ -134,7 +135,7 @@ static NSString *const kClientSecret = @"2aTGAtZEjPN-WxYFFYSEwoYD";
     alert = [[UIAlertView alloc] initWithTitle: title
                                        message: message
                                       delegate: nil
-                             cancelButtonTitle: @"OK"
+                             cancelButtonTitle: [Theme Singleton].OkCancelButtonTitle
                              otherButtonTitles: nil];
     [alert show];
 }
@@ -144,7 +145,7 @@ static NSString *const kClientSecret = @"2aTGAtZEjPN-WxYFFYSEwoYD";
 {
     UIAlertView *progressAlert;
     progressAlert = [[UIAlertView alloc] initWithTitle:title
-                                               message:@"Please wait..."
+                                               message:[Theme Singleton].PleaseWaitProgressAlertText
                                               delegate:nil
                                      cancelButtonTitle:nil
                                      otherButtonTitles:nil];
@@ -167,7 +168,7 @@ static NSString *const kClientSecret = @"2aTGAtZEjPN-WxYFFYSEwoYD";
 	
     GTLDriveFile *file = [GTLDriveFile object];
     file.title = name; //[dateFormat stringFromDate:[NSDate date]];
-    file.descriptionProperty = @"Uploaded from AirBitz";
+    file.descriptionProperty = [Theme Singleton].UploadedFromAirBitzText;
     file.mimeType = mimeType;
 	
     //NSData *data = UIImagePNGRepresentation((UIImage *)image);
@@ -175,7 +176,7 @@ static NSString *const kClientSecret = @"2aTGAtZEjPN-WxYFFYSEwoYD";
     GTLQueryDrive *query = [GTLQueryDrive queryForFilesInsertWithObject:file
                                                        uploadParameters:uploadParameters];
 	
-    UIAlertView *waitIndicator = [self showWaitIndicator:@"Uploading to Google Drive"];
+    UIAlertView *waitIndicator = [self showWaitIndicator:[Theme Singleton].UploadingToGoogleDrive];
 	
     [self.driveService executeQuery:query
                   completionHandler:^(GTLServiceTicket *ticket,
