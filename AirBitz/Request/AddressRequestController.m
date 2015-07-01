@@ -44,18 +44,18 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
 	_walletSelector.delegate = self;
-    _walletSelector.textLabel.text = NSLocalizedString(@"Wallet:", nil);
+    _walletSelector.textLabel.text = [Theme Singleton].walletNameHeaderText;
     [_walletSelector setButtonWidth:200];
 //    [self loadWalletInfo];
     [self validateUri];
 
     NSMutableString *msg = [[NSMutableString alloc] init];
     if ([strName length] > 0) {
-        [msg appendFormat:NSLocalizedString(@"%@ has requested a bitcoin address to send money to.", nil), strName];
+        [msg appendFormat:[Theme Singleton].RequestaBitcoinAddressText, strName];
     } else {
-        [msg appendString:NSLocalizedString(@"An app has requested a bitcoin address to send money to.", nil)];
+        [msg appendString:[Theme Singleton].AppRequestedBitcoinAddress];
     }
-    [msg appendString:NSLocalizedString(@" Please choose a wallet to receive funds.", nil)];
+    [msg appendString:[Theme Singleton].ChooseWallettoReceiveFundsText];
     _message.text = msg;
 
 
@@ -72,7 +72,7 @@
 - (void)updateViews:(NSNotification *)notification
 {
     [MainViewController changeNavBarOwner:self];
-    [MainViewController changeNavBarTitle:self title:@"Airbitz"];
+    [MainViewController changeNavBarTitle:self title:[Theme Singleton].AirbitzCheckUserReview];
     [MainViewController changeNavBar:self title:[Theme Singleton].backButtonText side:NAV_BAR_LEFT button:true enable:false action:nil fromObject:self];
     [MainViewController changeNavBar:self title:[Theme Singleton].helpButtonText side:NAV_BAR_RIGHT button:true enable:false action:nil fromObject:self];
 

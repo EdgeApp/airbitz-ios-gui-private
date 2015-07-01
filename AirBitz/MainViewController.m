@@ -945,7 +945,7 @@ MainViewController *singleton;
     } else {
         _passwordIncorrectAlert = [[UIAlertView alloc]
                 initWithTitle:[Theme Singleton].IncorrectCurrentPassword
-                      message:NSLocalizedString(@"Incorrect Password. Try again, or change it now?", nil)
+                      message:[Theme Singleton].IncorrectPasswordTryAgain
                      delegate:self
             cancelButtonTitle:[Theme Singleton].NoDescriptionText
             otherButtonTitles:[Theme Singleton].YesDescriptionText, [Theme Singleton].ChangeText, nil];
@@ -959,11 +959,11 @@ MainViewController *singleton;
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
         if([User offerUserReview]) {
             _userReviewAlert = [[UIAlertView alloc]
-                                    initWithTitle:NSLocalizedString(@"Airbitz", nil)
-                                    message:NSLocalizedString(@"How are you liking Airbitz?", nil)
+                                    initWithTitle:[Theme Singleton].AirbitzCheckUserReview
+                                    message:[Theme Singleton].MessageCheckUserReview
                                     delegate:self
-                                    cancelButtonTitle:NSLocalizedString(@"Not so good", nil)
-                                    otherButtonTitles:NSLocalizedString(@"It's great", nil), nil];
+                                    cancelButtonTitle:[Theme Singleton].CheckUserReviewCancelButtonTitle
+                                    otherButtonTitles:[Theme Singleton].CheckUserReviewOtherButtonTitle, nil];
             [_userReviewAlert show];
         }
     });
@@ -1003,19 +1003,19 @@ MainViewController *singleton;
     // Prevent displaying multiple alerts
     else if (_receivedAlert == nil)
     {
-        NSString *title = NSLocalizedString(@"Received Funds", nil);
-        NSString *msg = NSLocalizedString(@"Bitcoin received. Tap for details.", nil);
+        NSString *title = [Theme Singleton].ReceivedFundsAlert;
+        NSString *msg = [Theme Singleton].BitcoinReceivedAlert;
         if (transaction && transaction.amountSatoshi < 0) {
-            title = NSLocalizedString(@"Sent Funds", nil);
-            msg = NSLocalizedString(@"Bitcoin sent. Tap for details.", nil);
+            title = [Theme Singleton].SendFundsAlert;
+            msg =[Theme Singleton].BitcoinSentAlertMessage;
         }
         [[AudioController controller] playReceived];
         _receivedAlert = [[UIAlertView alloc]
                                 initWithTitle:title
                                 message:msg
                                 delegate:self
-                                cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+                                cancelButtonTitle:[Theme Singleton].cancelButtonText
+                                otherButtonTitles:[Theme Singleton].OkCancelButtonTitle, nil];
         [_receivedAlert show];
         // Wait 5 seconds and dimiss
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
@@ -1057,11 +1057,11 @@ MainViewController *singleton;
 
     if (receiveCount <= 2 && ([LocalSettings controller].bMerchantMode == false))
     {
-        message = [NSString stringWithFormat:@"You received Bitcoin!\n%@ (~%@)\nUse the Payee, Category, and Notes field to optionally tag your transaction", coin, fiat];
+        message = [NSString stringWithFormat:[Theme Singleton].YouReceivedBitcoinText, coin, fiat];
     }
     else
     {
-        message = [NSString stringWithFormat:@"You Received Bitcoin!\n%@ (~%@)", coin, fiat];
+        message = [NSString stringWithFormat:[Theme Singleton].YouReceivedBitcoinReceivedCount, coin, fiat];
     }
 
     if([LocalSettings controller].bMerchantMode)
@@ -1141,7 +1141,7 @@ MainViewController *singleton;
             [Util checkPasswordAsync:[[alertView textFieldAtIndex:0] text]
                         withSelector:@selector(handlePasswordResults:)
                           controller:self];
-            [FadingAlertView create:self.view message:NSLocalizedString(@"Checking password...", nil) holdTime:FADING_ALERT_HOLD_TIME_FOREVER_WITH_SPINNER];
+            [FadingAlertView create:self.view message:[Theme Singleton].CheckingPasswordText holdTime:FADING_ALERT_HOLD_TIME_FOREVER_WITH_SPINNER];
         }
     }
     else if (_passwordIncorrectAlert == alertView)
@@ -1167,21 +1167,21 @@ MainViewController *singleton;
         if(buttonIndex == 0) // No, send an email to support
         {
             _userReviewNOAlert = [[UIAlertView alloc]
-                                  initWithTitle:NSLocalizedString(@"Airbitz", nil)
-                                  message:NSLocalizedString(@"Would you like to send us some feedback?", nil)
+                                  initWithTitle:[Theme Singleton].AirbitzCheckUserReview
+                                  message:[Theme Singleton].UserReviewNoAlertMessage
                                   delegate:self
-                                  cancelButtonTitle:NSLocalizedString(@"No thanks", nil)
-                                  otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+                                  cancelButtonTitle:[Theme Singleton].NoThanksUserReview
+                                  otherButtonTitles:[Theme Singleton].OkCancelButtonTitle, nil];
             [_userReviewNOAlert show];
         }
         else if (buttonIndex == 1) // Yes, launch userReviewOKAlert
         {
             _userReviewOKAlert = [[UIAlertView alloc]
-                                initWithTitle:NSLocalizedString(@"Airbitz", nil)
-                                message:NSLocalizedString(@"Would you like to write a review in the App store?", nil)
+                                initWithTitle:[Theme Singleton].AirbitzCheckUserReview
+                                message:[Theme Singleton].WriteUserReviewAppStore
                                 delegate:self
-                                cancelButtonTitle:NSLocalizedString(@"No thanks", nil)
-                                otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+                                cancelButtonTitle:[Theme Singleton].NoThanksUserReview
+                                otherButtonTitles:[Theme Singleton].OkCancelButtonTitle, nil];
             [_userReviewOKAlert show];
         }
     }
@@ -1218,8 +1218,8 @@ MainViewController *singleton;
     if ([MFMailComposeViewController canSendMail])
     {
         MFMailComposeViewController *mailComposer = [[MFMailComposeViewController alloc] init];
-        [mailComposer setToRecipients:[NSArray arrayWithObjects:@"support@airbitz.co", nil]];
-        NSString *subject = [NSString stringWithFormat:@"Airbitz Feedback"];
+        [mailComposer setToRecipients:[NSArray arrayWithObjects:[Theme Singleton].SendSupportEmail]];
+        NSString *subject = [NSString stringWithFormat:[Theme Singleton].AirbitzFeedback];
         [mailComposer setSubject:NSLocalizedString(subject, nil)];
         mailComposer.mailComposeDelegate = self;
         [self presentViewController:mailComposer animated:YES completion:nil];
@@ -1227,9 +1227,9 @@ MainViewController *singleton;
     else
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
-                                                        message:@"Can't send e-mail"
+                                                        message:[Theme Singleton].CantSendemailText
                                                        delegate:nil
-                                              cancelButtonTitle:@"OK"
+                                              cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                                               otherButtonTitles:nil];
         [alert show];
     }
@@ -1239,26 +1239,26 @@ MainViewController *singleton;
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
-    NSString *strTitle = NSLocalizedString(@"AirBitz", nil);
+    NSString *strTitle = [Theme Singleton].AirbitzCheckUserReview;
     NSString *strMsg = nil;
     
     switch (result)
     {
         case MFMailComposeResultCancelled:
-            strMsg = NSLocalizedString(@"Email cancelled", nil);
+            strMsg = [Theme Singleton].EmailCancelledText;
             break;
             
         case MFMailComposeResultSaved:
-            strMsg = NSLocalizedString(@"Email saved to send later", nil);
+            strMsg = [Theme Singleton].EmailSavedToLaterText;
             break;
             
         case MFMailComposeResultSent:
-            strMsg = NSLocalizedString(@"Email sent", nil);
+            strMsg = [Theme Singleton].EmailSentText;
             break;
             
         case MFMailComposeResultFailed:
         {
-            strTitle = NSLocalizedString(@"Error sending Email", nil);
+            strTitle =[Theme Singleton].ErrorSendingEmailText;
             strMsg = [error localizedDescription];
             break;
         }
@@ -1269,7 +1269,7 @@ MainViewController *singleton;
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle
                                                     message:strMsg
                                                    delegate:nil
-                                          cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                          cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                                           otherButtonTitles:nil];
     [alert show];
     
@@ -1286,11 +1286,11 @@ MainViewController *singleton;
         [[User Singleton] clear];
         [self resetViews:nil];
         _passwordChangeAlert = [[UIAlertView alloc]
-                                initWithTitle:NSLocalizedString(@"Password Change", nil)
-                                message:NSLocalizedString(@"The password to this account was changed by another device. Please login using the new credentials.", nil)
+                                initWithTitle:[Theme Singleton].PasswordChangeText
+                                message:[Theme Singleton].PasswordChangeAlertMessage
                                 delegate:self
                     cancelButtonTitle:nil
-                    otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+                    otherButtonTitles:[Theme Singleton].OkCancelButtonTitle];
         [_passwordChangeAlert show];
         [[UIApplication sharedApplication] endIgnoringInteractionEvents];
     }
@@ -1300,11 +1300,11 @@ MainViewController *singleton;
 {
     if (_otpRequiredAlert == nil) {
         _otpRequiredAlert = [[UIAlertView alloc]
-                                initWithTitle:NSLocalizedString(@"Two Factor Authentication On", nil)
-                                message:NSLocalizedString(@"Two Factor Authentication (enchanced security) has been enabled from a different device for this account. Please enable 2 Factor Authentication for full access from this device.", nil)
+                                initWithTitle:[Theme Singleton].TwoFactorAuthenticationText
+                                message:[Theme Singleton].TwoFactorAuthenticationMessage
                                 delegate:self
-                                cancelButtonTitle:NSLocalizedString(@"Remind Me Later", nil)
-                                otherButtonTitles:NSLocalizedString(@"Enable", nil), nil];
+                                cancelButtonTitle:[Theme Singleton].RemindMeLaterText
+                                otherButtonTitles:[Theme Singleton].EnableText, nil];
         [_otpRequiredAlert show];
     }
 }
@@ -1313,10 +1313,10 @@ MainViewController *singleton;
 {
     if (_otpSkewAlert == nil) {
         _otpSkewAlert = [[UIAlertView alloc]
-            initWithTitle:NSLocalizedString(@"Two Factor Invalid", nil)
-            message:NSLocalizedString(@"The Two Factor Authentication token on this device is invalid. Either the token was changed by a different device our your clock is skewed. Please check your system time to ensure it is correct.", nil)
+            initWithTitle:[Theme Singleton].TwoFactorsInvalidText
+            message:[Theme Singleton].TwoFactorsInvalidMessage
             delegate:self
-            cancelButtonTitle:NSLocalizedString(@"OK", nil)
+            cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
             otherButtonTitles:nil, nil];
         [_otpSkewAlert show];
     }
@@ -1910,7 +1910,7 @@ MainViewController *singleton;
 
             if (bImportMode)
             {
-                NSAssert(_selectedViewController == _importViewController, @"Must be Import");
+                NSAssert(_selectedViewController == _importViewController, [Theme Singleton].MustBeImportText);
                 [MainViewController animateSwapViewControllers:fakeViewController out:_importViewController];
                 _importViewController = nil;
                 _importViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"SendViewController"];
@@ -1924,7 +1924,7 @@ MainViewController *singleton;
             }
             else
             {
-                NSAssert(_selectedViewController == _sendViewController, @"Must be Send");
+                NSAssert(_selectedViewController == _sendViewController, [Theme Singleton].MustBeSendText);
                 [MainViewController animateSwapViewControllers:fakeViewController out:_sendViewController];
                 _sendViewController = nil;
                 _sendViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"SendViewController"];

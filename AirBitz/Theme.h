@@ -105,8 +105,8 @@
 @property (nonatomic) NSString *LargeDigitInputSelected;
 @property (nonatomic) NSString *UsernameSelectorText;
 @property (nonatomic) NSString *PleaseEnteraUsernameText;
-@property (nonatomic) NSString *InvalidPINText;
-@property (nonatomic) NSString *InvalidPINAbortText;
+@property (nonatomic) NSString *IncorrectPINText;
+@property (nonatomic) NSString *IncorrectPINAbortText;
 @property (nonatomic) NSString *DeleteAccountText;
 @property (nonatomic) NSString *TimeToCrackPassword;
 @property (nonatomic) NSString *WarningInitWithTitle;
@@ -160,6 +160,90 @@
 @property (nonatomic) NSString *ChangeText;
 @property (nonatomic) NSString *GreatJobRememberingText;
 @property (nonatomic) NSString *IncorrectPasswordText;
+@property (nonatomic) NSString *IncorrectPasswordTryAgain;
+@property (nonatomic) NSString *AirbitzCheckUserReview;
+@property (nonatomic) NSString *MessageCheckUserReview;
+@property (nonatomic) NSString *CheckUserReviewCancelButtonTitle;
+@property (nonatomic) NSString *CheckUserReviewOtherButtonTitle;
+@property (nonatomic) NSString *ReceivedFundsAlert;
+@property (nonatomic) NSString *BitcoinReceivedAlert;
+@property (nonatomic) NSString *SendFundsAlert;
+@property (nonatomic) NSString *BitcoinSentAlertMessage;
+@property (nonatomic) NSString *UserReviewNoAlertMessage;
+@property (nonatomic) NSString *NoThanksUserReview;
+@property (nonatomic) NSString *WriteUserReviewAppStore;
+@property (nonatomic) NSString *CheckingPasswordText;
+@property (nonatomic) NSString *CantSendemailText;
+@property (nonatomic) NSString *EmailCancelledText;
+@property (nonatomic) NSString *EmailSavedToLaterText;
+@property (nonatomic) NSString *EmailSentText;
+@property (nonatomic) NSString *ErrorSendingEmailText;
+@property (nonatomic) NSString *PasswordChangeText;
+@property (nonatomic) NSString *PasswordChangeAlertMessage;
+@property (nonatomic) NSString *AirbitzFeedback;
+@property (nonatomic) NSString *YouReceivedBitcoinText;
+@property (nonatomic) NSString *YouReceivedBitcoinReceivedCount;
+@property (nonatomic) NSString *SendSupportEmail;
+@property (nonatomic) NSString *TwoFactorAuthenticationText;
+@property (nonatomic) NSString *TwoFactorAuthenticationMessage;
+@property (nonatomic) NSString *RemindMeLaterText;
+@property (nonatomic) NSString *EnableText;
+@property (nonatomic) NSString *TwoFactorsInvalidText;
+@property (nonatomic) NSString *TwoFactorsInvalidMessage;
+@property (nonatomic) NSString *MustBeImportText;
+@property (nonatomic) NSString *MustBeSendText;
+@property (nonatomic) NSString *TodayText;
+@property (nonatomic) NSString *YesterdayText;
+@property (nonatomic) NSString *DaysAgoText;
+@property (nonatomic) NSString *RequestaBitcoinAddressText;
+@property (nonatomic) NSString *AppRequestedBitcoinAddress;
+@property (nonatomic) NSString *ChooseWallettoReceiveFundsText;
+@property (nonatomic) NSString *PresentQRcodeText;
+@property (nonatomic) NSString *CopiedToTheClipboard;
+@property (nonatomic) NSString *WaitingForPaymentText;
+@property (nonatomic) NSString *RequestedText;
+@property (nonatomic) NSString *RemainingText;
+@property (nonatomic) NSString *ReceivedText;
+@property (nonatomic) NSString *PartialPaymentText;
+@property (nonatomic) NSString *ConnectedText;
+@property (nonatomic) NSString *PaymentReceivedText;
+@property (nonatomic) NSString *HardwareNotSupportedText;
+@property (nonatomic) NSString *NotAuthorizedToUseBluetoothText;
+@property (nonatomic) NSString *BluetoothPoweredOffText;
+@property (nonatomic) NSString *BluetoothCurrentlyResettingText;
+@property (nonatomic) NSString *SMSCancelledText;
+@property (nonatomic) NSString *ErrorSendingSMSText;
+@property (nonatomic) NSString *SMSSentText;
+@property (nonatomic) NSString *RequestedViaText;
+@property (nonatomic) NSString *EmailRecipientText;
+@property (nonatomic) NSString *SMSRecipientText;
+@property (nonatomic) NSString *SendingStatusMessageText;
+@property (nonatomic) NSString *PasswordLabelPINTitle;
+@property (nonatomic) NSString *PINLabelTitle;
+@property (nonatomic) NSString *DigitPIN;
+@property (nonatomic) NSString *EnterAmountContinueChecksText;
+@property (nonatomic) NSString *AmountTooSmallAlert;
+@property (nonatomic) NSString *ErrorSendFailedText;
+@property (nonatomic) NSString *IncorrectEntryPINWaitText;
+@property (nonatomic) NSString *PleaseEnterYourPInText;
+@property (nonatomic) NSString *PleaseWaitAlertdelayedText;
+@property (nonatomic) NSString *PleaseWaitMoreSomeTimeText;
+@property (nonatomic) NSString *CameraUnavailableText;
+@property (nonatomic) NSString *BitcoinAddressMismatchText;
+@property (nonatomic) NSString *BitcoinAddressMismatchMessage;
+@property (nonatomic) NSString *InvalidBluetoothRequestText;
+@property (nonatomic) NSString *RequestorContactSupportText;
+@property (nonatomic) NSString *InvalidPrivateKeyText;
+
+
+
+
+
+
+
+
+
+
 
 
 

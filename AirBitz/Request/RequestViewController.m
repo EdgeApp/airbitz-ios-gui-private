@@ -213,7 +213,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(exchangeRateUpdate:) name:NOTIFICATION_EXCHANGE_RATE_CHANGE object:nil];
 
     if ([[User Singleton] offerRequestHelp]) {
-        [MainViewController fadingAlertHelpPopup:NSLocalizedString(@"Present QR code to Sender and have them scan to send you payment",nil)];
+        [MainViewController fadingAlertHelpPopup:[Theme Singleton].PresentQRcodeText];
     }
 
     [self updateViews:nil];
@@ -415,7 +415,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
         UIPasteboard *pb = [UIPasteboard generalPasteboard];
         [pb setString:addressString];
 
-        [MainViewController fadingAlert:NSLocalizedString(@"Request is copied to the clipboard", nil)];
+        [MainViewController fadingAlert:[Theme Singleton].CopiedToTheClipboard];
     }
     else if(segmentedControlCopyEmailSMS.selectedSegmentIndex == 1)
     {
@@ -538,16 +538,16 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
         case kRequest:
         case kDone:
         {
-            self.statusLine2.text = NSLocalizedString(@"Waiting for Payment...", @"Status on Request screen");
+            self.statusLine2.text = [Theme Singleton].WaitingForPaymentText;
             break;
         }
         case kPartial:
         {
             remaining = self.amountSatoshiRequested - self.amountSatoshiReceived;
-            NSString *string = NSLocalizedString(@"Requested...", @"Requested string on Request screen");
+            NSString *string = [Theme Singleton].RequestedText;
             self.statusLine1.text = [NSString stringWithFormat:@"%@ %@",[CoreBridge formatSatoshi:self.amountSatoshiRequested],string];
 
-            string = NSLocalizedString(@"Remaining...", @"Remaining string on Request screen");
+            string = [Theme Singleton].RemainingText;
             self.statusLine2.text = [NSString stringWithFormat:@"%@ %@",[CoreBridge formatSatoshi:remaining],string];
             break;
         }
@@ -556,12 +556,12 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
             if (self.amountSatoshiReceived > 0)
             {
-                NSString *string = NSLocalizedString(@"Received...", @"Received string on Request screen");
+                NSString *string =[Theme Singleton].ReceivedText;
                 self.statusLine2.text = [NSString stringWithFormat:@"%@ %@",[CoreBridge formatSatoshi:self.amountSatoshiReceived],string];
             }
             else
             {
-                self.statusLine2.text = NSLocalizedString(@"Waiting for Payment...", @"Status on Request screen");
+                self.statusLine2.text = [Theme Singleton].WaitingForPaymentText;
             }
             break;
         }
@@ -1112,7 +1112,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
     line1 = self.connectedName;
     line2 = @"";
-    line3 = NSLocalizedString(@"Connected", "Popup text when BLE connects");
+    line3 = [Theme Singleton].ConnectedText;
 
     //see if there is a match between advertised name and name in contacts.  If so, use the photo from contacts
     BOOL imageIsFromContacts = NO;
@@ -1170,9 +1170,9 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
         {
             delay = 4.0;
             duration = 2.0;
-            line1 = NSLocalizedString(@"** Warning **", @"** Warning ** text on partial payment");
+            line1 = [Theme Singleton].WarningInitWithTitle;
             line2 = @"";
-            line3 = NSLocalizedString(@"Partial Payment", @"Text on partial payment");
+            line3 = [Theme Singleton].PartialPaymentText;
             image = [UIImage imageNamed:@"Warning_icon.png"];
             [[AudioController controller] playPartialReceived];
             break;
@@ -1182,7 +1182,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
             delay = 7.0;
             duration = 2.0;
             image = [UIImage imageNamed:@"bitcoin_symbol.png"];
-            line1 = NSLocalizedString(@"Payment received", @"Text on payment recived popup");
+            line1 = [Theme Singleton].PaymentReceivedText;
             tABC_Error error;
             double currency;
             if (ABC_SatoshiToCurrency([[User Singleton].name UTF8String], [[User Singleton].password UTF8String],
@@ -1433,16 +1433,16 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     NSString * state = nil;
     switch ([self.peripheralManager state]) {
         case CBPeripheralManagerStateUnsupported:
-            state = @"Your hardware doesn't support Bluetooth LE sharing.";
+            state = [Theme Singleton].HardwareNotSupportedText;
             break;
         case CBPeripheralManagerStateUnauthorized:
-            state = @"This app is not authorized to use Bluetooth. You can change this in the Settings app.";
+            state = [Theme Singleton].NotAuthorizedToUseBluetoothText;
             break;
         case CBPeripheralManagerStatePoweredOff:
-            state = @"Bluetooth is currently powered off.";
+            state = [Theme Singleton].BluetoothPoweredOffText;
             break;
         case CBPeripheralManagerStateResetting:
-            state = @"Bluetooth is currently resetting.";
+            state =[Theme Singleton].BluetoothCurrentlyResettingText;
             break;
         case CBPeripheralManagerStatePoweredOn:
             NSLog(@"powered on");
@@ -1705,7 +1705,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     NSDate *now = [NSDate date];
 
     NSMutableString *notes = [[NSMutableString alloc] init];
-    [notes appendFormat:NSLocalizedString(@"%@ / %@ requested via %@ on %@.", nil),
+    [notes appendFormat:[Theme Singleton].RequestedViaText,
                         [CoreBridge formatSatoshi:_txDetails.amountSatoshi],
                         [CoreBridge formatCurrency:_txDetails.amountCurrency withCurrencyNum:[CoreBridge Singleton].currentWallet.currencyNum],
                         _requestType,
@@ -1750,10 +1750,10 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     {
         case MessageComposeResultCancelled:
         {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Airbitz"
-                                                            message:@"SMS cancelled"
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[Theme Singleton].AirbitzCheckUserReview
+                                                            message:[Theme Singleton].SMSCancelledText
                                                            delegate:nil
-                                                  cancelButtonTitle:@"OK"
+                                                  cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                                                   otherButtonTitles: nil];
             [alert show];
         }
@@ -1761,10 +1761,10 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
         case MessageComposeResultFailed:
         {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Airbitz"
-                                                            message:@"Error sending SMS"
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[Theme Singleton].AirbitzCheckUserReview
+                                                            message:[Theme Singleton].ErrorSendingSMSText
                                                            delegate:nil
-                                                  cancelButtonTitle:@"OK"
+                                                  cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                                                   otherButtonTitles: nil];
             [alert show];
         }
@@ -1772,10 +1772,10 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
         case MessageComposeResultSent:
         {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Airbitz"
-                                                            message:@"SMS sent"
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[Theme Singleton].AirbitzCheckUserReview
+                                                            message:[Theme Singleton].SMSSentText
                                                            delegate:nil
-                                                  cancelButtonTitle:@"OK"
+                                                  cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                                                   otherButtonTitles: nil];
             [alert show];
         }
@@ -1794,26 +1794,26 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
 {
-    NSString *strTitle = NSLocalizedString(@"Airbitz", nil);
+    NSString *strTitle = [Theme Singleton].AirbitzCheckUserReview;
     NSString *strMsg = nil;
 
     switch (result)
     {
         case MFMailComposeResultCancelled:
-            strMsg = NSLocalizedString(@"Email cancelled", nil);
+            strMsg = [Theme Singleton].EmailCancelledText;
             break;
 
         case MFMailComposeResultSaved:
-            strMsg = NSLocalizedString(@"Email saved to send later", nil);
+            strMsg = [Theme Singleton].EmailSavedToLaterText;
             break;
 
         case MFMailComposeResultSent:
-            strMsg = NSLocalizedString(@"Email sent", nil);
+            strMsg = [Theme Singleton].EmailSentText;
             break;
 
         case MFMailComposeResultFailed:
         {
-            strTitle = NSLocalizedString(@"Error sending Email", nil);
+            strTitle = [Theme Singleton].ErrorSendingEmailText;
             strMsg = [error localizedDescription];
             break;
         }
@@ -1824,7 +1824,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle
                                                     message:strMsg
                                                    delegate:nil
-                                          cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                          cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                                           otherButtonTitles:nil];
     [alert show];
 
@@ -1857,10 +1857,10 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     }
     else
     {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Airbitz"
-                                                        message:(controller.mode == RecipientMode_SMS ? @"SMS cancelled" : @"Email cancelled")
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:[Theme Singleton].AirbitzCheckUserReview
+                                                        message:(controller.mode == RecipientMode_SMS ? [Theme Singleton].SMSCancelledText : [Theme Singleton].EmailCancelledText)
                                                        delegate:nil
-                                              cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                              cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                                               otherButtonTitles:nil];
         [alert show];
     }

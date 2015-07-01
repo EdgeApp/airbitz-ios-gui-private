@@ -413,7 +413,7 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
     }
     else
     {
-        self.scanningErrorLabel.text = NSLocalizedString(@"Camera unavailable. Please enable camera access on your phone's Privacy Settings", @"");
+        self.scanningErrorLabel.text = [Theme Singleton].CameraUnavailableText;
         [self.scanningErrorLabel setHidden:NO];
     }
 
@@ -920,10 +920,10 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
     {
         //start at index 9 to skip over "bitcoin:".  Partial address is 10 characters long
         UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:NSLocalizedString(@"Bitcoin address mismatch", nil)
-                              message:[NSString stringWithFormat:@"The bitcoin address of the device you connected with:%@ does not match the address that was initially advertised:%@", [stringFromData substringWithRange:NSMakeRange(8, 10) ], self.advertisedPartialBitcoinAddress]
+                              initWithTitle:[Theme Singleton].BitcoinAddressMismatchText
+                              message:[NSString stringWithFormat:[Theme Singleton].BitcoinAddressMismatchMessage, [stringFromData substringWithRange:NSMakeRange(8, 10) ], self.advertisedPartialBitcoinAddress]
                               delegate:nil
-                              cancelButtonTitle:@"OK"
+                              cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                               otherButtonTitles:nil];
         [alert show];
     }
@@ -944,10 +944,10 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
         {
             // start at index 9 to skip over "bitcoin:".  Partial address is 10 characters long
             UIAlertView *alert = [[UIAlertView alloc]
-                                  initWithTitle:NSLocalizedString(@"Bitcoin address mismatch", nil)
-                                  message:[NSString stringWithFormat:@"The bitcoin address of the device you connected with:%@ does not match the address that was initially advertised:%@", [stringFromData substringWithRange:NSMakeRange(8, 10) ], self.advertisedPartialBitcoinAddress]
+                                  initWithTitle:[Theme Singleton].BitcoinAddressMismatchText
+                                  message:[NSString stringWithFormat:[Theme Singleton].BitcoinAddressMismatchMessage, [stringFromData substringWithRange:NSMakeRange(8, 10) ], self.advertisedPartialBitcoinAddress]
                                   delegate:nil
-                                  cancelButtonTitle:@"OK"
+                                  cancelButtonTitle:Theme Singleton].OkCancelButtonTitle
                                   otherButtonTitles:nil];
             [alert show];
         }
@@ -1290,9 +1290,9 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
     else
     {
         // Invalid BLE request. Assign some warning text and image
-        scanCell.contactName.text = NSLocalizedString(@"Invalid Bluetooth Request", nil);
+        scanCell.contactName.text = [Theme Singleton].InvalidBluetoothRequestText;
         scanCell.contactName.textColor = scanCell.duplicateNamesLabel.textColor;
-        scanCell.contactBitcoinAddress.text = NSLocalizedString(@"Please have Requestor contact support", nil);
+        scanCell.contactBitcoinAddress.text = [Theme Singleton].RequestorContactSupportText;
         scanCell.contactBitcoinAddress.textColor = scanCell.duplicateNamesLabel.textColor;
         scanCell.contactImage.image = [UIImage imageNamed:@"Warning_icon.png"];
     }
@@ -1463,7 +1463,7 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
     if (NO == bSuccess)
     {
         _sweptAddress = nil;
-        [MainViewController fadingAlert:NSLocalizedString(@"Invalid private key", nil)];
+        [MainViewController fadingAlert:[Theme Singleton].InvalidPrivateKeyText];
         [self updateState];
     }
 }
@@ -1860,7 +1860,7 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
               initWithTitle:NSLocalizedString(@"Error", nil)
                     message:NSLocalizedString(@"Import failed", nil)
                     delegate:nil
-        cancelButtonTitle:@"OK"
+        cancelButtonTitle:[[Theme Singleton].OkCancelButtonTitle ]
         otherButtonTitles:nil];
     [alert show];
     _callbackTimer = nil;
@@ -1906,7 +1906,7 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
                         initWithTitle:NSLocalizedString(@"Error", nil)
                               message:message
                              delegate:self
-                    cancelButtonTitle:@"OK"
+                    cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                     otherButtonTitles:nil, nil];
             }
         }
@@ -1919,7 +1919,7 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
                     initWithTitle:NSLocalizedString(@"Error", nil)
                           message:message
                          delegate:self
-                cancelButtonTitle:@"OK"
+                cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                 otherButtonTitles:nil, nil];
         }
 
@@ -1960,8 +1960,8 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
                                        initWithTitle:NSLocalizedString(@"Sorry", nil)
                                        message:zmessage
                                        delegate:self
-                                       cancelButtonTitle:@"No"
-                                       otherButtonTitles:@"OK", nil];
+                                       cancelButtonTitle:[Theme Singleton].NoDescriptionText
+                                       otherButtonTitles:[Theme Singleton].OkCancelButtonTitle];
                         [_tweetAlert show];
                         bSuccess = YES;
                     }
@@ -1975,8 +1975,8 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
                                        initWithTitle:NSLocalizedString(@"Congratulations", nil)
                                        message:message
                                        delegate:self
-                                       cancelButtonTitle:@"No"
-                                       otherButtonTitles:@"OK", nil];
+                                       cancelButtonTitle:[Theme Singleton].NoDescriptionText
+                                       otherButtonTitles:[Theme Singleton].OkCancelButtonTitle];
                         [_tweetAlert show];
                         bSuccess = YES;
                     }

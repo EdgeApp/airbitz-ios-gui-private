@@ -437,7 +437,7 @@
     [self.view addSubview:self.sendStatusController.view];
     self.sendStatusController.view.alpha = 0.0;
 
-    self.sendStatusController.messageLabel.text = NSLocalizedString(@"Sending...", @"status message");
+    self.sendStatusController.messageLabel.text = [Theme Singleton].SendingStatusMessageText;
 
     [UIView animateWithDuration:0.35
                           delay:0.0
@@ -580,7 +580,7 @@
                             initWithTitle:title
                             message:message
                             delegate:nil
-                            cancelButtonTitle:@"OK"
+                            cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                             otherButtonTitles:nil];
     [_alert show];
     [self hideSendStatus];
@@ -645,7 +645,7 @@
         // Show password
         _passwordRequired = YES;
         _labelPINTitle.hidden = NO;
-        _labelPINTitle.text = NSLocalizedString(@"Password", nil);
+        _labelPINTitle.text = [Theme Singleton].PasswordLabelPINTitle;
         _withdrawlPIN.hidden = NO;
         _withdrawlPIN.keyboardType = UIKeyboardTypeDefault;
         _imagePINEmboss.hidden = NO;
@@ -656,7 +656,7 @@
         // Show PIN pad
         _pinRequired = YES;
         _labelPINTitle.hidden = NO;
-        _labelPINTitle.text = NSLocalizedString(@"4 Digit PIN", nil);
+        _labelPINTitle.text = [Theme Singleton].DigitPIN;
         _withdrawlPIN.hidden = NO;
         _withdrawlPIN.keyboardType = UIKeyboardTypeNumberPad;
         _imagePINEmboss.hidden = NO;
@@ -867,22 +867,22 @@
     if (kInvalidEntryWait == [User Singleton].sendState)
     {
         NSTimeInterval remaining = [user getRemainingInvalidEntryWait];
-        NSString *entry = _pinRequired ? @"PIN" : @"password";
+        NSString *entry = _pinRequired ? [Theme Singleton].PINLabelTitle :[Theme Singleton].PasswordLabelPINTitle;
         if(remaining < 1.5) {
             [self fadingAlertDelayed:[NSString stringWithFormat:
-                NSLocalizedString(@"Please wait 1 second before retrying %@", nil), entry]];
+                [Theme Singleton].PleaseWaitAlertdelayedText, entry]];
         }
         else
         {
            [self fadingAlertDelayed:[NSString stringWithFormat:
-                NSLocalizedString(@"Please wait %.0f seconds before retrying %@", nil), remaining, entry]];
+               [Theme Singleton].PleaseWaitMoreSomeTimeText, remaining, entry]];
         }
     }
     else
     {
         //make sure PIN is good
         if (_pinRequired && !self.withdrawlPIN.text.length) {
-            [self fadingAlertDelayed:NSLocalizedString(@"Please enter your PIN", nil)];
+            [self fadingAlertDelayed:[Theme Singleton].PleaseEnterYourPInText];
             [_withdrawlPIN becomeFirstResponder];
             [_withdrawlPIN selectAll:nil];
             [_confirmationSlider resetIn:1.0];
@@ -894,11 +894,11 @@
             if (kInvalidEntryWait == [user sendInvalidEntry])
             {
                 NSTimeInterval remaining = [user getRemainingInvalidEntryWait];
-                [self fadingAlertDelayed:[NSString stringWithFormat:NSLocalizedString(@"Incorrect PIN. Please wait %.0f seconds and try again.", nil), remaining]];
+                [self fadingAlertDelayed:[NSString stringWithFormat:[Theme Singleton].IncorrectEntryPINWaitText, remaining]];
             }
             else
             {
-                [self fadingAlertDelayed:NSLocalizedString(@"Incorrect PIN", nil)];
+                [self fadingAlertDelayed:[Theme Singleton].IncorrectPINText];
             }
             [_withdrawlPIN becomeFirstResponder];
             [_withdrawlPIN selectAll:nil];
@@ -927,7 +927,7 @@
     if (bAuthenticated) {
         [self continueChecks];
     } else {
-        [MainViewController fadingAlert:NSLocalizedString(@"Incorrect password", nil)];
+        [MainViewController fadingAlert:[Theme Singleton].IncorrectPasswordText];
         [_withdrawlPIN becomeFirstResponder];
         [_withdrawlPIN selectAll:nil];
     }
@@ -936,7 +936,7 @@
 - (void)continueChecks
 {
     if (_spendTarget.pSpend->amount == 0) {
-        [self fadingAlertDelayed:NSLocalizedString(@"Please enter an amount to send", nil)];
+        [self fadingAlertDelayed:[Theme Singleton].EnterAmountContinueChecksText];
     } else {
         [self initiateSendRequest];
     }
@@ -944,7 +944,7 @@
 
 - (void)tooSmallAlert
 {
-    [self fadingAlertDelayed:NSLocalizedString(@"Amount is too small", nil)];
+    [self fadingAlertDelayed:[Theme Singleton].AmountTooSmallAlert];
 }
 
 #pragma mark - Calculator delegates
@@ -1002,7 +1002,7 @@
 
 - (void)txSendFailed:(tABC_Error)Error
 {
-    NSString *title = NSLocalizedString(@"Error during send", nil);
+    NSString *title = [Theme Singleton].ErrorSendFailedText;
     NSString *message = [Util errorMap:&Error];
     NSArray *params = [NSArray arrayWithObjects: title, message, nil];
     dispatch_async(dispatch_get_main_queue(), ^(void) {

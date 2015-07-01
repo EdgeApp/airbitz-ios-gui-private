@@ -29,6 +29,7 @@
 //
 
 #import "NSDate+Helper.h"
+#import "Theme.h"
 
 @implementation NSDate (Helper)
 
@@ -68,13 +69,13 @@
 	NSString *text = nil;
 	switch (daysAgo) {
 		case 0:
-			text = @"Today";
+			text = [Theme Singleton].TodayText;
 			break;
 		case 1:
-			text = @"Yesterday";
+			text = [Theme Singleton].YesterdayText;
 			break;
 		default:
-			text = [NSString stringWithFormat:@"%ld days ago", (long)daysAgo];
+			text = [NSString stringWithFormat:[Theme Singleton].DaysAgoText, (long)daysAgo];
 	}
 	return text;
 }

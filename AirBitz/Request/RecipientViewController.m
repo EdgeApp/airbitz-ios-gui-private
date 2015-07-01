@@ -74,7 +74,7 @@
     self.tableContacts.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];     // This will remove extra separators from tableview
 
     // set the title based on why we were brought up
-    self.labelTitle.text = (self.mode == RecipientMode_Email ? @"Email Recipient" : @"SMS Recipient");
+    self.labelTitle.text = (self.mode == RecipientMode_Email ? [Theme Singleton].EmailRecipientText :[Theme Singleton].SMSRecipientText);
 
     [self.textFieldRecipient becomeFirstResponder];
 
@@ -93,7 +93,7 @@
 {
     [self.tableContacts setContentInset:UIEdgeInsetsMake(0, 0, [MainViewController getFooterHeight], 0)];
     [MainViewController changeNavBarOwner:self];
-    [MainViewController changeNavBarTitle:self title:(self.mode == RecipientMode_Email ? @"Email Recipient" : @"SMS Recipient")];
+    [MainViewController changeNavBarTitle:self title:(self.mode == RecipientMode_Email ? [Theme Singleton].EmailRecipientText :[Theme Singleton].SMSRecipientText)];
 
     [MainViewController changeNavBar:self title:[Theme Singleton].backButtonText side:NAV_BAR_LEFT button:true enable:true action:@selector(buttonBackTouched:) fromObject:self];
     [MainViewController changeNavBar:self title:[Theme Singleton].helpButtonText side:NAV_BAR_RIGHT button:true enable:true action:@selector(buttonInfoTouched:) fromObject:self];
