@@ -54,7 +54,7 @@
     self.pinTextField.minimumCharacters = ABC_MIN_PIN_LENGTH;
     self.contentViewY = self.contentView.frame.origin.y;
 
-    self.labelString = NSLocalizedString(@"Sign Up", @"Sign Up");
+    self.labelString = [Theme Singleton].signupText;
 
 
 }
@@ -95,7 +95,7 @@
     // check the new password fields
     if ([self newPasswordFieldsAreValid] == YES && [self fieldsAreValid] == YES)
     {
-        [FadingAlertView create:self.view message:NSLocalizedString(@"Creating and securing account", nil) holdTime:FADING_ALERT_HOLD_TIME_FOREVER_WITH_SPINNER];
+        [FadingAlertView create:self.view message:[Theme Singleton].creatingAccountText holdTime:FADING_ALERT_HOLD_TIME_FOREVER_WITH_SPINNER];
 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             tABC_Error error;
@@ -175,10 +175,10 @@
         if (bNewPasswordFieldsAreValid == NO)
         {
             UIAlertView *alert = [[UIAlertView alloc]
-                    initWithTitle:NSLocalizedString(@"Insufficient Password", @"Title of password check popup alert")
+                    initWithTitle:[Theme Singleton].InsufficientPasswordText
                           message:message
                          delegate:nil
-                cancelButtonTitle:@"OK"
+                cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                 otherButtonTitles:nil];
             [alert show];
         }
@@ -189,9 +189,9 @@
                     initWithTitle:self.labelString
                           message:[NSString stringWithFormat:@"%@ failed:\n%@",
                                                              self.labelString,
-                                          NSLocalizedString(@"Password does not match re-entered password", @"")]
+                                          [Theme Singleton].PasswordDoesNotMatchText]
                          delegate:nil
-                cancelButtonTitle:@"OK"
+                cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                 otherButtonTitles:nil];
             [alert show];
         }
@@ -216,9 +216,9 @@
                     initWithTitle:self.labelString
                           message:[NSString stringWithFormat:@"%@ failed:\n%@",
                                                              self.labelString,
-                                                             [NSString stringWithFormat:NSLocalizedString(@"PIN must be 4 digits", @""), ABC_MIN_PIN_LENGTH]]
+                                                             [NSString stringWithFormat:[Theme Singleton].PINMustBeAlertText, ABC_MIN_PIN_LENGTH]]
                          delegate:nil
-                cancelButtonTitle:@"OK"
+                cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                 otherButtonTitles:nil];
             [alert show];
         }

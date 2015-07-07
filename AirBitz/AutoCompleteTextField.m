@@ -457,8 +457,8 @@
 			[foundBusinessNames addObject:[dict objectForKey:@"text"]];
 		}
 #else
-		NSString *name = [dict objectForKey:[Theme Singleton].nameLocationDict];
-		if(name && name != (id)[NSNull null])
+        NSString *name = [dict objectForKey:name];
+        if(name && name != (id)[NSNull null])
 		{
 			[foundBusinessNames addObject:name];
 		}

@@ -256,7 +256,7 @@ typedef enum eRequestType
     [center addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [center addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 
-    self.nameTextField.placeholder = NSLocalizedString(@"Enter Payee", nil);
+    self.nameTextField.placeholder = [Theme Singleton].EnterPayeeText;
     self.nameTextField.autocapitalizationType = UITextAutocapitalizationTypeWords;
     self.nameTextField.font = [UIFont systemFontOfSize:18];
     
@@ -367,7 +367,7 @@ typedef enum eRequestType
 - (void)setupNavBar
 {
     [MainViewController changeNavBarOwner:self];
-    [MainViewController changeNavBarTitle:self title:NSLocalizedString(@"Transaction Details", @"Transaction Details header text")];
+    [MainViewController changeNavBarTitle:self title:[Theme Singleton].TransactionDetailsText];
     [MainViewController changeNavBar:self title:[Theme Singleton].backButtonText side:NAV_BAR_LEFT button:true enable:true action:@selector(Exit:) fromObject:self];
     [MainViewController changeNavBar:self title:[Theme Singleton].helpButtonText side:NAV_BAR_RIGHT button:true enable:false action:@selector(info:) fromObject:self];
 }
@@ -523,11 +523,10 @@ typedef enum eRequestType
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^ {
         if (_wallet && !_bOldTransaction && [CoreBridge needsRecoveryQuestionsReminder:_wallet]) {
             _recoveryAlert = [[UIAlertView alloc]
-                                initWithTitle:NSLocalizedString(@"Recovery Password Reminder", nil)
-                                message:NSLocalizedString(@"You've received Bitcoin! We STRONGLY recommend setting up Password Recovery questions and answers. Otherwise you will NOT be able to access your account if your password is forgotten.", nil)
-                                delegate:self
-                                cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
-                                otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+                              initWithTitle:[Theme Singleton].RecoveryPasswordReinderText
+                                message:[Theme Singleton].RecoveryAlertMessage                                delegate:self
+                                cancelButtonTitle:[Theme Singleton].cancelButtonText
+                                otherButtonTitles:[Theme Singleton].OkCancelButtonTitle];
             dispatch_async(dispatch_get_main_queue(), ^ {
                 [_recoveryAlert show];
             });

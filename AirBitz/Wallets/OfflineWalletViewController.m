@@ -10,6 +10,7 @@
 #import "CommonTypes.h"
 #import "ABC.h"
 #import "Config.h"
+#import "Theme.h"
 
 
 /////// TEMP UNTIL WE GET FUNCTIONALITY IN THE CORE
@@ -144,7 +145,7 @@ extern void QRcode_free(QRcode *qrcode);
                           initWithTitle:NSLocalizedString(@"Offline Wallet", nil)
                           message:NSLocalizedString(@"Public Key copied to clipboard", nil)
                           delegate:nil
-                          cancelButtonTitle:@"OK"
+                          cancelButtonTitle:[Theme Singleton].Ok
                           otherButtonTitles:nil];
     [alert show];
 }

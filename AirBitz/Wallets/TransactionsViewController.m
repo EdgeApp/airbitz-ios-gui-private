@@ -1048,7 +1048,7 @@
         {
             if (transaction.bSyncing)
             {
-                cell.confirmationLabel.text = NSLocalizedString(@"Synchronizing", nil);
+                cell.confirmationLabel.text = [Theme Singleton].SynchronizingText;
                 cell.confirmationLabel.textColor = COLOR_BALANCE;
             }
             else if (transaction.confirmations == 0)
@@ -1064,7 +1064,7 @@
             else if (transaction.confirmations >= CONFIRMED_CONFIRMATION_COUNT)
             {
                 cell.confirmationLabel.textColor = COLOR_POSITIVE;
-                cell.confirmationLabel.text = NSLocalizedString(@"Confirmed", nil);
+                cell.confirmationLabel.text = [Theme Singleton].ConfirmedText;
             }
             else
             {
@@ -1217,7 +1217,7 @@
         if (buttonIndex == 1)
         {
             // Do Rename popup
-            renameAlert =[[UIAlertView alloc ] initWithTitle:NSLocalizedString(@"Rename Wallet", nil)
+            renameAlert =[[UIAlertView alloc ] initWithTitle:[Theme Singleton].RenameWalletText
                                                      message:longTapWallet.strName
                                                     delegate:self
                                            cancelButtonTitle:[Theme Singleton].cancelButtonText
@@ -1346,7 +1346,7 @@
     self.walletsTable.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.walletsTable.allowsSelectionDuringEditing = YES;
 
-    self.balanceHeaderView = [WalletHeaderView CreateWithTitle:NSLocalizedString(@"Loading Balance...", @"title of wallets table balance header")
+    self.balanceHeaderView = [WalletHeaderView CreateWithTitle:[Theme Singleton].LoadingBalanceText
                                                             collapse:NO];
     self.balanceHeaderView.btn_expandCollapse.hidden = YES;
     self.balanceHeaderView.btn_expandCollapse.enabled = NO;
@@ -1356,7 +1356,7 @@
     self.balanceHeaderView.segmentedControlBTCUSD.enabled = YES;
     self.balanceHeaderView.delegate = self;
 
-    self.activeWalletsHeaderView = [WalletHeaderView CreateWithTitle:NSLocalizedString(@"WALLETS", @"title of active wallets table")
+    self.activeWalletsHeaderView = [WalletHeaderView CreateWithTitle:[Theme Singleton].WalletsText
                                                             collapse:NO];
     self.activeWalletsHeaderView.btn_expandCollapse.hidden = YES;
     self.activeWalletsHeaderView.btn_expandCollapse.enabled = NO;
@@ -1367,8 +1367,7 @@
     self.activeWalletsHeaderView.delegate = self;
 
     _archiveCollapsed = [[NSUserDefaults standardUserDefaults] boolForKey:ARCHIVE_COLLAPSED];
-    self.archivedWalletsHeaderView = [WalletHeaderView CreateWithTitle:NSLocalizedString(@"ARCHIVE", @"title of archived wallets table")
-                                                              collapse:_archiveCollapsed];
+    self.archivedWalletsHeaderView = [WalletHeaderView CreateWithTitle:[Theme Singleton].ArchiveText                                                              collapse:_archiveCollapsed];
     self.archivedWalletsHeaderView.btn_addWallet.hidden = YES;
     self.archivedWalletsHeaderView.btn_addWallet.enabled = NO;
     self.archivedWalletsHeaderView.segmentedControlBTCUSD.hidden = YES;
@@ -1419,7 +1418,7 @@
         cell.name.text = wallet.strName;
     } else {
         cell.userInteractionEnabled = NO;
-        cell.name.text = NSLocalizedString(@"Loading...", @"");
+        cell.name.text = [Theme Singleton].LoadingText;
     }
 
     cell.amount.text = [self formatAmount:wallet];

@@ -9,6 +9,7 @@
 #import "ABC.h"
 #import "Util.h"
 #import "User.h"
+#import "Theme.h"
 
 @interface SignUpUsernameController () <UITextFieldDelegate>
 {
@@ -39,7 +40,7 @@
 	_userNameTextField.delegate = self;
     _userNameTextField.minimumCharacters = ABC_MIN_USERNAME_LENGTH;
 
-    self.labelString = NSLocalizedString(@"Sign Up", @"Sign Up");
+    self.labelString = [Theme Singleton];
 
     if (self.manager.strInUserName) {
         self.userNameTextField.text = self.manager.strInUserName;
@@ -52,6 +53,7 @@
     self.buttonBlocker.frame = self.view.bounds;
     self.buttonBlocker.hidden = YES;
     [self.view addSubview:self.buttonBlocker];
+    self.userNameTextField.keyboardType = UIKeyboardTypeASCIICapable;
 
 }
 
@@ -140,10 +142,10 @@
     } else {
 //        [self dismissFading:NO];
         UIAlertView *alert = [[UIAlertView alloc]
-                initWithTitle:NSLocalizedString(@"Account Sign Up", @"Title of account signin error alert")
+                initWithTitle:[Theme Singleton].AccountSignUpText
                       message:[NSString stringWithFormat:@"Sign-Up failed:\n%@", _strReason]
                      delegate:nil
-            cancelButtonTitle:@"OK"
+            cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
             otherButtonTitles:nil];
         [alert show];
     }
@@ -171,9 +173,9 @@
                 initWithTitle:self.labelString
                       message:[NSString stringWithFormat:@"%@ failed:\n%@",
                                                          self.labelString,
-                                      NSLocalizedString(@"You must enter a user name", @"")]
+                                      [Theme Singleton].EnteraUsernameText]
                      delegate:nil
-            cancelButtonTitle:@"OK"
+            cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
             otherButtonTitles:nil];
         [alert show];
     }
@@ -195,9 +197,9 @@
                     initWithTitle:self.labelString
                           message:[NSString stringWithFormat:@"%@ failed:\n%@",
                                                              self.labelString,
-                                                             [NSString stringWithFormat:NSLocalizedString(@"Username must be at least %d characters.", @""), ABC_MIN_USERNAME_LENGTH]]
+                                                             [NSString stringWithFormat:[Theme Singleton].UsernameAlertTextField, ABC_MIN_USERNAME_LENGTH]]
                          delegate:nil
-                cancelButtonTitle:@"OK"
+                cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                 otherButtonTitles:nil];
             [alert show];
         }

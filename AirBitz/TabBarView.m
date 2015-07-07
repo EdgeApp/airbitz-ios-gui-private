@@ -8,6 +8,7 @@
 
 #import "TabBarView.h"
 #import "TabBarButton.h"
+#import "Theme.h"
 
 #define TAG_FIRST_DIVIDER    10
 
@@ -35,27 +36,27 @@
     
     //set up the button characteristics
     button = [self findButton:0];
-    button.label.text = NSLocalizedString(@"DIRECTORY", "tab bar button title");
+    button.label.text = [Theme Singleton].DirectoryText;
     button.icon.image = [UIImage imageNamed:@"icon_directory_dark"];
     button.selectedIcon.image = [UIImage imageNamed:@"icon_directory"];
     
     button = [self findButton:1];
-    button.label.text = NSLocalizedString(@"RECEIVE", "tab bar button title");
+    button.label.text = [Theme Singleton].ReceiveText;
     button.icon.image = [UIImage imageNamed:@"icon_request_dark"];
     button.selectedIcon.image = [UIImage imageNamed:@"icon_request"];
     
     button = [self findButton:2];
-    button.label.text = NSLocalizedString(@"SEND", "tab bar button title");
+    button.label.text = [Theme Singleton].SendText;
     button.icon.image = [UIImage imageNamed:@"icon_send_dark"];
     button.selectedIcon.image = [UIImage imageNamed:@"icon_send"];
     
     button = [self findButton:3];
-    button.label.text = NSLocalizedString(@"WALLETS", "tab bar button title");
+    button.label.text = [Theme Singleton].WalletsText;
     button.icon.image = [UIImage imageNamed:@"icon_wallet_dark"];
     button.selectedIcon.image = [UIImage imageNamed:@"icon_wallet"];
     
     button = [self findButton:4];
-    button.label.text = NSLocalizedString(@"MORE", "tab bar button title");
+    button.label.text = [Theme Singleton].MoreText;
     button.icon.image = [UIImage imageNamed:@"icon_more_dark"];
     button.selectedIcon.image = [UIImage imageNamed:@"icon_more"];
     

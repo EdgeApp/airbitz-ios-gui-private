@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CommonTypes.h"
-
+#define DEFAULT_KEYBOARD UIKeyboardTypeASCIICapable
 @interface Theme : NSObject
 
 //@property (nonatomic, copy) NSString *name;
@@ -234,6 +234,28 @@
 @property (nonatomic) NSString *InvalidBluetoothRequestText;
 @property (nonatomic) NSString *RequestorContactSupportText;
 @property (nonatomic) NSString *InvalidPrivateKeyText;
+@property (nonatomic) NSString *EnteraUsernameText;
+@property (nonatomic) NSString *HideButtonText;
+@property (nonatomic) NSString *ShowButtonText;
+@property (nonatomic) NSString *creatingAccountText;
+@property (nonatomic) NSString *DirectoryText;
+@property (nonatomic) NSString *ReceiveText;
+@property (nonatomic) NSString *SendText;
+@property (nonatomic) NSString *WalletsText;
+@property (nonatomic) NSString *MoreText;
+@property (nonatomic) NSString *EnterPayeeText;
+@property (nonatomic) NSString *TransactionDetailsText;
+@property (nonatomic) NSString *RecoveryPasswordReinderText;
+@property (nonatomic) NSString *RecoveryAlertMessage;
+@property (nonatomic) NSString *SynchronizingText;
+@property (nonatomic) NSString *ConfirmedText;
+@property (nonatomic) NSString *RenameWalletText;
+@property (nonatomic) NSString *LoadingText;
+@property (nonatomic) NSString *LoadingBalanceText;
+@property (nonatomic) NSString *ArchiveText;
+@property (nonatomic) NSString *CreateWalletText;
+
+
 
 
 

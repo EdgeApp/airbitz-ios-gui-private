@@ -250,10 +250,10 @@
     else
     {
         UIAlertView *alert = [[UIAlertView alloc]
-							  initWithTitle:NSLocalizedString(@"Create Wallet", nil)
+							  initWithTitle:[Theme Singleton].CreateWalletText
 							  message:[NSString stringWithFormat:@"Wallet creation failed:\n%@", _strReason]
 							  delegate:nil
-							  cancelButtonTitle:@"OK"
+							  cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
 							  otherButtonTitles:nil];
 		[alert show];
     }

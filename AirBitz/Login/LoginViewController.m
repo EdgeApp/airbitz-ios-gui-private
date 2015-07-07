@@ -153,6 +153,7 @@ static BOOL bInitialized = false;
     self.usernameSelector.textField.returnKeyType = UIReturnKeyDone;
     self.usernameSelector.textField.tintColor = [UIColor whiteColor];
     self.usernameSelector.textField.textAlignment = NSTextAlignmentLeft;
+    self.usernameSelector.textField.keyboardType = DEFAULT_KEYBOARD;
 
     // Add shadows to some text for visibility
     self.PINusernameSelector.textLabel.layer.shadowRadius = 3.0f;
@@ -508,7 +509,7 @@ static BOOL bInitialized = false;
                     }
                     else
                     {
-                        [MainViewController fadingAlert:[Theme Singleton].InvalidPINText];
+                        [MainViewController fadingAlert:[Theme Singleton].IncorrectPINText];
                         [self.PINCodeView becomeFirstResponder];
                     }
                     break;
@@ -529,7 +530,7 @@ static BOOL bInitialized = false;
 
 - (void)PINabortPermanently
 {
-    [MainViewController fadingAlert:[Theme Singleton].InvalidPINAbortText];
+    [MainViewController fadingAlert:[Theme Singleton].IncorrectPINAbortText];
 
     bPINModeEnabled = false;
     [self viewDidLoad];

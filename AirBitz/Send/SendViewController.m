@@ -1860,7 +1860,7 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
               initWithTitle:NSLocalizedString(@"Error", nil)
                     message:NSLocalizedString(@"Import failed", nil)
                     delegate:nil
-        cancelButtonTitle:[[Theme Singleton].OkCancelButtonTitle ]
+        cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
         otherButtonTitles:nil];
     [alert show];
     _callbackTimer = nil;

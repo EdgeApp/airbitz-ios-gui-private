@@ -264,7 +264,27 @@ static Theme *singleton = nil;  // this will be the one and only object this sta
     self.InvalidBluetoothRequestText                       = NSLocalizedString(@"Invalid Bluetooth Request", nil);
     self.RequestorContactSupportText                       = NSLocalizedString(@"Please have Requestor contact support", nil);
     self.InvalidPrivateKeyText                             = NSLocalizedString(@"Invalid private key", nil);
-
+    self.AccountSignUpText                                 = NSLocalizedString(@"Account Sign Up", @"Title of account signin error alert");
+    self.EnteraUsernameText                               = NSLocalizedString(@"You must enter a user name", nil);
+    self.HideButtonText                                   = NSLocalizedString(@"Hide",nil);
+    self.ShowButtonText                                   = NSLocalizedString(@"Show", nil);
+    self.creatingAccountText                              = NSLocalizedString(@"Creating and securing account", nil);
+    self.DirectoryText                                    = NSLocalizedString(@"DIRECTORY", "tab bar button title");
+    self.ReceiveText                                      = NSLocalizedString(@"RECEIVE", "tab bar button title");
+    self.SendText                                         = NSLocalizedString(@"SEND", "tab bar button title");
+    self.WalletsText                                      = NSLocalizedString(@"WALLETS", nil);
+    self.MoreText                                         = NSLocalizedString(@"MORE", "tab bar button title");
+    self.EnterPayeeText                                   = NSLocalizedString(@"Enter Payee", nil);
+    self.TransactionDetailsText                           = NSLocalizedString(@"Transaction Details", @"Transaction Details header text");
+    self.RecoveryPasswordReinderText                     = NSLocalizedString(@"Recovery Password Reminder" , nil);
+    self.RecoveryAlertMessage                            = NSLocalizedString(@"You've received Bitcoin! We STRONGLY recommend setting up Password Recovery questions and answers. Otherwise you will NOT be able to access your account if your password is forgotten.", nil);
+    self.SynchronizingText                              = NSLocalizedString(@"Synchronizing", nil);
+    self.ConfirmedText                                  = NSLocalizedString(@"Confirmed", nil);
+    self.RenameWalletText                               = NSLocalizedString(@"Rename Wallet", nil);
+    self.LoadingText                                    = NSLocalizedString(@"Loading...", nil);
+    self.LoadingBalanceText                             = NSLocalizedString(@"Loading Balance...", @"title of wallets table balance header");
+    self.ArchiveText                                    = NSLocalizedString(@"ARCHIVE", @"title of archived wallets table");
+    self.CreateWalletText                               = NSLocalizedString(@"Create Wallet", nil);
 
 
 

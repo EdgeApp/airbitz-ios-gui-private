@@ -15,6 +15,7 @@
 #import "Util.h"
 #import "CommonTypes.h"
 #import "MainViewController.h"
+#import "Theme.h"
 
 @interface SlideoutView () <PickerTextViewDelegate >
 
@@ -422,11 +423,11 @@
     NSString *message = [NSString stringWithFormat:@"Delete '%@' on this device? This will disable access via PIN. If 2FA is enabled, this device will not be able to login without a 2FA reset which takes 7 days.",
                          string];
     UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:NSLocalizedString(@"Delete Account", nil)
+                          initWithTitle:[Theme Singleton].DeleteAccountText
                           message:message
                           delegate:self
-                          cancelButtonTitle:@"No"
-                          otherButtonTitles:@"Yes", nil];
+                          cancelButtonTitle:[Theme Singleton].NoDescriptionText
+                          otherButtonTitles:[Theme Singleton].YesDescriptionText];
     [alert show];
     [self.accountPicker dismissPopupPicker];
 }

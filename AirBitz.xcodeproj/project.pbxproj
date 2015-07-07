@@ -419,6 +419,8 @@
 		B5FD393618F0A67100BE2670 /* transactionDetails.html in Resources */ = {isa = PBXBuildFile; fileRef = B5FD393518F0A67100BE2670 /* transactionDetails.html */; };
 		B5FD394718F240E600BE2670 /* AutoCompleteTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = B5FD394618F240E600BE2670 /* AutoCompleteTextField.m */; };
 		C40BC5D5199479CF00149E12 /* libcsv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C40BC5D4199479CF00149E12 /* libcsv.a */; };
+		C6353F881B45D39E0090CF4A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C6A238EB1B336C7800BC8B57 /* Localizable.strings */; };
+		C6353F8D1B45D3A10090CF4A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C6A238EB1B336C7800BC8B57 /* Localizable.strings */; };
 		C6A238E91B336C7800BC8B57 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C6A238EB1B336C7800BC8B57 /* Localizable.strings */; };
 		DA0239831B17B258002B9810 /* libprotobuf-lite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA02397D1B17B1B7002B9810 /* libprotobuf-lite.a */; };
 		DA0239841B17B267002B9810 /* libprotobuf-lite.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DA02397D1B17B1B7002B9810 /* libprotobuf-lite.a */; };
@@ -3654,6 +3656,7 @@
 				DAA8E9E51B1ED50B00BC870C /* icon_category_shopping@2x.png in Resources */,
 				7D98ADE519A7C550003D2BF6 /* InfoView~iphone.xib in Resources */,
 				DA06F9CC1B0BDD79000BCA46 /* icon_directory_dark.png in Resources */,
+				C6353F8D1B45D3A10090CF4A /* Localizable.strings in Resources */,
 				DAA8E9E81B1ED50B00BC870C /* icon_category_shopping@3x.png in Resources */,
 				7D98ADE719A7C550003D2BF6 /* CalculatorView~iphone.xib in Resources */,
 				DA06F7651B0BDD79000BCA46 /* 4-bars@2x.png in Resources */,
@@ -4255,6 +4258,7 @@
 				DAA8E9F61B1EDCB400BC870C /* ico_nav_directory_dark@2x.png in Resources */,
 				DAA8E9E61B1ED50B00BC870C /* icon_category_shopping@2x.png in Resources */,
 				DA06F8741B0BDD79000BCA46 /* btn_checkmark@2x.png in Resources */,
+				C6353F881B45D39E0090CF4A /* Localizable.strings in Resources */,
 				DAE8654C1A88A58A00A17BD3 /* FadingAlertView.xib in Resources */,
 				DAA8E9E91B1ED50B00BC870C /* icon_category_shopping@3x.png in Resources */,
 				DA06F9CD1B0BDD79000BCA46 /* icon_directory_dark.png in Resources */,
