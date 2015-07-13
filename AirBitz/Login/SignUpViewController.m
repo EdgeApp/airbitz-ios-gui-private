@@ -78,8 +78,10 @@
     self.userNameTextField.minimumCharacters = ABC_MIN_USERNAME_LENGTH;
 	self.passwordTextField.delegate = self;
     self.passwordTextField.minimumCharacters = ABC_MIN_PASS_LENGTH;
+
 	self.reenterPasswordTextField.delegate = self;
     self.reenterPasswordTextField.minimumCharacters = ABC_MIN_PASS_LENGTH;
+
 	self.pinTextField.delegate = self;
 	self.pinTextField.minimumCharacters = ABC_MIN_PIN_LENGTH;
     if (self.strUserName)

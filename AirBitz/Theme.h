@@ -254,6 +254,36 @@
 @property (nonatomic) NSString *LoadingBalanceText;
 @property (nonatomic) NSString *ArchiveText;
 @property (nonatomic) NSString *CreateWalletText;
+@property (nonatomic) NSString *OfflineWalletText;
+@property (nonatomic) NSString *PublickeyCopiedText;
+@property (nonatomic) NSString *ExportWalletText;
+@property (nonatomic) NSString *ExportWalletTransactions;
+@property (nonatomic) NSString *AirprintIsNotAvailableText;
+@property (nonatomic) NSString *AirbitzWalletTransactions;
+@property (nonatomic) NSString *EmailNotSent;
+@property (nonatomic) NSString *NoTransactionsText;
+@property (nonatomic) NSString *ExportWalletTransactionsError;
+@property (nonatomic) NSString *CSVExportFailed;
+@property (nonatomic) NSString *AccountAlreadyExistsText;
+@property (nonatomic) NSString *AccountDoesNotExistText;
+@property (nonatomic) NSString *InvalidPasswordOrUsernameText;
+@property (nonatomic) NSString *WalletAlreadyExistsText;
+@property (nonatomic) NSString *InvalidWalletIdText;
+@property (nonatomic) NSString *ServerErrorForAirbitzText;
+@property (nonatomic) NSString *NoRecoveryQuestionsText;
+@property (nonatomic) NSString *NotSupportedText;
+@property (nonatomic) NSString *InsufficientFundsText;
+@property (nonatomic) NSString *SynchronizingNetworkText;
+@property (nonatomic) NSString *NonNumericPinText;
+@property (nonatomic) NSString *FailedLoginAttemptsText;
+@property (nonatomic) NSString *AnErrorOccurredText;
+@property (nonatomic) NSString *ExpenseText;
+@property (nonatomic) NSString *IncomeText;
+@property (nonatomic) NSString *TransferText;
+@property (nonatomic) NSString *ExchangeText;
+
+
+
 
 
 

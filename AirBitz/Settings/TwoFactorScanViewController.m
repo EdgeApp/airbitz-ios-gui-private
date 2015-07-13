@@ -136,7 +136,7 @@
                             initWithTitle:NSLocalizedString(@"Unable to import token", nil)
                             message:NSLocalizedString(@"The two factor authentication token import failed. Please ensure you have the correct token!", nil)
                             delegate:self
-                            cancelButtonTitle:NSLocalizedString(@"No thanks", nil)
+                            cancelButtonTitle:[Theme Singleton].NoThanksUserReview
                             otherButtonTitles:NSLocalizedString(@"Try Again?", nil), nil];
             [_alertView show];
         }

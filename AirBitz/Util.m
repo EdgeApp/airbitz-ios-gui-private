@@ -10,6 +10,7 @@
 #import "ABC.h"
 #import "CommonTypes.h"
 #import "AirbitzViewController.h"
+#import "Theme.h"
 
 @implementation Util
 
@@ -18,35 +19,35 @@
     switch (pError->code)
     {
         case ABC_CC_AccountAlreadyExists:
-            return NSLocalizedString(@"This account already exists.", nil);
+            return [Theme Singleton].AccountAlreadyExistsText;
         case ABC_CC_AccountDoesNotExist:
-            return NSLocalizedString(@"We were unable to find your account. Be sure your username is correct.", nil);
+            return [Theme Singleton].AccountDoesNotExistText;
         case ABC_CC_BadPassword:
-            return NSLocalizedString(@"Invalid user name or password", nil);
+            return [Theme Singleton].InvalidPasswordOrUsernameText;
         case ABC_CC_WalletAlreadyExists:
-            return NSLocalizedString(@"Wallet already exists.", nil);
+            return [Theme Singleton].WalletAlreadyExistsText;
         case ABC_CC_InvalidWalletID:
-            return NSLocalizedString(@"Wallet does not exist.", nil);
+            return [Theme Singleton].InvalidWalletIdText;
         case ABC_CC_URLError:
         case ABC_CC_ServerError:
-            return NSLocalizedString(@"Unable to connect to Airbitz server. Please try again later.", nil);
+            return [Theme Singleton].ServerErrorForAirbitzText;
         case ABC_CC_NoRecoveryQuestions:
-            return NSLocalizedString(@"No recovery questions are available for this user", nil);
+            return [Theme Singleton].NoRecoveryQuestionsText;
         case ABC_CC_NotSupported:
-            return NSLocalizedString(@"This operation is not supported.", nil);
+            return [Theme Singleton].NotSupportedText;
         case ABC_CC_InsufficientFunds:
-            return NSLocalizedString(@"Insufficient funds", nil);
+            return [Theme Singleton].InsufficientFundsText;
         case ABC_CC_SpendDust:
-            return NSLocalizedString(@"Amount is too small", nil);
+            return [Theme Singleton].AmountTooSmallAlert;
         case ABC_CC_Synchronizing:
-            return NSLocalizedString(@"Synchronizing with the network.", nil);
+            return [Theme Singleton].SynchronizingNetworkText;
         case ABC_CC_NonNumericPin:
-            return NSLocalizedString(@"PIN must be a numeric value.", nil);
+            return [Theme Singleton].NonNumericPinText;
         case ABC_CC_InvalidPinWait:
         {
             NSString *description = [NSString stringWithUTF8String:pError->szDescription];
             if ([@"0" isEqualToString:description]) {
-                return NSLocalizedString(@"Invalid PIN.", nil);
+                return [Theme Singleton].IncorrectPINText;
             } else {
                 return [NSString stringWithFormat:
                             NSLocalizedString(@"Too many failed login attempts. Please try again in %@ seconds.", nil),
@@ -77,7 +78,7 @@
         case ABC_CC_NoRequest:
         case ABC_CC_NoAvailableAddress:
         default:
-            return NSLocalizedString(@"An error has occurred.", nil);
+            return [Theme Singleton].AnErrorOccurredText;
     }
 }
 
@@ -392,10 +393,10 @@
 
 + (BOOL)isValidCategory:(NSString *)category
 {
-    return [category hasPrefix:NSLocalizedString(@"Expense", nil)]
-            || [category hasPrefix:NSLocalizedString(@"Income", nil)]
-            || [category hasPrefix:NSLocalizedString(@"Transfer", nil)]
-            || [category hasPrefix:NSLocalizedString(@"Exchange", nil)];
+    return [category hasPrefix:[Theme Singleton].ExpenseText]
+            || [category hasPrefix:[Theme Singleton].IncomeText]
+            || [category hasPrefix:[Theme Singleton].TransferText]
+            || [category hasPrefix:[Theme Singleton].ExchangeText];
 }
 
 + (NSArray *)insertSubviewControllerWithConstraints:(UIView *)parentView child:(AirbitzViewController *)childViewController belowSubView:(UIView *)belowView

@@ -142,10 +142,10 @@ extern void QRcode_free(QRcode *qrcode);
     UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     pasteboard.string = self.strPublic;
     UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:NSLocalizedString(@"Offline Wallet", nil)
-                          message:NSLocalizedString(@"Public Key copied to clipboard", nil)
+                          initWithTitle:[Theme Singleton].OfflineWalletText
+                          message:[Theme Singleton].PublickeyCopiedText
                           delegate:nil
-                          cancelButtonTitle:[Theme Singleton].Ok
+                          cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                           otherButtonTitles:nil];
     [alert show];
 }
@@ -166,7 +166,7 @@ extern void QRcode_free(QRcode *qrcode);
 
         UIPrintInfo *printInfo = [UIPrintInfo printInfo];
         printInfo.outputType = UIPrintInfoOutputGeneral;
-        printInfo.jobName = NSLocalizedString(@"Offline Wallet", nil);
+        printInfo.jobName = [Theme Singleton].OfflineWalletText;
         pc.printInfo = printInfo;
         pc.showsPageRange = YES;
 
@@ -190,10 +190,10 @@ extern void QRcode_free(QRcode *qrcode);
     {
         // not available
         UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:NSLocalizedString(@"Offline Wallet", nil)
+                              initWithTitle:[Theme Singleton].OfflineWalletText
                               message:@"AirPrint is not currently available"
                               delegate:nil
-                              cancelButtonTitle:@"OK"
+                              cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                               otherButtonTitles:nil];
         [alert show];
     }
@@ -203,10 +203,10 @@ extern void QRcode_free(QRcode *qrcode);
 - (IBAction)buttonInfoTouched:(id)sender
 {
     UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:NSLocalizedString(@"Offline Wallet", nil)
+                          initWithTitle:[Theme Singleton].OfflineWalletText
                           message:@"TODO: bring up info"
                           delegate:nil
-                          cancelButtonTitle:@"OK"
+                          cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                           otherButtonTitles:nil];
     [alert show];
 }

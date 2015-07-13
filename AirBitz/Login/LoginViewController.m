@@ -155,12 +155,13 @@ static BOOL bInitialized = false;
     self.usernameSelector.textField.textAlignment = NSTextAlignmentLeft;
     self.usernameSelector.textField.keyboardType = DEFAULT_KEYBOARD;
 
-    // Add shadows to some text for visibility
+    // Add shadows to some text foroi visibility
     self.PINusernameSelector.textLabel.layer.shadowRadius = 3.0f;
     self.PINusernameSelector.textLabel.layer.shadowOpacity = 1.0f;
     self.PINusernameSelector.textLabel.layer.masksToBounds = NO;
     self.PINusernameSelector.textLabel.layer.shadowColor = [[UIColor whiteColor] CGColor];
     self.PINusernameSelector.textLabel.layer.shadowOffset = CGSizeMake(0.0, 0.0);
+   
 
     self.swipeText.layer.shadowRadius = 3.0f;
     self.swipeText.layer.shadowOpacity = 1.0f;

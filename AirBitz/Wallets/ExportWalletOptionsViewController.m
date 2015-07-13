@@ -294,7 +294,7 @@ typedef enum eExportOption
         UIPrintInteractionController *pc = [UIPrintInteractionController sharedPrintController];
         UIPrintInfo *printInfo = [UIPrintInfo printInfo];
         printInfo.outputType = UIPrintInfoOutputGeneral;
-        printInfo.jobName = NSLocalizedString(@"Wallet Export", nil);
+        printInfo.jobName = [Theme Singleton].ExportWalletText;
         pc.printInfo = printInfo;
         pc.showsPageRange = YES;
         NSData *dataExport = [self getExportDataInForm:self.type];
@@ -344,10 +344,10 @@ typedef enum eExportOption
     {
         // not available
         UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:NSLocalizedString(@"Export Wallet Transactions", nil)
-                              message:@"AirPrint is not currently available"
+                              initWithTitle:[Theme Singleton].ExportWalletTransactions
+                              message:[Theme Singleton].AirprintIsNotAvailableText
                               delegate:nil
-                              cancelButtonTitle:@"OK"
+                              cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                               otherButtonTitles:nil];
         [alert show];
     }
@@ -373,7 +373,7 @@ typedef enum eExportOption
 
         _mailComposer = [[MFMailComposeViewController alloc] init];
 
-        [_mailComposer setSubject:NSLocalizedString(@"AirBitz Bitcoin Wallet Transactions", nil)];
+        [_mailComposer setSubject:[Theme Singleton].AirbitzWalletTransactions];
 
         [_mailComposer setMessageBody:strBody isHTML:YES];
 
@@ -393,9 +393,9 @@ typedef enum eExportOption
     else
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
-                                                        message:@"Can't send e-mail"
+                                                        message:[Theme Singleton].EmailNotSent
                                                        delegate:nil
-                                              cancelButtonTitle:@"OK"
+                                              cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                                               otherButtonTitles:nil];
         [alert show];
     }
@@ -490,19 +490,19 @@ typedef enum eExportOption
                 NSString *title, *message;
                 if (ABC_CC_Empty_Wallet == cc)
                 {
-                    title = NSLocalizedString(@"Export Wallet Transactions", nil);
-                    message = NSLocalizedString(@"No Transactions in Wallet", nil);
+                    title = [Theme Singleton].ExportWalletTransactions;
+                    message = [Theme Singleton].NoTransactionsText;
                 }
                 else
                 {
-                    title = NSLocalizedString(@"Export Wallet Transactions error", nil);
-                    message = NSLocalizedString(@"CSV Export failed", nil);
+                    title = [Theme Singleton].ExportWalletTransactionsError;
+                    message = [Theme Singleton].CSVExportFailed;
                 }
                 UIAlertView *alert = [[UIAlertView alloc]
                                       initWithTitle:title
                                       message:message
                                       delegate:nil
-                                      cancelButtonTitle:@"OK"
+                                      cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                                       otherButtonTitles:nil];
                 [alert show];
                 [Util printABC_Error:&Error];
@@ -779,20 +779,20 @@ typedef enum eExportOption
 	switch (result)
     {
 		case MFMailComposeResultCancelled:
-            strMsg = NSLocalizedString(@"Email cancelled.", nil);
+            strMsg = [Theme Singleton].EmailCancelledText;
 			break;
 
 		case MFMailComposeResultSaved:
-            strMsg = NSLocalizedString(@"Email saved to send later.", nil);
+            strMsg = [Theme Singleton].EmailSavedToLaterText;
 			break;
 
 		case MFMailComposeResultSent:
-            strMsg = NSLocalizedString(@"Email sent.", nil);
+            strMsg = [Theme Singleton].EmailSentText;
 			break;
 
 		case MFMailComposeResultFailed:
 		{
-            strTitle = NSLocalizedString(@"Error sending Email.", nil);
+            strTitle = [Theme Singleton].ErrorSendingEmailText;
             strMsg = [error localizedDescription];
 			break;
 		}
@@ -803,7 +803,7 @@ typedef enum eExportOption
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle
                                                     message:strMsg
                                                    delegate:nil
-                                          cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                          cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
                                           otherButtonTitles:nil];
     [alert show];
 
