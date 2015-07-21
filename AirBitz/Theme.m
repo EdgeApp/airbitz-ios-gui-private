@@ -312,7 +312,11 @@ static Theme *singleton = nil;  // this will be the one and only object this sta
     self.IncomeText                                     = NSLocalizedString(@"Income", nil);
     self.TransferText                                   = NSLocalizedString(@"Transfer", nil);
     self.ExchangeText                                   = NSLocalizedString(@"Exchange", nil);
-
+    self.TwoFactorAutenticationTokenText                = NSLocalizedString(@"The two factor authentication token import failed. Please ensure you have the correct token!", nil);
+    self.TryAgainText                                   = NSLocalizedString(@"Try Again?", nil);
+    self.UnabletoUpdateSettings                         = NSLocalizedString(@"Unable to update Settings", nil);
+    self.CancelChangesText                              = NSLocalizedString(@"Cancel Changes", nil);
+    self.CancelChangesMessage                           = NSLocalizedString(@"Are you sure you want to cancel any changes you've made?", nil);
 
 
 

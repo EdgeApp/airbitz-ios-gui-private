@@ -262,22 +262,22 @@
             [[User Singleton] loadSettings];
         } else {
             UIAlertView *alert = [[UIAlertView alloc]
-                                initWithTitle:NSLocalizedString(@"Unable to update Settings", nil)
+                                initWithTitle:[Theme Singleton].UnabletoUpdateSettings
                                 message:[Util errorMap:&Error]
                                 delegate:self
-                                cancelButtonTitle:@"Cancel"
-                                otherButtonTitles:@"OK", nil];
+                                cancelButtonTitle:[Theme Singleton].cancelButtonText
+                                otherButtonTitles:[Theme Singleton].OkCancelButtonTitle];
             [alert show];
             [Util printABC_Error:&Error];
         }
         [self exitWithBackButton:YES];
     } else {
         UIAlertView *alert = [[UIAlertView alloc]
-                            initWithTitle:NSLocalizedString(@"Incorrect password", nil)
-                            message:NSLocalizedString(@"Incorrect password", nil)
+                            initWithTitle:[Theme Singleton].IncorrectPasswordText
+                            message:[Theme Singleton].IncorrectPasswordText
                             delegate:self
-                            cancelButtonTitle:@"Cancel"
-                            otherButtonTitles:@"OK", nil];
+                            cancelButtonTitle:[Theme Singleton].cancelButtonText
+                            otherButtonTitles:[Theme Singleton].OkCancelButtonTitle];
         [alert show];
     }
 }

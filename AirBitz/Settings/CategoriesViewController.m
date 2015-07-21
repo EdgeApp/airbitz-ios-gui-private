@@ -153,11 +153,11 @@
 - (IBAction)Cancel
 {
     UIAlertView *alert = [[UIAlertView alloc]
-                          initWithTitle:NSLocalizedString(@"Cancel Changes", nil)
-                          message:NSLocalizedString(@"Are you sure you want to cancel any changes you've made?", nil)
+                          initWithTitle:[Theme Singleton].CancelChangesText
+                          message:[Theme Singleton].CancelChangesMessage
                           delegate:self
-                          cancelButtonTitle:@"No"
-                          otherButtonTitles:@"Yes", nil];
+                          cancelButtonTitle:[Theme Singleton].NoDescriptionText
+                          otherButtonTitles:[Theme Singleton].YesDescriptionText];
     [alert show];
 }
 

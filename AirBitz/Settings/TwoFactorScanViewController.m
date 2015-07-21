@@ -133,11 +133,11 @@
             [self exit];
         } else {
             _alertView = [[UIAlertView alloc]
-                            initWithTitle:NSLocalizedString(@"Unable to import token", nil)
-                            message:NSLocalizedString(@"The two factor authentication token import failed. Please ensure you have the correct token!", nil)
+                            initWithTitle:[Theme Singleton].UnableToImportTokenTitle
+                            message:[Theme Singleton].TwoFactorAutenticationTokenText
                             delegate:self
                             cancelButtonTitle:[Theme Singleton].NoThanksUserReview
-                            otherButtonTitles:NSLocalizedString(@"Try Again?", nil), nil];
+                            otherButtonTitles:[Theme Singleton].TryAgainText];
             [_alertView show];
         }
     });

@@ -281,6 +281,11 @@
 @property (nonatomic) NSString *IncomeText;
 @property (nonatomic) NSString *TransferText;
 @property (nonatomic) NSString *ExchangeText;
+@property (nonatomic) NSString *TwoFactorAutenticationTokenText;
+@property (nonatomic) NSString *TryAgainText;
+@property (nonatomic) NSString *UnabletoUpdateSettings;
+@property (nonatomic) NSString *CancelChangesText;
+@property (nonatomic) NSString *CancelChangesMessage;
 
 
 
