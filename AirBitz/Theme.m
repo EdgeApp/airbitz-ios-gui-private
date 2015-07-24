@@ -49,9 +49,11 @@ static Theme *singleton = nil;  // this will be the one and only object this sta
     self.colorTextBright = [UIColor whiteColor];
     self.colorTextDark = UIColorFromARGB(0xff0C578C);;
     self.colorTextLink = UIColorFromARGB(0xFF007aFF);
-    self.deleteAccountWarning     = NSLocalizedString(@"Delete '%@' on this device? This will disable access via PIN. If 2FA is enabled on this account, this device will not be able to login without a 2FA reset which takes 7 days.", @"Delete Account Warning");
-    self.colorSendButton = UIColorFromARGB(0xFF80c342);
-    self.colorRequestButton = UIColorFromARGB(0xff2291cf);
+    self.deleteAccountWarning = NSLocalizedString(@"Delete '%@' on this device? This will disable access via PIN. If 2FA is enabled on this account, this device will not be able to login without a 2FA reset which takes 7 days.", @"Delete Account Warning");
+    self.colorButtonGreen = UIColorFromARGB(0xff80C342);
+    self.colorButtonBlue = UIColorFromARGB(0xff2291CF);
+    self.colorSendButton = self.colorButtonBlue;
+    self.colorRequestButton = self.colorButtonGreen;
 
     self.colorRequestButtonDisabled = UIColorFromARGB(0x5580c342);
     self.colorSendButtonDisabled = UIColorFromARGB(0x55006698);
@@ -60,30 +62,41 @@ static Theme *singleton = nil;  // this will be the one and only object this sta
     self.colorRequestTopTextFieldPlaceholder = UIColorFromARGB(0xffdddddd);
     self.colorRequestBottomTextField = self.colorTextDark;
 
-    self.colorButtonGreen = UIColorFromARGB(0xff80C342);
+    self.bdButtonBlue = UIColorFromARGB(0xff0079B9);
+    self.colorsProfileIcons = [[NSMutableArray alloc] init];
+
+    [self.colorsProfileIcons addObject:UIColorFromRGB(0xec6a5e)];
+    [self.colorsProfileIcons addObject:UIColorFromRGB(0xff9c00)];
+    [self.colorsProfileIcons addObject:UIColorFromRGB(0xf4d347)];
+    [self.colorsProfileIcons addObject:UIColorFromRGB(0x7ccc52)];
+    [self.colorsProfileIcons addObject:UIColorFromRGB(0x66aee4)];
+    [self.colorsProfileIcons addObject:UIColorFromRGB(0x5ee0ec)];
+    [self.colorsProfileIcons addObject:UIColorFromRGB(0xb400ff)];
+    [self.colorsProfileIcons addObject:UIColorFromRGB(0x777777)];
 
     self.appFont = @"Lato-Regular";
 
-    self.backButtonText                                    = NSLocalizedString(@"Back", @"Back button text on top left");
-    self.exitButtonText                                    = NSLocalizedString(@"Exit", @"Exit button text on top left");
-    self.helpButtonText                                    = NSLocalizedString(@"Help", @"Help button text on top right");
-    self.infoButtonText                                    = NSLocalizedString(@"Info", @"Info button text on top right");
-    self.doneButtonText                                    = NSLocalizedString(@"Done", @"Generic DONE button text");
-    self.cancelButtonText                                  = NSLocalizedString(@"CANCEL", @"Generic CANCEL button text");
-    self.exportButtonText                                  = NSLocalizedString(@"Export", @"EXPORT button text for wallet export");
-    self.renameButtonText                                  = NSLocalizedString(@"Rename", @"RENAME button text for wallet rename");
-    self.walletBalanceHeaderText                           = NSLocalizedString(@"TOTAL: ", @"Prefix of wallet balance dropdown header");
-    self.walletNameHeaderText                              = NSLocalizedString(@"Wallet: ", @"Prefix of wallet name on rename popup");
-    self.renameWalletWarningText                           = NSLocalizedString(@"Wallet name must have at least one character", nil);
-    self.transactionCellNoTransactionsText                 = NSLocalizedString(@"No Transactions", @"what to display when wallet has no transactions");
-    self.transactionCellNoTransactionsFoundText            = NSLocalizedString(@"No Transactions Found", @"what to display when no transactions are found in search");
+    self.backButtonText = NSLocalizedString(@"Back", @"Back button text on top left");
+    self.exitButtonText = NSLocalizedString(@"Exit", @"Exit button text on top left");
+    self.helpButtonText = NSLocalizedString(@"Help", @"Help button text on top right");
+    self.infoButtonText = NSLocalizedString(@"Info", @"Info button text on top right");
+    self.doneButtonText = NSLocalizedString(@"Done", @"Generic DONE button text");
+    self.cancelButtonText = NSLocalizedString(@"CANCEL", @"Generic CANCEL button text");
+    self.closeButtonText = NSLocalizedString(@"Close", @"Generic CLOSE button text");
+    self.exportButtonText = NSLocalizedString(@"Export", @"EXPORT button text for wallet export");
+    self.renameButtonText = NSLocalizedString(@"Rename", @"RENAME button text for wallet rename");
+    self.walletBalanceHeaderText = NSLocalizedString(@"TOTAL: ", @"Prefix of wallet balance dropdown header");
+    self.walletNameHeaderText = NSLocalizedString(@"Wallet: ", @"Prefix of wallet name on rename popup");
+    self.renameWalletWarningText = NSLocalizedString(@"Wallet name must have at least one character", nil);
+    self.transactionCellNoTransactionsText = NSLocalizedString(@"No Transactions", @"what to display when wallet has no transactions");
+    self.transactionCellNoTransactionsFoundText = NSLocalizedString(@"No Transactions Found", @"what to display when no transactions are found in search");
     self.fiatText = NSLocalizedString(@"Fiat", @"Fiat");
     self.walletHeaderButtonHelpText                        = NSLocalizedString(@"To sort wallets, tap and drag the 3 bars to the right of a wallet. Drag below the [ARCHIVE] header to archive the wallet", @"Popup wallet help test");
     self.walletHasBeenArchivedText                          = NSLocalizedString(@"This wallet has been archived. Please select a different wallet from the [Wallets] tab below", @"Popup sessage for when a wallet is archived");
     self.walletsPopupHelpText = NSLocalizedString(@"Tap and hold a wallet for additional options", nil);
-    self.selectWalletTransferPopupHeaderText                = NSLocalizedString(@"↓ Choose a wallet to transfer funds to ↓", @"Header of popup in SendView from wallet to wallet transfer");
-    self.invalidAddressPopupText                            = NSLocalizedString(@"Invalid Bitcoin Address", nil);
-    self.enterBitcoinAddressPopupText                       = NSLocalizedString(@"Send to Bitcoin Address", nil);
+    self.selectWalletTransferPopupHeaderText = NSLocalizedString(@"▼ Choose a wallet to transfer funds to ▼", @"Header of popup in SendView from wallet to wallet transfer");
+    self.invalidAddressPopupText = NSLocalizedString(@"Invalid Bitcoin Address", nil);
+    self.enterBitcoinAddressPopupText= NSLocalizedString(@"Send to Bitcoin Address", nil);
     self.enterBitcoinAddressPlaceholder                     = NSLocalizedString(@"Bitcoin Address or URI", nil);
     self.enterPrivateKeyPopupText                           = NSLocalizedString(@"Sweep Funds From Private Key", nil);
     self.enterPrivateKeyPlaceholder                         = NSLocalizedString(@"Bitcoin Private Key", nil);
@@ -317,14 +330,7 @@ static Theme *singleton = nil;  // this will be the one and only object this sta
     self.UnabletoUpdateSettings                         = NSLocalizedString(@"Unable to update Settings", nil);
     self.CancelChangesText                              = NSLocalizedString(@"Cancel Changes", nil);
     self.CancelChangesMessage                           = NSLocalizedString(@"Are you sure you want to cancel any changes you've made?", nil);
-
-
-
-    
-    
-    
-    
-    
+    self.defaultCurrencyInfoText                            = NSLocalizedString(@"Note: Default Currency setting is only used for new wallets and to show total balance of account. Create a new wallet to change the fiat currency shown in each transaction.", nil);
 
     self.sendRequestButtonDisabled = 0.4f;
 
@@ -337,6 +343,8 @@ static Theme *singleton = nil;  // this will be the one and only object this sta
     self.alertHoldTimePaymentReceived           = 10;       // Hold time for payments
     self.alertHoldTimeHelpPopups                = 6.0;      // Hold time for auto popup help
 
+    self.qrCodeGenDelayTime                     = 0.75;     // Timer delay after keypad entry before new QR code is generated
+    self.rotateServerInterval                   = 15.0;     // How long (in seconds) before we rotate libbitcoin servers while waiting on QR code screen
 
     self.backgroundApp = [UIImage imageNamed:@"postcard-mountain-blue.jpg"];
     self.backgroundLogin = [UIImage imageNamed:@"postcard-mountain.png"];
@@ -357,6 +365,9 @@ static Theme *singleton = nil;  // this will be the one and only object this sta
         self.heightSettingsTableCell            = 40.0;
         self.heightSettingsTableHeader          = 60.0;
         self.heightButton                       = 45.0;
+        self.buttonFontSize                     = 15.0;
+        self.fontSizeEnterPINText               = 16.0;     // Font size for PIN login screen "Enter PIN"
+
     }
     if (IS_MIN_IPHONE5)
     {
@@ -375,6 +386,7 @@ static Theme *singleton = nil;  // this will be the one and only object this sta
         self.heightPopupPicker = 60;
         self.heightSettingsTableCell            = 45.0;
         self.heightSettingsTableHeader          = 65.0;
+        self.fontSizeEnterPINText               = 18.0;     // Font size for PIN login screen "Enter PIN"
     }
     if (IS_MIN_IPHONE6_PLUS)
     {
@@ -387,9 +399,10 @@ static Theme *singleton = nil;  // this will be the one and only object this sta
     if (IS_MIN_IPAD_MINI)
     {
         self.heightBLETableCells = 75;
+        self.fontSizeEnterPINText               = 20.0;     // Font size for PIN login screen "Enter PIN"
     }
 
-    NSLog(@"***Device Type: %@ %@", [self platform], [self platformString]);
+    ABLog(2,@"***Device Type: %@ %@", [self platform], [self platformString]);
 
     NSString *devtype = [self platform];
 

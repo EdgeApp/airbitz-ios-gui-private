@@ -9,6 +9,7 @@
 #import "Location.h"
 #import "AppDelegate.h"
 #import "Theme.h"
+#import "Util.h"
 
 #define ACCURACY_METERS 100
 
@@ -136,7 +137,7 @@ static Location *singleton = nil;  // this will be the one and only object this 
 
 - (void)stop
 {
-    //NSLog(@"Stopping location");
+    //ABLog(2,@"Stopping location");
     self.bHaveLocation = NO;
     if (self.locationManager)
     {
@@ -170,7 +171,7 @@ static Location *singleton = nil;  // this will be the one and only object this 
     self.bHaveLocation = YES;
     self.curLocation = newLocation;
     
-    //NSLog(@"Aquired location: %lf, %lf (%lf)", newLocation.coordinate.latitude, newLocation.coordinate.longitude, newLocation.horizontalAccuracy);
+    //ABLog(2,@"Aquired location: %lf, %lf (%lf)", newLocation.coordinate.latitude, newLocation.coordinate.longitude, newLocation.horizontalAccuracy);
     
 	// if we are at our accuracy then we are done
 	if (newLocation.horizontalAccuracy <= ACCURACY_METERS)
@@ -182,12 +183,12 @@ static Location *singleton = nil;  // this will be the one and only object this 
 				[self.locationManager stopUpdatingLocation];
 				if(periodTimer == nil)
 				{
-					//NSLog(@"Setting period timer for %f seconds", updatePeriod);
+					//ABLog(2,@"Setting period timer for %f seconds", updatePeriod);
 					periodTimer = [NSTimer scheduledTimerWithTimeInterval:updatePeriod target:self selector:@selector(timerFired:) userInfo:nil repeats:NO];
 				}
 			}
 		}
-        //NSLog(@"Location is accurate enough");
+        //ABLog(2,@"Location is accurate enough");
 	}
 	if([self.delegate respondsToSelector:@selector(DidReceiveLocation)])
 	{
@@ -200,7 +201,7 @@ static Location *singleton = nil;  // this will be the one and only object this 
 {	
     NSMutableString *msg = [[NSMutableString alloc] initWithString:[Theme Singleton].LocationNSMutalableString];
 	
-    NSLog(@"Location error: %ld", (long)[error code]);
+    ABLog(2,@"Location error: %ld", (long)[error code]);
     
 	if ([error domain] == kCLErrorDomain) 
 	{
@@ -241,10 +242,10 @@ static Location *singleton = nil;  // this will be the one and only object this 
 
 -(void)timerFired:(NSTimer *)timer
 {
-	//NSLog(@"Timer fired.");
+	//ABLog(2,@"Timer fired.");
 	if(self.locationManager)
 	{
-		//NSLog(@"Starting location");
+		//ABLog(2,@"Starting location");
 		[self.locationManager startUpdatingLocation];
 	}
 }

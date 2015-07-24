@@ -228,7 +228,7 @@
 //    {
 //        CGRect textFieldFrame = [self.contentView convertRect:_activeTextField.frame toView:self.view.window];
 //        float overlap = self.contentView.frame.origin.y + _keyboardFrameOriginY - KEYBOARD_MARGIN - (textFieldFrame.origin.y + textFieldFrame.size.height);
-//        //NSLog(@"Overlap: %f", overlap);
+//        //ABLog(2,@"Overlap: %f", overlap);
 //        if(overlap < 0)
 //        {
 //            [UIView animateWithDuration:0.35
@@ -272,7 +272,7 @@
 //    //Get KeyboardFrame (in Window coordinates)
 //    if(_activeTextField)
 //    {
-//        //NSLog(@"Keyboard will show for SignUpView");
+//        //ABLog(2,@"Keyboard will show for SignUpView");
 //        NSDictionary *userInfo = [notification userInfo];
 //        CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
 //
@@ -286,7 +286,7 @@
 {
 //    if(_activeTextField)
 //    {
-//        //NSLog(@"Keyboard will hide for SignUpView");
+//        //ABLog(2,@"Keyboard will hide for SignUpView");
 //        _activeTextField = nil;
 //    }
 //    _keyboardFrameOriginY = 0.0;

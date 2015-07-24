@@ -101,6 +101,8 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 @property (nonatomic, assign) int64_t                   previousAmountSatoshiRequested;
 @property (nonatomic, assign) int64_t                   amountSatoshiReceived;
 @property (nonatomic, assign) RequestState              state;
+@property (nonatomic, strong) NSTimer                   *qrTimer;
+@property (nonatomic, strong) NSTimer                   *rotateServerTimer;
 
 @property (assign) tABC_TxDetails txDetails;
 @property (nonatomic, strong) NSString *requestType;
@@ -224,6 +226,16 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
         _bDoFinalizeTx = NO;
     }
 
+    self.rotateServerTimer = [NSTimer scheduledTimerWithTimeInterval:[Theme Singleton].rotateServerInterval target:self selector:@selector(refreshBackground) userInfo:nil repeats:YES];
+
+    // Tweak the colors of fonts if we're in non-blur mode as the background will be too bright to have a white font
+    if (![Theme Singleton].bTranslucencyEnable)
+    {
+        [self.statusLine1 setTextColor:[Theme Singleton].colorTextDark];
+        [self.statusLine2 setTextColor:[Theme Singleton].colorTextDark];
+        [self.statusLine3 setTextColor:[Theme Singleton].colorTextDark];
+        [self.segmentedControlCopyEmailSMS setTintColor:[Theme Singleton].colorTextDark];
+    }
 }
 
 - (void)updateViews:(NSNotification *)notification
@@ -234,7 +246,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
         [self.buttonSelector.button setTitle:[CoreBridge Singleton].currentWallet.strName forState:UIControlStateNormal];
         self.buttonSelector.selectedItemIndex = [CoreBridge Singleton].currentWalletID;
 
-        NSString *walletName = [NSString stringWithFormat:@"To: %@ ↓", [CoreBridge Singleton].currentWallet.strName];
+        NSString *walletName = [NSString stringWithFormat:@"To: %@ ▼", [CoreBridge Singleton].currentWallet.strName];
         [MainViewController changeNavBarTitleWithButton:self title:walletName action:@selector(didTapTitle:) fromObject:self];
 
         self.keypadView.currencyNum = [CoreBridge Singleton].currentWallet.currencyNum;
@@ -248,7 +260,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
                            holdTime:FADING_ALERT_HOLD_TIME_FOREVER];
         }
     }
-    [MainViewController changeNavBar:self title:[Theme Singleton].backButtonText side:NAV_BAR_LEFT button:true enable:false action:@selector(Back:) fromObject:self];
+    [MainViewController changeNavBar:self title:[Theme Singleton].closeButtonText side:NAV_BAR_LEFT button:true enable:bWalletListDropped action:@selector(didTapTitle:) fromObject:self];
     [MainViewController changeNavBar:self title:[Theme Singleton].helpButtonText side:NAV_BAR_RIGHT button:true enable:true action:@selector(info:) fromObject:self];
 
 }
@@ -270,11 +282,16 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 {
     [super viewWillDisappear:animated];
     if(self.peripheralManager.isAdvertising) {
-        NSLog(@"Removing all BLE services and stopping advertising");
+        ABLog(2,@"Removing all BLE services and stopping advertising");
         [self.peripheralManager removeAllServices];
         [self.peripheralManager stopAdvertising];
         _peripheralManager = nil;
     }
+    if (self.qrTimer)
+        [self.qrTimer invalidate];
+    if (self.rotateServerTimer)
+        [self.rotateServerTimer invalidate];
+
     [CoreBridge prioritizeAddress:nil inWallet:[CoreBridge Singleton].currentWallet.strUUID];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -348,11 +365,13 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     if (_importWalletViewController)
     {
         [_importWalletViewController.view removeFromSuperview];
+        [_importWalletViewController removeFromParentViewController];
         _importWalletViewController = nil;
     }
     if (_recipientViewController)
     {
         [_recipientViewController.view removeFromSuperview];
+        [_recipientViewController removeFromParentViewController];
         _recipientViewController = nil;
     }
 
@@ -372,11 +391,20 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     {
         _refreshButton.hidden = YES;
         _refreshSpinner.hidden = NO;
-        [CoreBridge refreshWallet:[CoreBridge Singleton].currentWallet.strUUID refreshData:NO notify:^{
+        [CoreBridge rotateWalletServer:[CoreBridge Singleton].currentWallet.strUUID refreshData:NO notify:^
+        {
             [NSThread sleepForTimeInterval:2.0f];
             _refreshSpinner.hidden = YES;
             _refreshButton.hidden = NO;
         }];
+    }
+}
+
+- (void)refreshBackground
+{
+    if ([CoreBridge Singleton].arrayWallets && [CoreBridge Singleton].currentWallet)
+    {
+        [CoreBridge rotateWalletServer:[CoreBridge Singleton].currentWallet.strUUID refreshData:NO notify:nil];
     }
 }
 
@@ -413,9 +441,16 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     if(segmentedControlCopyEmailSMS.selectedSegmentIndex == 0)
     {
         UIPasteboard *pb = [UIPasteboard generalPasteboard];
-        [pb setString:addressString];
-
-        [MainViewController fadingAlert:[Theme Singleton].CopiedToTheClipboard];
+        if (pb && addressString)
+        {
+            [pb setString:addressString];
+            [MainViewController fadingAlert:NSLocalizedString(@"Request is copied to the clipboard", nil)];
+            [MainViewController fadingAlert:[Theme Singleton].CopiedToTheClipboard];
+        }
+        else
+        {
+            [MainViewController fadingAlert:NSLocalizedString(@"Error occured copying to the clipboard", nil)];
+        }
     }
     else if(segmentedControlCopyEmailSMS.selectedSegmentIndex == 1)
     {
@@ -453,7 +488,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
 - (RequestState)updateQRCode:(SInt64)incomingSatoshi
 {
-    NSLog(@"ENTER updateQRCode");
+    ABLog(2,@"ENTER updateQRCode");
 
     BOOL bChangeRequest = false;
 
@@ -532,7 +567,6 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
     self.statusLine1.text = @"";
     self.statusLine2.text = @"";
-    self.statusLine3.text = @"";
 
     switch (self.state) {
         case kRequest:
@@ -567,25 +601,23 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
         }
     }
 
+    Wallet *wallet = [self getCurrentWallet];
+    NSString *strUUID = wallet.strUUID;
+    NSNumber *nsCurrencyNum = [NSNumber numberWithInt:wallet.currencyNum];
+    NSNumber *nsRemaining = [NSNumber numberWithLongLong:remaining];
+
     //
-    // Change the QR code. This is a slow call so put it in a queue
+    // Change the QR code. This is a slow call so put it in a queue and timer. Timer fires every 1 second
     //
-    [CoreBridge postToWalletsQueue:^(void) {
 
-        UIImage *qrImage = [self createRequestQRImageFor:strName withNotes:strNotes withCategory:strCategory
-                                        storeRequestIDIn:strRequestID storeRequestURI:strRequestURI storeRequestAddressIn:strRequestAddress
-                                            scaleAndSave:NO withAmount:remaining];
+    if (self.qrTimer)
+        [self.qrTimer invalidate];
 
+    NSArray *args = [NSArray arrayWithObjects:strName,strUUID,nsCurrencyNum,strNotes,strCategory,strRequestID,strRequestURI,strRequestAddress,nsRemaining,nil];
 
-        addressString = strRequestAddress;
-        _uriString = strRequestURI;
+    ABLog(2,@"updateQRCode setTimer req=%d", [nsRemaining longLongValue]);
+    self.qrTimer = [NSTimer scheduledTimerWithTimeInterval:[Theme Singleton].qrCodeGenDelayTime target:self selector:@selector(updateQRAsync:) userInfo:args repeats:NO];
 
-        dispatch_async(dispatch_get_main_queue(),^{
-            [CoreBridge prioritizeAddress:addressString inWallet:[CoreBridge Singleton].currentWallet.strUUID];
-            self.statusLine3.text = addressString;
-            self.qrCodeImageView.image = qrImage;
-        });
-    }];
 
     if (incomingSatoshi)
     {
@@ -597,12 +629,49 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
         self.BLE_LogoImageView.hidden = YES;
     }
 
-    //
-    // If request has changed or is brand new, startup the BLE manager and start broadcasting
-    //
-    [CoreBridge postToWalletsQueue:^(void) {
+    return self.state;
+    ABLog(2,@"EXIT updateQRCode");
+
+}
+
+- (void)updateQRAsync:(NSTimer *)timer
+{
+    NSArray *args = [timer userInfo];
+    int i = 0;
+
+    NSString *strName = [args objectAtIndex:i++];
+    NSString *strUUID = [args objectAtIndex:i++];
+    NSNumber *nsCurrencyNum = [args objectAtIndex:i++];
+    int currencyNum = [nsCurrencyNum intValue];
+
+    NSString *strNotes = [args objectAtIndex:i++];
+    NSString *strCategory = [args objectAtIndex:i++];
+    NSString *strRequestID = [args objectAtIndex:i++];
+    NSString *strRequestURI = [args objectAtIndex:i++];
+    NSString *strRequestAddress = [args objectAtIndex:i++];
+    NSNumber *nsRemaining = [args objectAtIndex:i++];
+
+    SInt64 remaining = [nsRemaining longLongValue];
+
+    [CoreBridge postToGenQRQueue:^(void) {
+
+        ABLog(2,@"updateQRAsync Do actual QR update str=%d",remaining);
+        UIImage *qrImage = [self createRequestQRImageFor:strName walletUUID:strUUID currencyNum:currencyNum withNotes:strNotes withCategory:strCategory
+                                        storeRequestIDIn:strRequestID storeRequestURI:strRequestURI storeRequestAddressIn:strRequestAddress
+                                            scaleAndSave:NO withAmount:remaining];
+
+        addressString = strRequestAddress;
+        _uriString = strRequestURI;
+
+        [CoreBridge prioritizeAddress:addressString inWallet:strUUID];
+
+        dispatch_async(dispatch_get_main_queue(),^{
+            self.statusLine3.text = addressString;
+            self.qrCodeImageView.image = qrImage;
+        });
+
         if(self.peripheralManager.isAdvertising) {
-            NSLog(@"Removing all BLE services and stopping advertising");
+            ABLog(2,@"Removing all BLE services and stopping advertising");
             [self.peripheralManager removeAllServices];
             [self.peripheralManager stopAdvertising];
             _peripheralManager = nil;
@@ -624,16 +693,13 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
         }
     }];
 
-    return self.state;
-    NSLog(@"EXIT updateQRCode");
-
 }
 
 #pragma mark - Notification Handlers
 
 - (void)exchangeRateUpdate: (NSNotification *)notification
 {
-    NSLog(@"Updating exchangeRateUpdate");
+    ABLog(2,@"Updating exchangeRateUpdate");
 	[self updateTextFieldContents:NO];
 }
 
@@ -761,15 +827,13 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
 }
 
-- (const char *)createReceiveRequestFor:(NSString *)strName withNotes:(NSString *)strNotes 
+- (const char *)createReceiveRequestFor:(NSString *)strName walletUUID:(NSString *)strUUID currencyNum:(int)currencyNum withNotes:(NSString *)strNotes
     withCategory:(NSString *)strCategory withAmount:(SInt64)amountSatoshi
 {
 	//creates a receive request.  Returns a requestID.  Caller must free this ID when done with it
 	tABC_CC result;
 	double currency;
 	tABC_Error error;
-
-    Wallet *wallet = [self getCurrentWallet];
 
 	//first need to create a transaction details struct
     memset(&_details, 0, sizeof(tABC_TxDetails));
@@ -781,7 +845,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 	_details.amountFeesMinersSatoshi = 0;
 	
 	result = ABC_SatoshiToCurrency([[User Singleton].name UTF8String], [[User Singleton].password UTF8String],
-                                   _details.amountSatoshi, &currency, wallet.currencyNum, &error);
+                                   _details.amountSatoshi, &currency, currencyNum, &error);
 	if (result == ABC_CC_Ok)
 	{
 		_details.amountCurrency = currency;
@@ -798,7 +862,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     // create the request
 	result = ABC_CreateReceiveRequest([[User Singleton].name UTF8String],
                                       [[User Singleton].password UTF8String],
-                                      [wallet.strUUID UTF8String],
+                                      [strUUID UTF8String],
                                       &_details,
                                       &pRequestID,
                                       &error);
@@ -815,12 +879,12 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
 
 // generates and returns a request qr image, stores request id in the given mutable string
-- (UIImage *)createRequestQRImageFor:(NSString *)strName withNotes:(NSString *)strNotes withCategory:(NSString *)strCategory 
+- (UIImage *)createRequestQRImageFor:(NSString *)strName walletUUID:(NSString *)strUUID currencyNum:(int)currencyNum withNotes:(NSString *)strNotes withCategory:(NSString *)strCategory
     storeRequestIDIn:(NSMutableString *)strRequestID storeRequestURI:(NSMutableString *)strRequestURI 
     storeRequestAddressIn:(NSMutableString *)strRequestAddress scaleAndSave:(BOOL)bScaleAndSave 
     withAmount:(SInt64)amountSatoshi
 {
-    NSLog(@"ENTER createRequestQRImageFor");
+    ABLog(2,@"ENTER createRequestQRImageFor");
 
     UIImage *qrImage = nil;
     [strRequestID setString:@""];
@@ -832,16 +896,16 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     char *pszURI = NULL;
     tABC_Error error;
 
-    const char *szRequestID = [self createReceiveRequestFor:strName withNotes:strNotes
+    const char *szRequestID = [self createReceiveRequestFor:strName walletUUID:strUUID currencyNum:currencyNum withNotes:strNotes
         withCategory:strCategory withAmount:amountSatoshi];
-    self.requestID = [NSString stringWithUTF8String:szRequestID];
 
     if (szRequestID)
     {
-        Wallet *wallet = [self getCurrentWallet];
+        self.requestID = [NSString stringWithUTF8String:szRequestID];
+
         tABC_CC result = ABC_GenerateRequestQRCode([[User Singleton].name UTF8String],
                                            [[User Singleton].password UTF8String],
-                                           [wallet.strUUID UTF8String],
+                                           [strUUID UTF8String],
                                                    szRequestID,
                                                    &pszURI,
                                                    &pData,
@@ -920,7 +984,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
         [UIImagePNGRepresentation(qrImageFinal) writeToFile:filePath atomically:YES];
     }
 
-    NSLog(@"EXIT createRequestQRImageFor");
+    ABLog(2,@"EXIT createRequestQRImageFor");
 
     return qrImageFinal;
 }
@@ -984,13 +1048,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
         }
 	}
 
-//    NSString *walletName;
-//
-//    walletName = [NSString stringWithFormat:@"To: %@ ↓", wallet.strName];
-//
-//    [MainViewController changeNavBarTitleWithButton:self title:walletName action:@selector(didTapTitle:) fromObject:self];
     [self updateQRCode:0];
-//
 }
 
 - (void)didTapTitle: (UIButton *)sender
@@ -1005,6 +1063,8 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
         [self.buttonSelector open];
         bWalletListDropped = true;
     }
+    [MainViewController changeNavBar:self title:[Theme Singleton].closeButtonText side:NAV_BAR_LEFT button:true enable:bWalletListDropped action:@selector(didTapTitle:) fromObject:self];
+
 
 }
 
@@ -1049,6 +1109,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
 - (void)CalculatorValueChanged:(CalculatorView *)calculator
 {
+    self.amountSatoshiReceived = 0;
 	[self updateTextFieldContents:YES];
 }
 
@@ -1093,6 +1154,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 - (void)importWalletViewControllerDidFinish:(ImportWalletViewController *)controller
 {
 	[controller.view removeFromSuperview];
+    [controller removeFromParentViewController];
 	_importWalletViewController = nil;
 
     [self setFirstResponder];
@@ -1271,7 +1333,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
     // assign final
     self.arrayContacts = [arrayContacts sortedArrayUsingSelector:@selector(compare:)];
-    //NSLog(@"contacts: %@", self.arrayContacts);
+    //ABLog(2,@"contacts: %@", self.arrayContacts);
 }
 
 - (void)addContactInfo:(ABRecordRef)person withName:(NSString *)strName toArray:(NSMutableArray *)arrayContacts
@@ -1302,7 +1364,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     if(peripheral.state == CBPeripheralManagerStatePoweredOn && [self isLECapableHardware])
     {
         // We're in CBPeripheralManagerStatePoweredOn state...
-        //NSLog(@"self.peripheralManager powered on.");
+        //ABLog(2,@"self.peripheralManager powered on.");
 
         // ... so build our service.
 
@@ -1336,27 +1398,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
             address = addressString;
         }
 
-        tABC_AccountSettings            *pAccountSettings;
-        tABC_Error Error;
-        Error.code = ABC_CC_Ok;
-
-        // load the current account settings
-        pAccountSettings = NULL;
-        ABC_LoadAccountSettings([[User Singleton].name UTF8String],
-                [[User Singleton].password UTF8String],
-                &pAccountSettings,
-                &Error);
-        [Util printABC_Error:&Error];
-
-        BOOL sendName = NO;
-        if (pAccountSettings)
-        {
-            if(pAccountSettings->bNameOnPayments)
-            {
-                sendName = YES;
-            }
-            ABC_FreeAccountSettings(pAccountSettings);
-        }
+        BOOL sendName = [User Singleton].bNameOnPayments;
 
         NSString *name;
         if(sendName)
@@ -1388,13 +1430,13 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
  */
 -(void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveWriteRequests:(NSArray *)requests
 {
-    //NSLog(@"didReceiveWriteRequests");
+    //ABLog(2,@"didReceiveWriteRequests");
     for(CBATTRequest *request in requests)
     {
         if([request.characteristic.UUID isEqual:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]])
         {
             NSString *userName = [[NSString alloc] initWithData:request.value encoding:NSUTF8StringEncoding];
-            //NSLog(@"Received new string: %@", userName);
+            //ABLog(2,@"Received new string: %@", userName);
 
             self.connectedName = userName;
         }
@@ -1408,7 +1450,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
  */
 -(void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveReadRequest:(CBATTRequest *)request
 {
-    //NSLog(@"didReceiveReadRequests");
+    //ABLog(2,@"didReceiveReadRequests");
 
     if([request.characteristic.UUID isEqual:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]])
     {
@@ -1445,15 +1487,15 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
             state =[Theme Singleton].BluetoothCurrentlyResettingText;
             break;
         case CBPeripheralManagerStatePoweredOn:
-            NSLog(@"powered on");
+            ABLog(2,@"powered on");
             return TRUE;
         case CBPeripheralManagerStateUnknown:
-            NSLog(@"state unknown");
+            ABLog(2,@"state unknown");
             return FALSE;
         default:
             return FALSE;
     }
-    NSLog(@"Peripheral manager state: %@", state);
+    ABLog(2,@"Peripheral manager state: %@", state);
     return FALSE;
 }
 
@@ -1580,7 +1622,6 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
         [self presentViewController:mailComposer animated:YES completion:nil];
 
-        [MainViewController animateFadeOut:self.view];
         _requestType = [Theme Singleton].emailText;
     }
     else
@@ -1598,7 +1639,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
 - (void)sendSMS
 {
-    //NSLog(@"sendSMS to: %@ / %@", self.strFullName, self.strPhoneNumber);
+    //ABLog(2,@"sendSMS to: %@ / %@", self.strFullName, self.strPhoneNumber);
 
     MFMessageComposeViewController *controller = [[MFMessageComposeViewController alloc] init];
     if ([MFMessageComposeViewController canSendText] && [MFMessageComposeViewController canSendAttachments])
@@ -1618,7 +1659,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
         BOOL bAttached = [controller addAttachmentData:UIImagePNGRepresentation(imageAttachment) typeIdentifier:(NSString*)kUTTypePNG filename:filePath];
         if (!bAttached)
         {
-            NSLog(@"Could not attach qr code");
+            ABLog(2,@"Could not attach qr code");
         }
 
         controller.body = content;
@@ -1634,7 +1675,6 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
         controller.messageComposeDelegate = self;
 
         [self presentViewController:controller animated:YES completion:nil];
-        [MainViewController animateFadeOut:self.view];
 
         _requestType = [Theme Singleton].smsText;
     }
@@ -1665,7 +1705,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     self.recipientViewController.delegate = self;
     self.recipientViewController.mode = mode;
 
-    [Util addSubviewControllerWithConstraints:self.view child:self.recipientViewController];
+    [Util addSubviewControllerWithConstraints:self child:self.recipientViewController];
     [MainViewController animateSlideIn:self.recipientViewController];
 }
 
@@ -1722,8 +1762,6 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     {
         [Util printABC_Error:&Error];
     }
-
-    [self.delegate pleaseRestartRequestViewBecauseAppleSucksWithPresentController];
 
 }
 
@@ -1844,7 +1882,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
         self.strEMail = strTarget;
         self.strPhoneNumber = strTarget;
 
-        //NSLog(@"name: %@, target: %@", strFullName, strTarget);
+        //ABLog(2,@"name: %@, target: %@", strFullName, strTarget);
 
         if (controller.mode == RecipientMode_SMS)
         {

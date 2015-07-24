@@ -218,6 +218,8 @@ static BOOL bInitialized = false;
         self.credentialsPINView.hidden = false;
         self.credentialsView.hidden = true;
         self.userEntryView.hidden = true;
+        [self.passwordTextField resignFirstResponder];
+        [self.usernameSelector.textField resignFirstResponder];
         [self.PINCodeView becomeFirstResponder];
     }
     else
@@ -226,6 +228,8 @@ static BOOL bInitialized = false;
         self.credentialsPINView.hidden = true;
         self.credentialsView.hidden = false;
         self.userEntryView.hidden = false;
+        [self.passwordTextField resignFirstResponder];
+        [self.usernameSelector.textField resignFirstResponder];
         [self.PINCodeView resignFirstResponder];
     }
 
@@ -238,15 +242,21 @@ static BOOL bInitialized = false;
     }
     else
     {
-        self.usernameSelector.textField.hidden = false;
+        [self.view.superview layoutIfNeeded];
         self.usernameHeight.constant = _originalUsernameHeight;
         self.passwordHeight.constant = _originalPasswordHeight;
-        self.forgotPassworddButton.hidden = false;
-
-        if (_mode == MODE_ENTERING_USERNAME)
-        {
-            [self.usernameSelector.textField becomeFirstResponder];
-        }
+        [UIView animateWithDuration:[Theme Singleton].animationDurationTimeDefault
+                              delay:[Theme Singleton].animationDelayTimeDefault
+                            options:UIViewAnimationOptionCurveEaseInOut
+                         animations:^
+                         {
+                             self.usernameSelector.textField.hidden = false;
+                             self.forgotPassworddButton.hidden = false;
+                             [self.view.superview layoutIfNeeded];
+                         }
+                         completion:^(BOOL finished)
+                         {
+                         }];
     }
 
 
@@ -307,7 +317,7 @@ static BOOL bInitialized = false;
          [MainViewController moveSelectedViewController:0.0];
          [MainViewController setAlphaOfSelectedViewController:1.0];
          self.leftConstraint.constant = self.view.frame.size.width;
-         [self.view layoutIfNeeded];
+         [self.view.superview layoutIfNeeded];
      }
                      completion:^(BOOL finished)
      {
@@ -338,8 +348,8 @@ static BOOL bInitialized = false;
         //
         // Set the PIN username default
         //
-        UIFont *boldFont = [UIFont fontWithName:@"Lato-Bold" size:self.PINusernameSelector.button.titleLabel.font.pointSize];
-        UIFont *regularFont = [UIFont fontWithName:@"Lato-Regular" size:self.PINusernameSelector.button.titleLabel.font.pointSize];
+        UIFont *boldFont = [UIFont fontWithName:@"Lato-Bold" size:[Theme Singleton].fontSizeEnterPINText];
+        UIFont *regularFont = [UIFont fontWithName:@"Lato-Regular" size:[Theme Singleton].fontSizeEnterPINText];
         UIColor *boldColor = [UIColor colorWithRed:60./255. green:140.5/255. blue:200/255. alpha:1.];
         UIColor *regularColor = [UIColor grayColor];
         NSString *title = [NSString stringWithFormat:@"Enter PIN for (%@)",
@@ -389,6 +399,11 @@ static BOOL bInitialized = false;
                     [self.passwordTextField.text UTF8String], &error);
             _bSuccess = error.code == ABC_CC_Ok ? YES: NO;
             _strReason = [Util errorMap:&error];
+
+            // Core doesn't return anything specific for the case where network is down.
+            // Make up a better response in this case
+            if (error.code == ABC_CC_Error)
+                _strReason = NSLocalizedString(@"An error occurred. Possible network connection issue or incorrect username & password", nil);
             _resultCode = error.code;
             [self performSelectorOnMainThread:@selector(signInComplete) withObject:nil waitUntilDone:FALSE];
         });
@@ -517,8 +532,16 @@ static BOOL bInitialized = false;
                 }
                 default:
                 {
+                    NSString *reason;
                     [MainViewController showBackground:NO animate:YES];
-                    [MainViewController fadingAlert:[Util errorMap:&error]];
+                    // Core doesn't return anything specific for the case where network is down.
+                    // Make up a better response in this case
+                    if (error.code == ABC_CC_Error)
+                        reason = NSLocalizedString(@"An error occurred. Please check your network connection. You may also exit PIN login and use your username & password to login offline", nil);
+                    else
+                        reason = [Util errorMap:&error];
+
+                    [MainViewController fadingAlert:reason];
                     [self.PINCodeView becomeFirstResponder];
 
                 }
@@ -596,7 +619,7 @@ static BOOL bInitialized = false;
 {
     [self updateDisplayForKeyboard:YES];
 
-    //NSLog(@"Keyboard will show for SignUpView");
+    //ABLog(2,@"Keyboard will show for SignUpView");
     NSDictionary *userInfo = [notification userInfo];
     CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
 
@@ -721,30 +744,29 @@ static BOOL bInitialized = false;
     if(xOffset < 0) xOffset = -xOffset;
     if(xOffset < self.view.frame.size.width / 2)
     {
+        [self.view.superview layoutIfNeeded];
+
         //spring back
+        if (self.view.frame.origin.x > 0)
+        {
+            // sliding to right. Move directory back to left
+            [MainViewController moveSelectedViewController:-self.view.frame.size.width];
+        }
+        else if (self.view.frame.origin.x < 0)
+        {
+            // sliding to left. Move directory back to right
+            [MainViewController moveSelectedViewController:self.view.frame.size.width];
+        }
+
+//        [MainViewController setAlphaOfSelectedViewController:0.0];
+        self.leftConstraint.constant = 0;
+
         [UIView animateWithDuration:0.35
                               delay:0.0
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^
          {
-             if (self.view.frame.origin.x > 0)
-             {
-                 // sliding to right. Move directory back to left
-                 [MainViewController moveSelectedViewController:-self.view.frame.size.width];
-             }
-             else if (self.view.frame.origin.x < 0)
-             {
-                 // sliding to left. Move directory back to right
-                 [MainViewController moveSelectedViewController:self.view.frame.size.width];
-             }
-
-             [MainViewController setAlphaOfSelectedViewController:0.0];
-             self.leftConstraint.constant = 0;
-//             CGRect frame = self.view.frame;
-//            frame.origin.x = 0.0;
-//             self.view.frame = frame;
-
-             [self.view layoutIfNeeded];
+             [self.view.superview layoutIfNeeded];
          }
         completion:^(BOOL finished)
          {
@@ -753,28 +775,32 @@ static BOOL bInitialized = false;
     else
     {
         //spring out
+        [self.view.superview layoutIfNeeded];
+
+        CGRect frame = self.view.frame;
+        if(frame.origin.x < 0)
+        {
+            self.leftConstraint.constant = -frame.size.width;
+        }
+        else
+        {
+            self.leftConstraint.constant = frame.size.width;
+        }
+        [MainViewController moveSelectedViewController:0.0];
+        [MainViewController setAlphaOfSelectedViewController:1.0];
+
         [UIView animateWithDuration:0.35
                               delay:0.0
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^
          {
-             CGRect frame = self.view.frame;
-             if(frame.origin.x < 0)
-             {
-                 self.leftConstraint.constant = -frame.size.width;
-             }
-             else
-             {
-                 self.leftConstraint.constant = frame.size.width;
-             }
-             [MainViewController moveSelectedViewController:0.0];
-
-             [MainViewController setAlphaOfSelectedViewController:1.0];
-//             self.view.frame = frame;
-             [self.view layoutIfNeeded];
+             [self.view setAlpha:0];
+             [self.view.superview layoutIfNeeded];
          }
          completion:^(BOOL finished)
          {
+             self.leftConstraint.constant = 0;
+             [self.view layoutIfNeeded];
              [self.delegate loginViewControllerDidAbort];
          }];
     }
@@ -802,7 +828,7 @@ static BOOL bInitialized = false;
     }
     else if (_mode == MODE_NO_USERS)
     {
-        NSLog(@"XXX error. should not happen");
+        ABLog(2,@"XXX error. should not happen");
     }
 
     // highlight all of the text

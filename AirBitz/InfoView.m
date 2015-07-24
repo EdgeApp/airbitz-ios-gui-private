@@ -21,28 +21,39 @@
 
 @implementation InfoView
 
+static InfoView *currentView = nil;
+static NSString *currentHtml = nil;
 
 + (InfoView *)CreateWithDelegate:(id<InfoViewDelegate>)delegate
 {
-	InfoView *iv;
+    if (currentView) {
+        [currentView removeFromSuperview];
+        currentView = nil;
+        currentHtml = nil;
+    }
+    InfoView *iv;
     iv = [[[NSBundle mainBundle] loadNibNamed:@"InfoView~iphone" owner:nil options:nil] objectAtIndex:0];
-	iv.delegate = delegate;
-	return iv;
+    iv.delegate = delegate;
+    currentView = iv;
+    currentHtml = nil;
+    return iv;
 }
 
 + (InfoView *)CreateWithHTML:(NSString *)strHTML forView:(UIView *)theView
 {
+    // Are we already showing this help page?
+    if (currentHtml && [strHTML isEqualToString:currentHtml]) {
+        return currentView;
+    }
+    // If not, dismiss any current help pages
+    if (currentView) {
+        [currentView removeFromSuperview];
+        currentView = nil;
+        currentHtml = nil;
+    }
 	InfoView *iv;
 
-//	if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-//	{
-		iv = [[[NSBundle mainBundle] loadNibNamed:@"InfoView~iphone" owner:nil options:nil] objectAtIndex:0];
-//	}
-//	else
-//	{
-//		iv = [[[NSBundle mainBundle] loadNibNamed:@"InfoView~ipad" owner:nil options:nil] objectAtIndex:0];
-//
-//	}
+    iv = [[[NSBundle mainBundle] loadNibNamed:@"InfoView~iphone" owner:nil options:nil] objectAtIndex:0];
 
     CGRect frame;
 
@@ -57,6 +68,9 @@
 	NSString* path = [[NSBundle mainBundle] pathForResource:strHTML ofType: [Theme Singleton].HtmlFrame];
 	iv.htmlInfoToDisplay = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL];
     [theView addSubview:iv];
+    currentView = iv;
+    currentHtml = strHTML;
+
 	return iv;
 }
 
@@ -148,6 +162,8 @@
 	 completion:^(BOOL finished)
 	 {
          [self dismiss];
+         currentView = nil;
+         currentHtml = nil;
 	 }];
 }
 
@@ -167,6 +183,8 @@
      {
          [self removeFromSuperview];
      }
+    currentView = nil;
+    currentHtml = nil;
 }
 
 #pragma mark UIWebView delegates

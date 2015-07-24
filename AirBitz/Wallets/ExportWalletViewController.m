@@ -491,7 +491,7 @@ typedef enum eDatePeriod
 //    self.exportWalletOptionsViewController.fromDateTime = self.fromDateTime;
 //    self.exportWalletOptionsViewController.toDateTime = self.toDateTime;
 
-    [Util addSubviewControllerWithConstraints:self.view child:self.exportWalletOptionsViewController];
+    [Util addSubviewControllerWithConstraints:self child:self.exportWalletOptionsViewController];
     [MainViewController animateSlideIn:self.exportWalletOptionsViewController];
 }
 
@@ -511,7 +511,7 @@ typedef enum eDatePeriod
         self.buttonSelector.selectedItemIndex = [CoreBridge Singleton].currentWalletID;
 
         NSString *walletName;
-        walletName = [NSString stringWithFormat:@"Export From: %@ ↓", [CoreBridge Singleton].currentWallet.strName];
+        walletName = [NSString stringWithFormat:@"Export From: %@ ▼", [CoreBridge Singleton].currentWallet.strName];
 
         [MainViewController changeNavBarTitleWithButton:self title:walletName action:@selector(didTapTitle:) fromObject:self];
         if (!([[CoreBridge Singleton].arrayWallets containsObject:[CoreBridge Singleton].currentWallet]))
@@ -580,7 +580,6 @@ typedef enum eDatePeriod
 - (void)exportWalletOptionsViewControllerDidFinish:(ExportWalletOptionsViewController *)controller
 {
     [MainViewController animateOut:controller withBlur:NO complete:^(void) {
-        [controller.view removeFromSuperview];
         self.exportWalletOptionsViewController = nil;
         [self viewWillAppear:YES];
     }];

@@ -189,7 +189,7 @@
 
 - (void)toggleWalletDropdown: (UIButton *)sender
 {
-    NSLog(@"didTapWalletName: Hello world\n");
+    ABLog(2,@"didTapWalletName: Hello world\n");
 
     CGFloat destination;
 
@@ -198,12 +198,15 @@
         destination = -[MainViewController getLargestDimension];
         _bWalletsShowing = false;
 
+
     }
     else
     {
         destination = [MainViewController getHeaderHeight];
         _bWalletsShowing = true;
     }
+
+    [MainViewController changeNavBar:self title:[Theme Singleton].closeButtonText side:NAV_BAR_LEFT button:true enable:_bWalletsShowing action:@selector(toggleWalletDropdown:) fromObject:self];
 
     [UIView animateWithDuration: 0.35
                           delay: 0.0
@@ -228,8 +231,10 @@
     [self performSelector:@selector(resetTableHideSearch) withObject:nil afterDelay:0.0f];
 //    [self resetTableHideSearch];
 
+    _bWalletsShowing = false;
+
     [MainViewController changeNavBarOwner:self];
-    [MainViewController changeNavBar:self title:[Theme Singleton].backButtonText side:NAV_BAR_LEFT button:true enable:false action:@selector(Back:) fromObject:self];
+    [MainViewController changeNavBar:self title:[Theme Singleton].closeButtonText side:NAV_BAR_LEFT button:true enable:_bWalletsShowing action:@selector(toggleWalletDropdown:) fromObject:self];
     [MainViewController changeNavBar:self title:[Theme Singleton].helpButtonText side:NAV_BAR_RIGHT button:true enable:true action:@selector(info:) fromObject:self];
 
     self.buttonRequest.enabled = false;
@@ -237,7 +242,6 @@
     [self.buttonSend setAlpha:0.4];
     [self.buttonRequest setAlpha:0.4];
 
-    _bWalletsShowing = false;
     self.walletsViewTop.constant = -[MainViewController getLargestDimension];
 
     self.walletsView.layer.masksToBounds = NO;
@@ -252,25 +256,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViews:) name:NOTIFICATION_WALLETS_CHANGED object:nil];
 
     [self updateViews:nil];
-//    [self.balanceViewPlaceholder refresh];
-
-//    if (self.arrayWallets == nil)
-//    {
-//        self.arrayWallets = [[NSMutableArray alloc] init];
-//        self.arrayArchivedWallets = [[NSMutableArray alloc] init];
-//    }
-//    [CoreBridge postToWalletsQueue:^(void) {
-//        [self reloadWallets:self.arrayWallets archived:self.arrayArchivedWallets];
-//
-//        dispatch_async(dispatch_get_main_queue(),^{
-//            [self getBizImagesForWallet:self.wallet];
-//            [self.tableView reloadData];
-//            [self.walletsTable reloadData];
-//            [self updateBalanceView];
-//
-//        });
-//    }];
-//
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -373,7 +358,14 @@
 - (void)info: (UIButton *)sender
 {
     [self resignAllResponders];
-    [InfoView CreateWithHTML:@"infoTransactions" forView:self.view];
+    if (_bWalletsShowing)
+    {
+        [InfoView CreateWithHTML:@"infoWallets" forView:self.view];
+    }
+    else
+    {
+        [InfoView CreateWithHTML:@"infoTransactions" forView:self.view];
+    }
 }
 
 - (IBAction)buttonBlockerTouched:(id)sender
@@ -406,7 +398,7 @@
     self.exportWalletViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"ExportWalletViewController"];
     self.exportWalletViewController.delegate = self;
 
-    [Util addSubviewControllerWithConstraints:self.view child:self.exportWalletViewController];
+    [Util addSubviewControllerWithConstraints:self child:self.exportWalletViewController];
     [MainViewController animateSlideIn:self.exportWalletViewController];
 }
 
@@ -455,7 +447,7 @@
 
     NSString *walletName;
 
-    walletName = [NSString stringWithFormat:@"%@ ↓", [CoreBridge Singleton].currentWallet.strName];
+    walletName = [NSString stringWithFormat:@"%@ ▼", [CoreBridge Singleton].currentWallet.strName];
 
     [MainViewController changeNavBarTitleWithButton:self title:walletName action:@selector(toggleWalletDropdown:) fromObject:self];
 
@@ -548,7 +540,7 @@
     self.transactionDetailsController.transactionDetailsMode = (transaction.amountSatoshi < 0 ? TD_MODE_SENT : TD_MODE_RECEIVED);
     self.transactionDetailsController.photo = [self imageForTransaction:transaction];
 
-    [Util addSubviewControllerWithConstraints:self.view child:self.transactionDetailsController];
+    [Util addSubviewControllerWithConstraints:self child:self.transactionDetailsController];
     [MainViewController animateSlideIn:self.transactionDetailsController];
 }
 
@@ -565,6 +557,8 @@
                      completion:^(BOOL finished)
      {
          [self.transactionDetailsController.view removeFromSuperview];
+         [self.transactionDetailsController removeFromParentViewController];
+
          self.transactionDetailsController = nil;
      }];
 }
@@ -693,7 +687,7 @@
 {
     //get business details
 	NSString *requestURL = [NSString stringWithFormat:@"%@/business/%u/", SERVER_API, transaction.bizId];
-	//NSLog(@"Requesting: %@", requestURL);
+	//ABLog(2,@"Requesting: %@", requestURL);
 	[[DL_URLServer controller] issueRequestURL:requestURL
 									withParams:nil
 									withObject:nil
@@ -750,7 +744,7 @@
     }
 
     [MainViewController changeNavBarOwner:self];
-    [MainViewController changeNavBar:self title:[Theme Singleton].backButtonText side:NAV_BAR_LEFT button:true enable:false action:@selector(Back:) fromObject:self];
+    [MainViewController changeNavBar:self title:[Theme Singleton].closeButtonText side:NAV_BAR_LEFT button:true enable:_bWalletsShowing action:@selector(toggleWalletDropdown:) fromObject:self];
     [MainViewController changeNavBar:self title:[Theme Singleton].helpButtonText side:NAV_BAR_RIGHT button:true enable:true action:@selector(info:) fromObject:self];
 
     [self dismissTransactionDetails];
@@ -859,7 +853,7 @@
             case WALLET_SECTION_ACTIVE:
 
                 //CellIdentifier = @"WalletsHeader";
-                //NSLog(@"Active wallets header view: %@", activeWalletsHeaderView);
+                //ABLog(2,@"Active wallets header view: %@", activeWalletsHeaderView);
                 return _activeWalletsHeaderView;
 
             case WALLET_SECTION_ARCHIVED:
@@ -1015,7 +1009,7 @@
         //
         if (bBlankCell)
         {
-            cell.addressLabel.textColor = [Theme Singleton].colorTextDark;
+//            cell.addressLabel.textColor = [Theme Singleton].colorTextDark;
             cell.dateLabel.text = @"";
             cell.confirmationLabel.text = @"";
             cell.amountLabel.text = @"";
@@ -1028,7 +1022,7 @@
         cell.dateLabel.text = [NSDate stringForDisplayFromDate:transaction.date prefixed:NO alwaysDisplayTime:YES];
 
         // address
-        cell.addressLabel.text = transaction.strAddress;
+        cell.addressLabel.text = transaction.strName;
 
         // if we are in search  mode
         if ([self searchEnabled])
@@ -1084,9 +1078,39 @@
         cell.amountLabel.textColor = (transaction.amountSatoshi < 0) ? COLOR_NEGATIVE : COLOR_POSITIVE;
         // set the photo
         cell.imagePhoto.image = [self imageForTransaction:transaction];
-        cell.imagePhoto.hidden = (cell.imagePhoto.image == nil);
+//        cell.imagePhoto.hidden = (cell.imagePhoto.image == nil);
         cell.imagePhoto.layer.cornerRadius = 5;
         cell.imagePhoto.layer.masksToBounds = YES;
+
+        if (nil == cell.imagePhoto.image)
+        {
+            if (transaction.amountSatoshi < 0)
+            {
+                UIColor *color = [Theme Singleton].colorSendButton;
+                [cell.imagePhoto.layer setBackgroundColor:[color CGColor]];
+                cell.imagePhoto.image = [UIImage imageNamed:@"icon_send_padded.png"];
+            }
+            else
+            {
+                UIColor *color = [Theme Singleton].colorRequestButton;
+                [cell.imagePhoto.layer setBackgroundColor:[color CGColor]];
+                cell.imagePhoto.image = [UIImage imageNamed:@"icon_request_padded.png"];
+            }
+//            NSString *stringToHash;
+//            if ([cell.addressLabel.text length] == 0)
+//            {
+//                // Random color based on txid
+//                stringToHash = transaction.strID;
+//            }
+//            else
+//            {
+//                stringToHash = transaction.strName;
+//            }
+//            NSUInteger hash = [stringToHash hash];
+//            hash = hash % [[Theme Singleton].colorsProfileIcons count];
+//            UIColor *color = [[Theme Singleton].colorsProfileIcons objectAtIndex:hash];
+//            [cell.imagePhoto.layer setBackgroundColor:[color CGColor]];
+        }
     
         CGFloat borderWidth = PHOTO_BORDER_WIDTH;
         cell.viewPhoto.layer.borderColor = [PHOTO_BORDER_COLOR CGColor];
@@ -1141,14 +1165,14 @@
 {
     //XXX
     // Need to lock table header & shrink toggle bar
-    NSLog(@"TransactionsView: searchBarTextDidBeginEditing");
+    ABLog(2,@"TransactionsView: searchBarTextDidBeginEditing");
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar;
 {
     //XXX
     // Need to unlock table header & grow toggle bar
-    NSLog(@"TransactionsView: searchBarTextDidEndEditing");
+    ABLog(2,@"TransactionsView: searchBarTextDidEndEditing");
 }
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)text
@@ -1175,7 +1199,7 @@
             {
                 NSString *jsonString = [[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:NSUTF8StringEncoding];
 
-				//NSLog(@"Results download returned: %@", jsonString );
+				//ABLog(2,@"Results download returned: %@", jsonString );
 
                 NSData *jsonData = [jsonString dataUsingEncoding:NSUTF32BigEndianStringEncoding];
                 NSError *myError;
@@ -1238,7 +1262,7 @@
             //        // need at least one character in a wallet name
             if ([textField.text length])
             {
-                //NSLog(@"rename wallet to: %@", textField.text);
+                //ABLog(2,@"rename wallet to: %@", textField.text);
                 tABC_Error error;
                 ABC_RenameWallet([[User Singleton].name UTF8String],
                                  [[User Singleton].password UTF8String],
@@ -1266,7 +1290,7 @@
         self.exportWalletViewController = nil;
     }];
     [MainViewController changeNavBarOwner:self];
-    [MainViewController changeNavBar:self title:[Theme Singleton].backButtonText side:NAV_BAR_LEFT button:true enable:false action:@selector(Back:) fromObject:self];
+    [MainViewController changeNavBar:self title:[Theme Singleton].closeButtonText side:NAV_BAR_LEFT button:true enable:false action:@selector(Back:) fromObject:self];
     [MainViewController changeNavBar:self title:[Theme Singleton].helpButtonText side:NAV_BAR_RIGHT button:true enable:true action:@selector(info:) fromObject:self];
 
     [self updateViews:nil];
@@ -1282,9 +1306,9 @@
 
     NSIndexPath *indexPath = [self.walletsTable indexPathForRowAtPoint:p];
     if (indexPath == nil) {
-        NSLog(@"long press on table view but not on a row");
+        ABLog(2,@"long press on table view but not on a row");
     } else if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        NSLog(@"long press on table view at section %d, row %d", indexPath.section, indexPath.row);
+        ABLog(2,@"long press on table view at section %d, row %d", indexPath.section, indexPath.row);
         if (indexPath.section == WALLET_SECTION_ACTIVE)
         {
             longTapWallet = [[CoreBridge Singleton].arrayWallets objectAtIndex:indexPath.row];
@@ -1300,7 +1324,7 @@
                                         otherButtonTitles:[Theme Singleton].renameButtonText,nil];
         [longTapAlert show];
     } else {
-        NSLog(@"gestureRecognizer.state = %d", gestureRecognizer.state);
+        ABLog(2,@"gestureRecognizer.state = %d", gestureRecognizer.state);
     }
 }
 
@@ -1328,8 +1352,9 @@
 
 - (void)refresh:(id)sender
 {
-    [CoreBridge refreshWallet:[CoreBridge Singleton].currentWallet.strUUID refreshData:NO notify:^{
-        [(UIRefreshControl *)sender endRefreshing];
+    [CoreBridge rotateWalletServer:[CoreBridge Singleton].currentWallet.strUUID refreshData:NO notify:^
+    {
+        [(UIRefreshControl *) sender endRefreshing];
     }];
 }
 
@@ -1481,7 +1506,7 @@
     {
         _archiveCollapsed = YES;
         NSInteger countOfRowsToDelete = [CoreBridge Singleton].arrayArchivedWallets.count;
-        //NSLog(@"Rows to collapse: %i", countOfRowsToDelete);
+        //ABLog(2,@"Rows to collapse: %i", countOfRowsToDelete);
         if (countOfRowsToDelete > 0)
         {
             NSMutableArray *indexPathsToDelete = [[NSMutableArray alloc] init];
