@@ -204,7 +204,7 @@
 "V5e-1n-K9Z.placeholder" = "पासवर्ड";
 
 /* Class = "UILabel"; text = "An app has requested a bitcoin address to send money to. Please choose a wallet to receive funds:"; ObjectID = "Vcb-0y-fDf"; */
-"Vcb-0y-fDf.text" = "An app has requested a bitcoin address to send money to. Please choose a wallet to receive funds:";
+"Vcb-0y-fDf.text" = "पैसा भेजने के लिए, app ने bitcoin address का अनुरोध किया है . पैसे प्राप्त करने के लिए बटुए का चयन करें:";
 
 /* Class = "UIButton"; normalTitle = "Wallet Private Seed (advanced)"; ObjectID = "Vuw-Bw-dQY"; */
 "Vuw-Bw-dQY.normalTitle" = "Wallet Private Seed (advanced)";
