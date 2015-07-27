@@ -53,7 +53,7 @@
     self.buttonBlocker.frame = self.view.bounds;
     self.buttonBlocker.hidden = YES;
     [self.view addSubview:self.buttonBlocker];
-    self.userNameTextField.keyboardType = UIKeyboardTypeASCIICapable;
+    self.userNameTextField.keyboardType = DEFAULT_KEYBOARD;
 
 }
 

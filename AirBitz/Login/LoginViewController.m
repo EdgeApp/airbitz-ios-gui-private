@@ -161,6 +161,7 @@ static BOOL bInitialized = false;
     self.PINusernameSelector.textLabel.layer.masksToBounds = NO;
     self.PINusernameSelector.textLabel.layer.shadowColor = [[UIColor whiteColor] CGColor];
     self.PINusernameSelector.textLabel.layer.shadowOffset = CGSizeMake(0.0, 0.0);
+    
    
 
     self.swipeText.layer.shadowRadius = 3.0f;
@@ -180,6 +181,7 @@ static BOOL bInitialized = false;
     self.forgotPassworddButton.layer.masksToBounds = NO;
     self.forgotPassworddButton.layer.shadowColor = [[UIColor darkGrayColor] CGColor];
     self.forgotPassworddButton.layer.shadowOffset = CGSizeMake(0.0, 0.0);
+    
 
     self.usernameSelector.textField.placeholder =[Theme Singleton].UsernameSelectorText;
     self.usernameSelector.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.usernameSelector.textField.placeholder attributes:@{NSForegroundColorAttributeName: [UIColor lightTextColor]}];

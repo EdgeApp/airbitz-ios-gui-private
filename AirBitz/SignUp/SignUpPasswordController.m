@@ -53,7 +53,7 @@
     self.pinTextField.delegate = self;
     self.pinTextField.minimumCharacters = ABC_MIN_PIN_LENGTH;
     self.contentViewY = self.contentView.frame.origin.y;
-    self.passwordTextField.keyboardType = UIKeyboardTypeASCIICapable;
+    self.passwordTextField.keyboardType = DEFAULT_KEYBOARD;
     self.labelString = [Theme Singleton].signupText;
 
 
