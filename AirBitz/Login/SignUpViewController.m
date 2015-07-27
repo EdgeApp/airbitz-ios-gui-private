@@ -110,7 +110,7 @@
 
 -(void)viewWillAppear:(BOOL)animated
 {
-	//NSLog(@"Adding keyboard notification");
+	//ABLog(2,@"Adding keyboard notification");
 	NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
 	[center addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[center addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -128,9 +128,9 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-   // NSLog(@"%s", __FUNCTION__);
+   // ABLog(2,@"%s", __FUNCTION__);
     
-	//NSLog(@"Removing keyboard notification");
+	//ABLog(2,@"Removing keyboard notification");
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
     [super viewWillDisappear:animated];
 }
@@ -159,23 +159,6 @@
             // check the username and pin field
             if ([self fieldsAreValid] == YES)
             {
-//                // if we are signing up a new account
-//                if (_mode == SignUpMode_SignUp)
-//                {
-//                    [FadingAlertView create:self.view message:NSLocalizedString(@"Creating and securing account", nil) holdTime:FADING_ALERT_HOLD_TIME_FOREVER_WITH_SPINNER];
-//
-//                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-//                        tABC_Error error;
-//                        ABC_CreateAccount([self.userNameTextField.text UTF8String], [self.passwordTextField.text UTF8String], &error);
-//                        if (error.code == ABC_CC_Ok) {
-//                            ABC_SetPIN([[User Singleton].name UTF8String], [self.userNameTextField.text UTF8String],
-//                                [self.pinTextField.text UTF8String], &error);
-//                        }
-//                        _bSuccess = error.code;
-//                        _strReason = [Util errorMap:&error];
-//                        [self performSelectorOnMainThread:@selector(createAccountComplete) withObject:nil waitUntilDone:FALSE];
-//                    });
-//                }
                 if (_mode == SignUpMode_ChangePassword)
                 {
                     // get their old pen
@@ -222,14 +205,14 @@
                 else if (_mode == SignUpMode_ChangePasswordUsingAnswers)
                 {
                     [self blockUser:YES];
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+                    [CoreBridge postToMiscQueue:^{
                         tABC_Error error;
                         ABC_ChangePasswordWithRecoveryAnswers([self.strUserName UTF8String],
                             [self.strAnswers UTF8String], [self.passwordTextField.text UTF8String], &error);
                         _bSuccess = error.code == ABC_CC_Ok;
                         _strReason = [Util errorMap:&error];
                         [self performSelectorOnMainThread:@selector(changePasswordComplete) withObject:nil waitUntilDone:FALSE];
-                    });
+                    }];
                 }
                 else
                 {
@@ -248,9 +231,9 @@
                         [alert show];
 
                         // all other modes must wait for callback before PIN login setup
-                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                        [CoreBridge postToMiscQueue:^{
                             [CoreBridge setupLoginPIN];
-                        });
+                        }];
                     }
                 }
             }
@@ -540,7 +523,7 @@
 	{
 		CGRect textFieldFrame = [self.contentView convertRect:_activeTextField.frame toView:self.view.window];
 		float overlap = self.contentView.frame.origin.y + _keyboardFrameOriginY - KEYBOARD_MARGIN - (textFieldFrame.origin.y + textFieldFrame.size.height);
-		//NSLog(@"Overlap: %f", overlap);
+		//ABLog(2,@"Overlap: %f", overlap);
 		if(overlap < 0)
 		{
 			[UIView animateWithDuration:0.35
@@ -584,7 +567,7 @@
 	//Get KeyboardFrame (in Window coordinates)
 	if(_activeTextField)
 	{
-		//NSLog(@"Keyboard will show for SignUpView");
+		//ABLog(2,@"Keyboard will show for SignUpView");
 		NSDictionary *userInfo = [notification userInfo];
 		CGRect keyboardFrame = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
 
@@ -598,7 +581,7 @@
 {
 	if(_activeTextField)
 	{
-		//NSLog(@"Keyboard will hide for SignUpView");
+		//ABLog(2,@"Keyboard will hide for SignUpView");
 		_activeTextField = nil;
 	}
 	_keyboardFrameOriginY = 0.0;
@@ -622,7 +605,7 @@
 {
 	//called when user taps on either search textField or location textField
 	
-	//NSLog(@"TextField began editing");
+	//ABLog(2,@"TextField began editing");
 	_activeTextField = textField;
 	if(textField == self.passwordTextField)
 	{
@@ -727,29 +710,6 @@
 
 #pragma mark - ABC Callbacks
 
-- (void)createAccountComplete
-{
-    if (_bSuccess) {
-        [User login:self.userNameTextField.text
-           password:self.passwordTextField.text];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
-        {
-            [CoreBridge setupLoginPIN];
-        });
-        [self exit];
-    } else {
-        [self dismissFading:NO];
-		UIAlertView *alert = [[UIAlertView alloc]
-							  initWithTitle:[Theme Singleton].AccountSignUpText
-							  message:[NSString stringWithFormat:[Theme Singleton].SignUpFailedText, _strReason]
-							  delegate:nil
-							  cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
-							  otherButtonTitles:nil];
-		[alert show];
-    }
-    [self blockUser:NO];
-}
-
 - (void)changePasswordComplete
 {
     [self blockUser:NO];
@@ -805,10 +765,10 @@
     if (ABC_CC_Ok == result)
     {
         // all other modes must wait for callback before PIN login setup
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^
+        [CoreBridge postToMiscQueue:^
         {
             [CoreBridge setupLoginPIN];
-        });
+        }];
     }
     else
     {

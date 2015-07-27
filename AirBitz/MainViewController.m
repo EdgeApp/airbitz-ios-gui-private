@@ -86,6 +86,7 @@ typedef enum eAppMode
     NSURL                       *_uri;
     InfoView                    *_notificationInfoView;
     BOOL                        firstLaunch;
+    BOOL                        sideBarLocked;
 
     CGRect                      _closedSlideoutFrame;
     SlideoutView                *slideoutView;
@@ -157,15 +158,6 @@ MainViewController *singleton;
     });
 #endif
 
-	// Do any additional setup after loading the view.
-	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
-    UIStoryboard *directoryStoryboard = [UIStoryboard storyboardWithName:@"BusinessDirectory" bundle: nil];
-	_directoryViewController = [directoryStoryboard instantiateViewControllerWithIdentifier:@"DirectoryViewController"];
-	_loginViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-	_loginViewController.delegate = self;
-
-    [self loadUserViews];
-
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 
     // resgister for transaction details screen complete notification
@@ -201,7 +193,7 @@ MainViewController *singleton;
     NSNumber *nOrientation = [NSNumber numberWithInteger:toOrientation];
     NSDictionary *dictNotification = @{ KEY_ROTATION_ORIENTATION : nOrientation };
 
-    NSLog(@"Woohoo we WILL rotate %d", toOrientation);
+    ABLog(2,@"Woohoo we WILL rotate %d", toOrientation);
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ROTATION_CHANGED object:self userInfo:dictNotification];
 }
 
@@ -211,8 +203,17 @@ MainViewController *singleton;
 - (void)loadUserViews
 {
 	UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+    if (_requestViewController) {
+        [_requestViewController resetViews];
+        _requestViewController = nil;
+    }
 	_requestViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"RequestViewController"];
 	_requestViewController.delegate = self;
+
+    if (_sendViewController) {
+        [_sendViewController resetViews];
+        _sendViewController = nil;
+    }
 	_sendViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"SendViewController"];
     _sendViewController.delegate = self;
 
@@ -220,14 +221,25 @@ MainViewController *singleton;
     _importViewController.delegate = self;
 
     _transactionsViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"TransactionsViewController"];
+
+    if (_settingsViewController) {
+        [_settingsViewController resetViews];
+        _settingsViewController = nil;
+    }
     UIStoryboard *settingsStoryboard = [UIStoryboard storyboardWithName:@"Settings" bundle: nil];
     _settingsViewController = [settingsStoryboard instantiateViewControllerWithIdentifier:@"SettingsViewController"];
     _settingsViewController.delegate = self;
-    [_settingsViewController resetViews];
 
 	UIStoryboard *pluginStoryboard = [UIStoryboard storyboardWithName:@"Plugins" bundle: nil];
 	_buySellViewController = [pluginStoryboard instantiateViewControllerWithIdentifier:@"BuySellViewController"];
     _buySellViewController.delegate = self;
+
+    if (slideoutView)
+    {
+        [slideoutView removeFromSuperview];
+
+        slideoutView = nil;
+    }
 
     slideoutView = [SlideoutView CreateWithDelegate:self parentView:self.view withTab:self.tabBar];
     [self loadSlideOutViewConstraints];
@@ -235,6 +247,7 @@ MainViewController *singleton;
     _otpRequiredAlert = nil;
     _otpSkewAlert = nil;
     firstLaunch = YES;
+    sideBarLocked = NO;
     [self.view layoutIfNeeded];
 }
 
@@ -270,7 +283,17 @@ MainViewController *singleton;
 
 - (void)viewWillAppear:(BOOL)animated
 {
-	self.tabBar.delegate = self;
+    //
+    // If this has already been initialized. Don't initialize again. Just jump to launchViewControllerBasedOnAppMode with current appMode
+    //
+
+    if (self.tabBar.delegate == self)
+    {
+        [self launchViewControllerBasedOnAppMode];
+        return;
+    }
+
+    self.tabBar.delegate = self;
 
 	//originalTabBarPosition = self.tabBar.frame.origin;
 #if DIRECTORY_ONLY
@@ -278,6 +301,15 @@ MainViewController *singleton;
 #else
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showHideTabBar:) name:NOTIFICATION_SHOW_TAB_BAR object:nil];
 #endif
+    // Do any additional setup after loading the view.
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle: nil];
+    UIStoryboard *directoryStoryboard = [UIStoryboard storyboardWithName:@"BusinessDirectory" bundle: nil];
+    _directoryViewController = [directoryStoryboard instantiateViewControllerWithIdentifier:@"DirectoryViewController"];
+    _loginViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    _loginViewController.delegate = self;
+
+    [self loadUserViews];
+
 
 
     // Launch biz dir into background
@@ -291,11 +323,11 @@ MainViewController *singleton;
 
     self.tabBar.selectedItem = self.tabBar.items[_appMode];
 
-    NSLog(@"navBar:%f %f\ntabBar: %f %f\n",
+    ABLog(2,@"navBar:%f %f\ntabBar: %f %f\n",
             self.navBar.frame.origin.y, self.navBar.frame.size.height,
             self.tabBar.frame.origin.y, self.tabBar.frame.size.height);
 
-    NSLog(@"DVC topLayoutGuide: self=%f", self.topLayoutGuide.length);
+    ABLog(2,@"DVC topLayoutGuide: self=%f", self.topLayoutGuide.length);
 
 
     [self.tabBar setTranslucent:[Theme Singleton].bTranslucencyEnable];
@@ -379,6 +411,7 @@ MainViewController *singleton;
 + (void)showBackground:(BOOL)loggedIn animate:(BOOL)animated completion:(void (^)(BOOL finished))completion
 {
     CGFloat bvStart, bvEnd, bvbStart, bvbEnd;
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
 
     if (loggedIn)
     {
@@ -402,12 +435,18 @@ MainViewController *singleton;
                              [singleton.backgroundView setAlpha:bvEnd];
                              [singleton.backgroundViewBlue setAlpha:bvbEnd];
                          }
-                         completion:completion];
+                         completion:^(BOOL finished){
+                            if (completion) {
+                                completion(finished);
+                            }
+                            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+                         }];
     }
     else
     {
         [singleton.backgroundView setAlpha:bvEnd];
         [singleton.backgroundViewBlue setAlpha:bvbEnd];
+        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
     }
 
 }
@@ -428,7 +467,6 @@ MainViewController *singleton;
 -(void)showLogin:(BOOL)animated withPIN:(BOOL)bWithPIN
 {
     [LoginViewController setModePIN:bWithPIN];
-    _loginViewController.leftConstraint.constant = 0;
     [self.view layoutIfNeeded];
 
     if (_selectedViewController != _directoryViewController)
@@ -436,20 +474,38 @@ MainViewController *singleton;
         [MainViewController animateFadeOut:_selectedViewController.view remove:YES];
         _selectedViewController = _directoryViewController;
 
-        NSArray *constraints = [Util insertSubviewWithConstraints:self.view child:_selectedViewController.view belowSubView:self.tabBar];
-
-        _selectedViewController.leftConstraint = [constraints objectAtIndex:0];
+        [Util insertSubviewControllerWithConstraints:self child:_selectedViewController belowSubView:self.tabBar];
     }
-    [MainViewController animateFadeOut:_selectedViewController.view];
-    [MainViewController moveSelectedViewController: -[MainViewController getLargestDimension]];
-    NSArray *constraints = [Util insertSubviewWithConstraints:singleton.view child:_loginViewController.view belowSubView:singleton.tabBar];
-    _loginViewController.leftConstraint = [constraints objectAtIndex:0];
-    _loginViewController.leftConstraint.constant = 0;
+
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+    [_selectedViewController.view setAlpha:1.0];
+    [_selectedViewController.view setOpaque:NO];
+    [Util insertSubviewControllerWithConstraints:self child:_loginViewController belowSubView:singleton.tabBar];
+    [_loginViewController.view setAlpha:0.0];
     [self.view layoutIfNeeded];
+
+    [_selectedViewController.view setAlpha:0.0];
+    _selectedViewController.leftConstraint.constant = -[MainViewController getLargestDimension];
+    self.blurViewLeft.constant = -[MainViewController getLargestDimension];
+    [_loginViewController.view setAlpha:1.0];
+
+    [UIView animateWithDuration:0.35
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^ {
+                         [self.view layoutIfNeeded];
+                     }
+                     completion:^(BOOL finished) {
+                         [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+                     }];
+
+
+//    [MainViewController animateFadeOut:_selectedViewController.view];
+//    [MainViewController moveSelectedViewController: -[MainViewController getWidth]];
 
     [MainViewController hideTabBarAnimated:animated];
     [MainViewController hideNavBarAnimated:animated];
-    [MainViewController animateFadeIn:_loginViewController.view];
+//    [MainViewController animateFadeIn:_loginViewController.view];
     [MainViewController showBackground:NO animate:YES];
 
 }
@@ -471,18 +527,22 @@ MainViewController *singleton;
 {
     if(animated)
     {
+        [singleton.view layoutIfNeeded];
+
+        singleton.tabBarBottom.constant = 0;
+        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
         [UIView animateWithDuration:0.25
                               delay:0.0
                             options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState
                          animations:^
                          {
-                             singleton.tabBarBottom.constant = 0;
                              [singleton.view layoutIfNeeded];
 
                          }
                          completion:^(BOOL finished)
                          {
-                             NSLog(@"view: %f, %f, tab bar origin: %f", singleton.view.frame.origin.y, singleton.view.frame.size.height, singleton.tabBar.frame.origin.y);
+                             ABLog(2,@"view: %f, %f, tab bar origin: %f", singleton.view.frame.origin.y, singleton.view.frame.size.height, singleton.tabBar.frame.origin.y);
+                             [[UIApplication sharedApplication] endIgnoringInteractionEvents];
 
                          }];
     }
@@ -497,19 +557,21 @@ MainViewController *singleton;
 
     if(animated)
     {
+        [singleton.view layoutIfNeeded];
+
+        singleton.navBarTop.constant = 0;
+        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
         [UIView animateWithDuration:0.25
                               delay:0.0
                             options:UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionBeginFromCurrentState
                          animations:^
                          {
-
-                             singleton.navBarTop.constant = 0;
-
                              [singleton.view layoutIfNeeded];
                          }
                          completion:^(BOOL finished)
                          {
-                             NSLog(@"view: %f, %f, tab bar origin: %f", singleton.view.frame.origin.y, singleton.view.frame.size.height, singleton.tabBar.frame.origin.y);
+                             ABLog(2,@"view: %f, %f, tab bar origin: %f", singleton.view.frame.origin.y, singleton.view.frame.size.height, singleton.tabBar.frame.origin.y);
+                             [[UIApplication sharedApplication] endIgnoringInteractionEvents];
                          }];
     }
     else
@@ -525,20 +587,22 @@ MainViewController *singleton;
 
 	if(animated)
 	{
+        [singleton.view layoutIfNeeded];
+
+        singleton.tabBarBottom.constant = -singleton.tabBar.frame.size.height;
+        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
 		[UIView animateWithDuration:0.25
 							  delay:0.0
 							options:UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionBeginFromCurrentState
 						 animations:^
-		 {
-
-             singleton.tabBarBottom.constant = -singleton.tabBar.frame.size.height;
-
+        {
              [singleton.view layoutIfNeeded];
-		 }
+		}
 		completion:^(BOOL finished)
-		 {
-			NSLog(@"view: %f, %f, tab bar origin: %f", singleton.view.frame.origin.y, singleton.view.frame.size.height, singleton.tabBar.frame.origin.y);
-		 }];
+		{
+            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+            ABLog(2,@"view: %f, %f, tab bar origin: %f", singleton.view.frame.origin.y, singleton.view.frame.size.height, singleton.tabBar.frame.origin.y);
+		}];
 	}
 	else
 	{
@@ -551,19 +615,21 @@ MainViewController *singleton;
 
     if(animated)
     {
+        [singleton.view layoutIfNeeded];
+
+        singleton.navBarTop.constant = -singleton.navBar.frame.size.height;
+        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
         [UIView animateWithDuration:0.25
                               delay:0.0
                             options:UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionBeginFromCurrentState
                          animations:^
                          {
-
-                             singleton.navBarTop.constant = -singleton.navBar.frame.size.height;
-
                              [singleton.view layoutIfNeeded];
                          }
                          completion:^(BOOL finished)
                          {
-                             NSLog(@"view: %f, %f, tab bar origin: %f", singleton.view.frame.origin.y, singleton.view.frame.size.height, singleton.tabBar.frame.origin.y);
+                             [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+                             ABLog(2,@"view: %f, %f, tab bar origin: %f", singleton.view.frame.origin.y, singleton.view.frame.size.height, singleton.tabBar.frame.origin.y);
                          }];
     }
     else
@@ -571,6 +637,11 @@ MainViewController *singleton;
         singleton.navBarTop.constant = -singleton.navBar.frame.size.height;
         [singleton.view layoutIfNeeded];
     }
+}
+ 
++ (void)lockSidebar:(BOOL)locked
+{
+    singleton->sideBarLocked = locked;
 }
 
 +(UIViewController *)getSelectedViewController
@@ -797,6 +868,7 @@ MainViewController *singleton;
 	[MainViewController showTabBarAnimated:YES];
     [MainViewController showNavBarAnimated:YES];
 	[_loginViewController.view removeFromSuperview];
+    [_loginViewController removeFromParentViewController];
 }
 
 - (void)loginViewControllerDidLogin:(BOOL)bNewAccount
@@ -899,8 +971,7 @@ MainViewController *singleton;
     _signUpController.mode = SignUpMode_ChangePasswordNoVerify;
     _signUpController.delegate = self;
 
-    NSArray *constraints = [Util addSubviewWithConstraints:self.view child:_signUpController.view];
-    _signUpController.leftConstraint = [constraints objectAtIndex:0];
+    [Util addSubviewControllerWithConstraints:self child:_signUpController];
     _signUpController.leftConstraint.constant = _signUpController.view.frame.size.width;
 
     [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
@@ -1099,7 +1170,7 @@ MainViewController *singleton;
     _txDetailsController.bOldTransaction = NO;
     _txDetailsController.transactionDetailsMode = TD_MODE_RECEIVED;
 
-    [Util addSubviewControllerWithConstraints:singleton.view child:_txDetailsController];
+    [Util addSubviewControllerWithConstraints:self child:_txDetailsController];
     [MainViewController animateSlideIn:_txDetailsController];
 }
 
@@ -1109,6 +1180,7 @@ MainViewController *singleton;
     [MainViewController animateOut:controller withBlur:NO complete:^
     {
         [_txDetailsController.view removeFromSuperview];
+        [_txDetailsController removeFromParentViewController];
         _txDetailsController = nil;
         [MainViewController showNavBarAnimated:YES];
         [MainViewController showTabBarAnimated:YES];
@@ -1489,6 +1561,7 @@ MainViewController *singleton;
     if (_selectedViewController != nil)
     {
         [_selectedViewController.view removeFromSuperview];
+        [_selectedViewController removeFromParentViewController];
         _selectedViewController = nil;
     }
     [self launchViewControllerBasedOnAppMode];
@@ -1512,7 +1585,7 @@ MainViewController *singleton;
 
 - (void)slideoutAccount
 {
-    NSLog(@"MainViewController.slideoutAccount");
+    ABLog(2,@"MainViewController.slideoutAccount");
 }
 
 - (void)slideoutSettings
@@ -1532,20 +1605,16 @@ MainViewController *singleton;
 - (void)slideoutLogout
 {
     [slideoutView showSlideout:NO withAnimation:NO];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[User Singleton] clear];
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            [self SettingsViewControllerDone:nil];
-            [self launchViewControllerBasedOnAppMode];
-        });
-    });
+    [self logout];
 }
 
 - (void)slideoutBuySell
 {
     [_selectedViewController.view removeFromSuperview];
+    [_selectedViewController removeFromParentViewController];
+
     _selectedViewController = _buySellViewController;
-    [Util insertSubviewControllerWithConstraints:self.view child:_selectedViewController belowSubView:self.tabBar];
+    [Util insertSubviewControllerWithConstraints:self child:_selectedViewController belowSubView:self.tabBar];
 //    [self.view insertSubview:_selectedViewController.view belowSubview:self.tabBar];
     self.tabBar.selectedItem = self.tabBar.items[APP_MODE_MORE];
     [slideoutView showSlideout:NO];
@@ -1564,6 +1633,22 @@ MainViewController *singleton;
     }
 }
 
+- (void)logout
+{
+    [FadingAlertView create:self.view
+                    message:NSLocalizedString(@"Please wait while Airbitz gracefully exits your account. This may take awhile on slow networks", nil)
+                   holdTime:FADING_ALERT_HOLD_TIME_FOREVER_WITH_SPINNER notify:^{
+                // Log the user out and reset UI
+                [[User Singleton] clear];
+
+                [self loadUserViews];
+                [self launchViewControllerBasedOnAppMode];
+
+                [FadingAlertView dismiss:YES];
+            }];
+
+}
+
 #pragma mark - Slideout Methods
 
 - (void)installRightToLeftSwipeDetection
@@ -1580,7 +1665,7 @@ MainViewController *singleton;
 }
 
 - (void)handlePan:(UIPanGestureRecognizer *) recognizer {
-    if ([User isLoggedIn]) {
+    if ([User isLoggedIn] && !sideBarLocked) {
         if (![slideoutView isOpen]) {
             [slideoutView handleRecognizer:recognizer fromBlock:NO];
         }
@@ -1592,6 +1677,8 @@ MainViewController *singleton;
 -(void)signupViewControllerDidFinish:(SignUpViewController *)controller withBackButton:(BOOL)bBack
 {
     [controller.view removeFromSuperview];
+    [controller removeFromParentViewController];
+
     _signUpController = nil;
 }
 
@@ -1678,12 +1765,12 @@ MainViewController *singleton;
     viewController.leftConstraint.constant = [MainViewController getLargestDimension];
     [viewController.view layoutIfNeeded];
 
+    viewController.leftConstraint.constant = 0;
     [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
     [UIView animateWithDuration:0.35
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^ {
-                         viewController.leftConstraint.constant = 0;
                          [viewController.view layoutIfNeeded];
                      }
                      completion:^(BOOL finished) {
@@ -1698,11 +1785,14 @@ MainViewController *singleton;
 {
     [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
     [view setAlpha:0.0];
+    [view.superview layoutIfNeeded];
+
     [UIView animateWithDuration:0.35
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^ {
                          [view setAlpha:1.0];
+                         [view.superview layoutIfNeeded];
                      }
                      completion:^(BOOL finished) {
                          [[UIApplication sharedApplication] endIgnoringInteractionEvents];
@@ -1720,11 +1810,14 @@ MainViewController *singleton;
     [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
     [view setAlpha:1.0];
     [view setOpaque:NO];
+    [view.superview layoutIfNeeded];
+
     [UIView animateWithDuration:0.35
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^ {
                          [view setAlpha:0.0];
+                         [view.superview layoutIfNeeded];
                      }
                      completion:^(BOOL finished) {
                          [[UIApplication sharedApplication] endIgnoringInteractionEvents];
@@ -1734,9 +1827,9 @@ MainViewController *singleton;
                      }];
 }
 
-+ (NSArray *)animateSwapViewControllers:(AirbitzViewController *)in out:(AirbitzViewController *)out
++ (void)animateSwapViewControllers:(AirbitzViewController *)in out:(AirbitzViewController *)out
 {
-    NSArray *constraints = [Util insertSubviewControllerWithConstraints:singleton.view child:in belowSubView:singleton.tabBar];
+    [Util insertSubviewControllerWithConstraints:singleton child:in belowSubView:singleton.tabBar];
 
     singleton.selectedViewController = in;
 
@@ -1745,26 +1838,26 @@ MainViewController *singleton;
     singleton.blurViewLeft.constant = 0;
     [singleton.view layoutIfNeeded];
 
+    in.leftConstraint.constant = 0;
+    singleton.blurViewLeft.constant = 0;
     [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
     [UIView animateWithDuration:0.20
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^
                      {
-                         in.leftConstraint.constant = 0;
-                         singleton.blurViewLeft.constant = 0;
                          [singleton.blurViewContainer setAlpha:1];
                          [out.view setAlpha:0.0];
                          [in.view setAlpha:1.0];
-
                          [singleton.view layoutIfNeeded];
                      }
                      completion:^(BOOL finished)
                      {
                          [out.view removeFromSuperview];
+                         [out removeFromParentViewController];
                          [[UIApplication sharedApplication] endIgnoringInteractionEvents];
                      }];
-    return constraints;
+    return;
 }
 
 + (void)animateView:(AirbitzViewController *)viewController withBlur:(BOOL)withBlur
@@ -1776,7 +1869,7 @@ MainViewController *singleton;
 {
 
 
-    [Util insertSubviewControllerWithConstraints:singleton.view child:viewController belowSubView:singleton.tabBar];
+    [Util insertSubviewControllerWithConstraints:singleton child:viewController belowSubView:singleton.tabBar];
 
     viewController.leftConstraint.constant = viewController.view.frame.size.width;
     [singleton.view layoutIfNeeded];
@@ -1786,7 +1879,13 @@ MainViewController *singleton;
         singleton.blurViewLeft.constant = [MainViewController getLargestDimension];
         [singleton.view layoutIfNeeded];
     }
+    [singleton.view layoutIfNeeded];
 
+    viewController.leftConstraint.constant = 0;
+    if (withBlur)
+    {
+        singleton.blurViewLeft.constant = 0;
+    }
     if (animated)
     {
         [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
@@ -1795,11 +1894,6 @@ MainViewController *singleton;
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^
                          {
-                             viewController.leftConstraint.constant = 0;
-                             if (withBlur)
-                             {
-                                 singleton.blurViewLeft.constant = 0;
-                             }
                              [singleton.view layoutIfNeeded];
                          }
                          completion:^(BOOL finished)
@@ -1807,11 +1901,10 @@ MainViewController *singleton;
                              [[UIApplication sharedApplication] endIgnoringInteractionEvents];
                          }];
     }
-//    else
-//    {
-//        viewController.leftConstraint.constant = 0;
-//        [singleton.view layoutIfNeeded];
-//    }
+    else
+    {
+        [singleton.view layoutIfNeeded];
+    }
 }
 
 + (void)animateOut:(AirbitzViewController *)viewController withBlur:(BOOL)withBlur complete:(void(^)(void))cb
@@ -1820,19 +1913,21 @@ MainViewController *singleton;
 
     if (withBlur)
         singleton.blurViewLeft.constant = 0;
+    [singleton.view layoutIfNeeded];
 
+    viewController.leftConstraint.constant = [MainViewController getLargestDimension];
+    if (withBlur)
+        singleton.blurViewLeft.constant = [MainViewController getLargestDimension];
     [UIView animateWithDuration:0.35
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^ {
-                         viewController.leftConstraint.constant = [MainViewController getLargestDimension];
-                         if (withBlur)
-                             singleton.blurViewLeft.constant = [MainViewController getLargestDimension];
                          [singleton.view layoutIfNeeded];
 
                      }
                      completion:^(BOOL finished) {
                          [viewController.view removeFromSuperview];
+                         [viewController removeFromParentViewController];
                          [[UIApplication sharedApplication] endIgnoringInteractionEvents];
                          if(cb != nil)
                              cb();
@@ -1843,103 +1938,29 @@ MainViewController *singleton;
 {
     if (_selectedViewController == nil)
     {
-        NSLog(@"_selectedViewController == nil");
+        ABLog(2,@"_selectedViewController == nil");
     }
     else if (_selectedViewController == _directoryViewController)
     {
-        NSLog(@"_selectedViewController == _directoryViewController");
+        ABLog(2,@"_selectedViewController == _directoryViewController");
     }
     else if (_selectedViewController == _transactionsViewController)
     {
-        NSLog(@"_selectedViewController == _transactionsViewController");
+        ABLog(2,@"_selectedViewController == _transactionsViewController");
     }
     else if (_selectedViewController == _loginViewController)
     {
-        NSLog(@"_selectedViewController == _loginViewController");
+        ABLog(2,@"_selectedViewController == _loginViewController");
     }
     else if (_selectedViewController == _sendViewController)
     {
-        NSLog(@"_selectedViewController == _sendViewController");
+        ABLog(2,@"_selectedViewController == _sendViewController");
     }
     else if (_selectedViewController == _requestViewController)
     {
-        NSLog(@"_selectedViewController == _requestViewController");
+        ABLog(2,@"_selectedViewController == _requestViewController");
     }
 }
-
-#pragma RequestViewController delegate
--(void)pleaseRestartRequestViewBecauseAppleSucksWithPresentController
-{
-    NSLog(@"pleaseRestartRequestViewBecauseAppleSucksWithPresentController called");
-
-    NSString *requestID = _requestViewController.requestID;
-    AirbitzViewController *fakeViewController;
-    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-    fakeViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"AirbitzViewController"];
-
-    [MainViewController animateSwapViewControllers:fakeViewController out:_requestViewController];
-    _requestViewController = nil;
-    _requestViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"RequestViewController"];
-
-    _requestViewController.delegate = self;
-    _requestViewController.requestID = requestID;
-    _requestViewController.bDoFinalizeTx = YES;
-    [MainViewController animateSwapViewControllers:_requestViewController out:fakeViewController];
-}
-
-
-#pragma SendViewController delegate
--(void)pleaseRestartSendViewBecauseAppleSucksWithPresentController
-{
-    SendViewController *tempSend;
-    NSLog(@"pleaseRestartSendViewBecauseAppleSucksWithPresentController called");
-    NSAssert((_selectedViewController == _sendViewController) || (_selectedViewController == _importViewController), @"Must be Import or Send View Controllers");
-    tempSend = _selectedViewController;
-    ZBarSymbolSet *zBarSymbolSet = tempSend.zBarSymbolSet;
-    BOOL bImportMode = tempSend.bImportMode;
-    tLoopbackState loopbackState = tempSend.loopbackState;
-    tempSend = nil;
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [NSThread sleepForTimeInterval:0.5f];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            AirbitzViewController *fakeViewController;
-            UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
-
-            fakeViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"AirbitzViewController"];
-
-            if (bImportMode)
-            {
-                NSAssert(_selectedViewController == _importViewController, [Theme Singleton].MustBeImportText);
-                [MainViewController animateSwapViewControllers:fakeViewController out:_importViewController];
-                _importViewController = nil;
-                _importViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"SendViewController"];
-
-                _importViewController.zBarSymbolSet = zBarSymbolSet;
-                _importViewController.bImportMode = bImportMode;
-                _importViewController.delegate = self;
-                _importViewController.loopbackState = loopbackState;
-                [MainViewController animateSwapViewControllers:_importViewController out:fakeViewController];
-
-            }
-            else
-            {
-                NSAssert(_selectedViewController == _sendViewController, [Theme Singleton].MustBeSendText);
-                [MainViewController animateSwapViewControllers:fakeViewController out:_sendViewController];
-                _sendViewController = nil;
-                _sendViewController = [mainStoryboard instantiateViewControllerWithIdentifier:@"SendViewController"];
-
-                _sendViewController.zBarSymbolSet = zBarSymbolSet;
-                _sendViewController.bImportMode = bImportMode;
-                _sendViewController.delegate = self;
-                _sendViewController.loopbackState = loopbackState;
-                [MainViewController animateSwapViewControllers:_sendViewController out:fakeViewController];
-
-            }
-        });
-    });
-}
-
 
 + (void)fadingAlertHelpPopup:(NSString *)message
 {
