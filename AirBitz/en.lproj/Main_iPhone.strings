@@ -9,16 +9,16 @@
 "0WP-4K-TNl.text" = "mBTC";
 
 /* Class = "IBUILabel"; text = "Email Recipient"; ObjectID = "0b6-ws-V2S"; */
-"0b6-ws-V2S.text" = "Email Recipient";
+"0b6-ws-V2S.text" = "Email प्राप्तकर्ता";
 
 /* Class = "IBUILabel"; text = "Scanning for Bluetooth  Requests..."; ObjectID = "21p-YC-LN1"; */
-"21p-YC-LN1.text" = "Scanning for Bluetooth  Requests...";
+"21p-YC-LN1.text" = "ब्लूटूथ अनुरोधों के लिए स्कैनिंग...";
 
 /* Class = "IBUILabel"; text = "Label"; ObjectID = "2FV-6E-gId"; */
-"2FV-6E-gId.text" = "Label";
+"2FV-6E-gId.text" = "लेबल";
 
 /* Class = "IBUILabel"; text = "Send Confirmation"; ObjectID = "2LK-LX-sOp"; */
-"2LK-LX-sOp.text" = "Send Confirmation";
+"2LK-LX-sOp.text" = "पुष्टि भेजें";
 
 /* Class = "IBUILabel"; text = "10/15/2014"; ObjectID = "2Rj-4b-xgk"; */
 "2Rj-4b-xgk.text" = "10/15/2014";
@@ -30,7 +30,7 @@
 "3Py-nn-1AR.normalTitle" = "Advanced";
 
 /* Class = "IBUITextField"; placeholder = "Business Name or Category"; ObjectID = "3S0-VF-OIs"; */
-"3S0-VF-OIs.placeholder" = "Business Name or Category";
+"3S0-VF-OIs.placeholder" = "बिज़नेस डायरेक्टरी या केटेगरी";
 
 /* Class = "IBUILabel"; text = "Offline Wallet"; ObjectID = "4KX-hj-tJA"; */
 "4KX-hj-tJA.text" = "Offline Wallet";
@@ -48,7 +48,7 @@
 "51g-oU-QIB.text" = "Import Wallet";
 
 /* Class = "IBUILabel"; text = "Invalid user name or password"; ObjectID = "5wy-Mi-whP"; */
-"5wy-Mi-whP.text" = "Invalid user name or password";
+"5wy-Mi-whP.text" = "अमान्य उपयोगकर्ता नाम या पासवर्ड";
 
 /* Class = "IBUILabel"; text = "Export"; ObjectID = "6dp-0x-wlF"; */
 "6dp-0x-wlF.text" = "Export";
@@ -78,7 +78,7 @@
 "9aX-Dw-7XD.text" = "1.00 BTC - $876.13 USD";
 
 /* Class = "IBUILabel"; text = "Password Recovery Setup"; ObjectID = "9kf-YJ-8Zz"; */
-"9kf-YJ-8Zz.text" = "Password Recovery Setup";
+"9kf-YJ-8Zz.text" = "पासवर्ड वसूली सेटअप";
 
 /* Class = "IBUILabel"; text = "Address 1234 Orange"; ObjectID = "9nk-xb-nVD"; */
 "9nk-xb-nVD.text" = "Address 1234 Orange";
@@ -90,7 +90,7 @@
 "9vG-sw-IPy.text" = "Debug View";
 
 /* Class = "IBUILabel"; text = "Request Bitcoin"; ObjectID = "AX6-P8-c2L"; */
-"AX6-P8-c2L.text" = "Request Bitcoin";
+"AX6-P8-c2L.text" = "Bitcoin प्रार्थना";
 
 /* Class = "IBUIButton"; normalTitle = "Clear Watcher Cache"; ObjectID = "Ag5-Xn-Vpg"; */
 "Ag5-Xn-Vpg.normalTitle" = "Clear Watcher Cache";
@@ -102,7 +102,7 @@
 "BED-Cf-F1n.text" = "Password must have an upper and lower case letter, a number, and a minimum 10 of characters";
 
 /* Class = "IBUIButton"; normalTitle = "(coming soon)        ."; ObjectID = "BET-uK-exQ"; */
-"BET-uK-exQ.normalTitle" = "(coming soon)        .";
+"BET-uK-exQ.normalTitle" = "(शीघ्र आ रहा है)        .";
 
 /* Class = "IBUILabel"; text = "From:"; ObjectID = "BW5-4o-QhE"; */
 "BW5-4o-QhE.text" = "From:";
@@ -132,13 +132,13 @@
 "Dh6-PA-WGi.text" = "Test";
 
 /* Class = "IBUILabel"; text = "Business Name"; ObjectID = "DlF-tR-T08"; */
-"DlF-tR-T08.text" = "Business Name";
+"DlF-tR-T08.text" = "बिज़नेस नाम";
 
 /* Class = "IBUILabel"; text = "Enter PIN for (airbitz)"; ObjectID = "Dn2-OV-6cd"; */
-"Dn2-OV-6cd.text" = "Enter PIN for (airbitz)";
+"Dn2-OV-6cd.text" = "(airbitz) के लिए पिन दर्ज करिये ";
 
 /* Class = "IBUILabel"; text = "Send Bitcoin"; ObjectID = "ESa-8m-WoY"; */
-"ESa-8m-WoY.text" = "Send Bitcoin";
+"ESa-8m-WoY.text" = "Bitcoin भेज";
 
 /* Class = "IBUILabel"; text = "This Year"; ObjectID = "EcC-tD-Jnf"; */
 "EcC-tD-Jnf.text" = "This Year";
@@ -174,7 +174,7 @@
 "HzM-6V-ckO.text" = "Export";
 
 /* Class = "IBUILabel"; text = "Share"; ObjectID = "IKa-up-adT"; */
-"IKa-up-adT.text" = "Share";
+"IKa-up-adT.text" = "शेयर";
 
 /* Class = "IBUILabel"; text = "Camera unavailable"; ObjectID = "IrC-mj-iIB"; */
 "IrC-mj-iIB.text" = "Camera unavailable";
@@ -195,10 +195,10 @@
 "L8T-Xw-aVE.text" = "Notes";
 
 /* Class = "IBUIButton"; normalTitle = "Done"; ObjectID = "LAg-aY-W5b"; */
-"LAg-aY-W5b.normalTitle" = "Done";
+"LAg-aY-W5b.normalTitle" = "किया हुआ";
 
 /* Class = "IBUILabel"; text = "Payment received"; ObjectID = "MKi-zS-5GZ"; */
-"MKi-zS-5GZ.text" = "Payment received";
+"MKi-zS-5GZ.text" = "भुगतान प्राप्त";
 
 /* Class = "IBUILabel"; text = "Social"; ObjectID = "MT9-P3-r5I"; */
 "MT9-P3-r5I.text" = "Social";
@@ -218,7 +218,7 @@
 "N0S-HZ-7RS.text" = "Wallet:";
 
 /* Class = "IBUILabel"; text = "User Name:"; ObjectID = "NdY-co-ret"; */
-"NdY-co-ret.text" = "User Name:";
+"NdY-co-ret.text" = "उपयोगकर्ता नाम:";
 
 
 /* Class = "IBUIButton"; normalTitle = "Import"; ObjectID = "NzT-rU-bq0"; */
@@ -237,34 +237,34 @@
 "PDc-Am-Qmc.text" = "PUBLIC ADDRESS";
 
 /* Class = "IBUITextField"; placeholder = "Current Password"; ObjectID = "PI3-NW-bVF"; */
-"PI3-NW-bVF.placeholder" = "Current Password";
+"PI3-NW-bVF.placeholder" = "वर्तमान पासवर्ड";
 
 /* Class = "IBUILabel"; text = "Sending..."; ObjectID = "PY5-r2-zeB"; */
-"PY5-r2-zeB.text" = "Sending...";
+"PY5-r2-zeB.text" = "भेजने...";
 
 /* Class = "IBUILabel"; text = "Request Bitcoin"; ObjectID = "PYX-iO-gJ9"; */
-"PYX-iO-gJ9.text" = "Request Bitcoin";
+"PYX-iO-gJ9.text" = "प्रार्थना Bitcoin";
 
 /* Class = "IBUIButton"; normalTitle = "Income"; ObjectID = "PmL-d6-vpJ"; */
 "PmL-d6-vpJ.normalTitle" = "Income";
 
 /* Class = "IBUIButton"; normalTitle = "Sign In"; ObjectID = "Q2G-61-ExK"; */
-"Q2G-61-ExK.normalTitle" = "Sign In";
+"Q2G-61-ExK.normalTitle" = "साइन इन करें";
 
 /* Class = "IBUITextField"; placeholder = "Re-enter Password"; ObjectID = "QzV-Gk-Vrs"; */
-"QzV-Gk-Vrs.placeholder" = "Re-enter Password";
+"QzV-Gk-Vrs.placeholder" = "पासवर्ड फिर से दर्ज करें";
 
 /* Class = "IBUIButton"; normalTitle = "Forgot Password"; ObjectID = "RVo-M5-ZXk"; */
-"RVo-M5-ZXk.normalTitle" = "Forgot Password";
+"RVo-M5-ZXk.normalTitle" = "पासवर्ड भूल गए";
 
 /* Class = "IBUILabel"; text = "Require PIN above amount"; ObjectID = "Rid-6B-Lv4"; */
-"Rid-6B-Lv4.text" = "Require PIN above amount";
+"Rid-6B-Lv4.text" = "राशि से ऊपर आवश्यक पिन";
 
 /* Class = "IBUILabel"; text = "Label"; ObjectID = "RqX-ow-U05"; */
 "RqX-ow-U05.text" = "Label";
 
 /* Class = "IBUILabel"; text = "Transaction Details"; ObjectID = "S6o-KK-lbq"; */
-"S6o-KK-lbq.text" = "Transaction Details";
+"S6o-KK-lbq.text" = "लेनदेन का विवरण";
 
 /* Class = "IBUILabel"; text = "BTC"; ObjectID = "S8Q-An-svf"; */
 "S8Q-An-svf.text" = "BTC";
@@ -279,16 +279,16 @@
 "ScE-Ny-R3i.text" = "4 Digit PIN";
 
 /* Class = "IBUIButton"; normalTitle = "Login With Password"; ObjectID = "Szb-Pc-bx6"; */
-"Szb-Pc-bx6.normalTitle" = "Login With Password";
+"Szb-Pc-bx6.normalTitle" = "पासवर्ड के साथ लॉगिन";
 
 /* Class = "IBUITextField"; placeholder = "User Name"; ObjectID = "TCB-w9-Wgd"; */
-"TCB-w9-Wgd.placeholder" = "User Name";
+"TCB-w9-Wgd.placeholder" = "उपयोगकर्ता नाम";
 
 /* Class = "IBUILabel"; text = "Label"; ObjectID = "TJ3-SX-hen"; */
 "TJ3-SX-hen.text" = "Label";
 
 /* Class = "IBUITextField"; placeholder = "Password"; ObjectID = "TJm-Ie-PWq"; */
-"TJm-Ie-PWq.placeholder" = "Password";
+"TJm-Ie-PWq.placeholder" = "पासवर्ड";
 
 /* Class = "IBUILabel"; text = "5Kb8kLf9zgWQnogidDA76MzPL6TsZZY36hWXMssSzNydYXYB9KF"; ObjectID = "U2R-0A-Vdq"; */
 "U2R-0A-Vdq.text" = "5Kb8kLf9zgWQnogidDA76MzPL6TsZZY36hWXMssSzNydYXYB9KF";
@@ -297,10 +297,10 @@
 "UHx-LD-t4M.text" = "0.0";
 
 /* Class = "IBUILabel"; text = "To:"; ObjectID = "Uak-ip-kgV"; */
-"Uak-ip-kgV.text" = "To:";
+"Uak-ip-kgV.text" = "को:";
 
 /* Class = "IBUILabel"; text = "Phone"; ObjectID = "Uf1-Hd-oNr"; */
-"Uf1-Hd-oNr.text" = "Phone";
+"Uf1-Hd-oNr.text" = "फ़ोन";
 
 /* Class = "IBUITextField"; placeholder = "Amt (optional)"; ObjectID = "Ug3-Vw-VAD"; */
 "Ug3-Vw-VAD.placeholder" = "Amt (optional)";
@@ -309,34 +309,34 @@
 "Ug3-Vw-VAD.text" = "0.00000";
 
 /* Class = "IBUITextField"; placeholder = "Password"; ObjectID = "V5e-1n-K9Z"; */
-"V5e-1n-K9Z.placeholder" = "Password";
+"V5e-1n-K9Z.placeholder" = "पासवर्ड";
 
 /* Class = "IBUILabel"; text = "Categories"; ObjectID = "Vde-og-tHg"; */
-"Vde-og-tHg.text" = "Categories";
+"Vde-og-tHg.text" = "श्रेणियाँ";
 
 /* Class = "IBUILabel"; text = "4 Digit PIN"; ObjectID = "WB0-Ox-RAw"; */
 "WB0-Ox-RAw.text" = "4 Digit PIN";
 
 /* Class = "IBUIButton"; normalTitle = "Email"; ObjectID = "WCA-P7-L3q"; */
-"WCA-P7-L3q.normalTitle" = "Email";
+"WCA-P7-L3q.normalTitle" = "ईमेल";
 
 /* Class = "IBUITextField"; placeholder = "Search"; ObjectID = "WMa-Cy-YRr"; */
-"WMa-Cy-YRr.placeholder" = "Search";
+"WMa-Cy-YRr.placeholder" = "खोज";
 
 /* Class = "IBUILabel"; text = "fee"; ObjectID = "WU8-fS-VMb"; */
-"WU8-fS-VMb.text" = "fee";
+"WU8-fS-VMb.text" = "शुल्क";
 
 /* Class = "IBUITextField"; placeholder = "Search"; ObjectID = "X6G-HD-WUv"; */
-"X6G-HD-WUv.placeholder" = "Search";
+"X6G-HD-WUv.placeholder" = "खोज";
 
 /* Class = "IBUILabel"; text = "Label"; ObjectID = "XJN-At-Qod"; */
 "XJN-At-Qod.text" = "Label";
 
 /* Class = "IBUILabel"; text = "Web"; ObjectID = "XeE-e1-pX7"; */
-"XeE-e1-pX7.text" = "Web";
+"XeE-e1-pX7.text" = "वेब";
 
 /* Class = "IBUILabel"; text = "Wallet:"; ObjectID = "Xq1-GY-d2Y"; */
-"Xq1-GY-d2Y.text" = "Wallet:";
+"Xq1-GY-d2Y.text" = "बटुआ:";
 
 /* Class = "IBUILabel"; text = "Send Status"; ObjectID = "XxH-iI-cot"; */
 "XxH-iI-cot.text" = "Send Status";
@@ -345,7 +345,7 @@
 "Yfp-gi-q8F.text" = "Label";
 
 /* Class = "IBUITextField"; placeholder = "City, State/Province, or Country"; ObjectID = "ZBb-rD-XHs"; */
-"ZBb-rD-XHs.placeholder" = "City, State/Province, or Country";
+"ZBb-rD-XHs.placeholder" = "शहर, राज्य / प्रांत, या देश";
 
 /* Class = "IBUITextField"; placeholder = "Private key"; ObjectID = "ZTK-Sq-FqJ"; */
 "ZTK-Sq-FqJ.placeholder" = "Private key";
@@ -354,13 +354,13 @@
 "ZW8-Za-VVy.text" = "Sent From:";
 
 /* Class = "IBUILabel"; text = "Total Balance"; ObjectID = "ZgP-7Q-PoB"; */
-"ZgP-7Q-PoB.text" = "Total Balance";
+"ZgP-7Q-PoB.text" = "कुल शेष";
 
 /* Class = "IBUILabel"; text = "Sign Up"; ObjectID = "ZkD-2s-BfP"; */
-"ZkD-2s-BfP.text" = "Sign Up";
+"ZkD-2s-BfP.text" = "साइन अप करें";
 
 /* Class = "IBUILabel"; text = "This Month"; ObjectID = "Zsg-Mo-aHL"; */
-"Zsg-Mo-aHL.text" = "This Month";
+"Zsg-Mo-aHL.text" = "इस महीने";
 
 /* Class = "IBUILabel"; text = "Mainnet"; ObjectID = "Zw4-k1-a82"; */
 "Zw4-k1-a82.text" = "Mainnet";
@@ -378,7 +378,7 @@
 "bu9-4x-j6f.text" = "Label";
 
 /* Class = "IBUILabel"; text = "Swipe to View Business Directory"; ObjectID = "bv5-eJ-aMl"; */
-"bv5-eJ-aMl.text" = "Swipe to View Business Directory";
+"bv5-eJ-aMl.text" = "स्वाइप तो व्यू बिज़नेस डायरेक्टरी";
 
 /* Class = "IBUILabel"; text = "Wallets"; ObjectID = "c6k-sf-dw2"; */
 "c6k-sf-dw2.text" = "Wallets";
@@ -387,10 +387,10 @@
 "cIH-5H-WKu.text" = "1CC3X2gu58d6wXUWMffpuzN9JAfTUWu4Kj";
 
 /* Class = "IBUIButton"; normalTitle = "Skip This Step"; ObjectID = "cix-f2-i3I"; */
-"cix-f2-i3I.normalTitle" = "Skip This Step";
+"cix-f2-i3I.normalTitle" = "इस स्टेप को छोड़ दें";
 
 /* Class = "IBUIButton"; normalTitle = "Forgot PIN"; ObjectID = "dAN-gQ-Vd0"; */
-"dAN-gQ-Vd0.normalTitle" = "Forgot PIN";
+"dAN-gQ-Vd0.normalTitle" = "अपना PIN भूल गए";
 
 /* Class = "IBUILabel"; text = "Near You"; ObjectID = "dJQ-W9-yUR"; */
 "dJQ-W9-yUR.text" = "Near You";
@@ -414,10 +414,10 @@
 "e3p-Sp-KAc.normalTitle" = "Next";
 
 /* Class = "IBUILabel"; text = "Categories"; ObjectID = "eQh-NG-MLn"; */
-"eQh-NG-MLn.text" = "Categories";
+"eQh-NG-MLn.text" = "केटेगरी";
 
 /* Class = "IBUILabel"; text = "Directory"; ObjectID = "efU-iU-0QP"; */
-"efU-iU-0QP.text" = "Directory";
+"efU-iU-0QP.text" = "डायरेक्टरी";
 
 /* Class = "IBUITextField"; placeholder = "PIN Spending Limit"; ObjectID = "egu-Uy-luw"; */
 "egu-Uy-luw.placeholder" = "PIN Spending Limit";
@@ -426,7 +426,7 @@
 "elg-44-b1O.text" = "10/15/2014";
 
 /* Class = "IBUILabel"; text = "Always confirm for future transactions"; ObjectID = "eoS-dN-sXy"; */
-"eoS-dN-sXy.text" = "Always confirm for future transactions";
+"eoS-dN-sXy.text" = "हमेशा भविष्य के लेनदेन के लिए इस बात की पुष्टि";
 
 /* Class = "IBUILabel"; text = "Type BTC"; ObjectID = "foH-la-zuu"; */
 "foH-la-zuu.text" = "Type BTC";

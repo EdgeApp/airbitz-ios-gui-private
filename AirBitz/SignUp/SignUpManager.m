@@ -138,7 +138,7 @@
     _signupUsernameController.manager = self;
     _current = _signupUsernameController;
     [MainViewController changeNavBarOwner:self];
-    [MainViewController changeNavBarTitle:self title:[Theme Singleton].signupText];
+    [MainViewController changeNavBarTitle:self title:[Theme Singleton].signupButtonText];
     [MainViewController changeNavBar:self title:[Theme Singleton].exitButtonText side:NAV_BAR_LEFT button:true enable:true action:@selector(back:) fromObject:self];
     [MainViewController animateView:_signupUsernameController withBlur:YES];
 }

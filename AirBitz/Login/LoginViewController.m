@@ -1069,7 +1069,7 @@ static BOOL bInitialized = false;
                           message:NSLocalizedString(message, nil)
                           delegate:self
                           cancelButtonTitle:[Theme Singleton].NoDescriptionText
-                          otherButtonTitles:[Theme Singleton].YesDescriptionText];
+                          otherButtonTitles:[Theme Singleton].YesDescriptionText, nil];
     [alert show];
     [self.usernameSelector dismissPopupPicker];
 }

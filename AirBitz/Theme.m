@@ -85,6 +85,7 @@ static Theme *singleton = nil;  // this will be the one and only object this sta
     self.closeButtonText = NSLocalizedString(@"Close", @"Generic CLOSE button text");
     self.exportButtonText = NSLocalizedString(@"Export", @"EXPORT button text for wallet export");
     self.renameButtonText = NSLocalizedString(@"Rename", @"RENAME button text for wallet rename");
+    self.signupButtonText = NSLocalizedString(@"Sign Up", nil);
     self.walletBalanceHeaderText = NSLocalizedString(@"TOTAL: ", @"Prefix of wallet balance dropdown header");
     self.walletNameHeaderText = NSLocalizedString(@"Wallet: ", @"Prefix of wallet name on rename popup");
     self.renameWalletWarningText = NSLocalizedString(@"Wallet name must have at least one character", nil);
@@ -108,7 +109,7 @@ static Theme *singleton = nil;  // this will be the one and only object this sta
     self.createPasswordForAccountText                       = NSLocalizedString(@"Please create a password for this account or you will not be able to recover your account if your device is lost or stolen.", nil);
     self.settingsText                                       = NSLocalizedString(@"Settings", nil);
     self.categoriesText                                     = NSLocalizedString(@"Categories", nil);
-    self.signupText                                         = NSLocalizedString(@"Sign Up", nil);
+    
     self.changePasswordText                                 = NSLocalizedString(@"Change Password", nil);
     self.changePINText                                      = NSLocalizedString(@"Change PIN", nil);
     self.twoFactorText                                      = NSLocalizedString(@"Two Factor", nil);

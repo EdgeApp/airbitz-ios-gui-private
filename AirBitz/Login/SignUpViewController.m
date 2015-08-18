@@ -223,7 +223,7 @@
                     {
                         // no callback on this one so tell them it was a success
                         UIAlertView *alert = [[UIAlertView alloc]
-                                                initWithTitle:[Theme Singleton].signupText
+                                                initWithTitle:[Theme Singleton].signupButtonText
                                                 message:[Theme Singleton].PinSuccessfullyChangedText
                                                 delegate:self
                                                 cancelButtonTitle:[Theme Singleton].OkCancelButtonTitle
