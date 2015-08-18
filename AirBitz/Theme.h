@@ -76,6 +76,7 @@
 @property (nonatomic) NSString *importText;
 @property (nonatomic) NSString *passwordRecoveryText;
 @property (nonatomic) NSString *defaultCurrencyInfoText;
+@property (nonatomic) NSString *buySellText;
 
 
 @property (nonatomic) CGFloat fadingAlertDropdownHeight;

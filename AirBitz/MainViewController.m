@@ -1609,14 +1609,14 @@ MainViewController *singleton;
 
 - (void)slideoutBuySell
 {
-    [_selectedViewController.view removeFromSuperview];
-    [_selectedViewController removeFromParentViewController];
-
-    _selectedViewController = _buySellViewController;
-    [Util insertSubviewControllerWithConstraints:self child:_selectedViewController belowSubView:self.tabBar];
-//    [self.view insertSubview:_selectedViewController.view belowSubview:self.tabBar];
-    self.tabBar.selectedItem = self.tabBar.items[APP_MODE_MORE];
-    [slideoutView showSlideout:NO];
+    if (_selectedViewController != _buySellViewController)
+    {
+        if ([User isLoggedIn] || (DIRECTORY_ONLY == 1)) {
+            [MainViewController animateSwapViewControllers:_buySellViewController out:_selectedViewController];
+            self.tabBar.selectedItem = self.tabBar.items[APP_MODE_MORE];
+            [slideoutView showSlideout:NO];
+        }
+    }
 }
 
 - (void)slideoutImport

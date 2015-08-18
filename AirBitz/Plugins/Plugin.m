@@ -40,28 +40,12 @@ static NSMutableArray *plugins;
                 @"CURRENCY_CODE": @"840",
                 @"CURRENCY_ABBREV": @"USD",
                 @"SANDBOX": (isTestnet ? @"true" : @"false"),
-                @"GLIDERA_PARTNER_TOKEN": (isTestnet ? GLIDERA_API_SANDBOX_KEY : GLIDERA_API_KEY)
+                @"GLIDERA_CLIENT_ID": GLIDERA_CLIENT_ID,
+                @"GLIDERA_CLIENT_SECRET": GLIDERA_CLIENT_SECRET,
+                @"REDIRECT_URI": @"airbitz://plugin/glidera/US/"
             };
             [plugins addObject:plugin];
         }
-
-        plugin = [[Plugin alloc] init];
-        plugin.pluginId = @"com.glidera.ca";
-        plugin.sourceFile = @"glidera";
-        plugin.provider = @"glidera";
-        plugin.country = @"CA";
-        plugin.sourceExtension = @"html";
-        plugin.name = @"Glidera Canada";
-        plugin.env = @{
-            @"COUNTRY_CODE": @"CA",
-            @"COUNTRY_NAME": @"Canada",
-            @"CURRENCY_CODE": @"124",
-            @"CURRENCY_ABBREV": @"CAD",
-            @"SANDBOX": (isTestnet ? @"true" : @"false"),
-            @"GLIDERA_PARTNER_TOKEN": (isTestnet ? GLIDERA_API_SANDBOX_KEY : GLIDERA_API_KEY)
-        };
-        [plugins addObject:plugin];
-
         bInitialized = YES;
     }
 }

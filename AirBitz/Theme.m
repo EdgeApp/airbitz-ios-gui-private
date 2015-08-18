@@ -116,6 +116,8 @@ static Theme *singleton = nil;  // this will be the one and only object this sta
     self.passwordRecoveryText                               = NSLocalizedString(@"Password Recovery", nil);
     self.defaultCurrencyInfoText                            = NSLocalizedString(@"Note: Default Currency setting is only used for new wallets and to show total balance of account. Create a new wallet to change the fiat currency shown in each transaction.", nil);
 
+    self.buySellText = NSLocalizedString(@"Buy/Sell", nil);
+
     self.sendRequestButtonDisabled = 0.4f;
 
     self.animationDurationTimeDefault           = 0.35;     // How long the animation transition should take

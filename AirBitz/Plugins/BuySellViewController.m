@@ -3,12 +3,14 @@
 //  AirBitz
 //
 
-#import "BuySellViewController.h"
 #import "BuySellCell.h"
-#import "PluginViewController.h"
-#import "WalletHeaderView.h"
+#import "BuySellViewController.h"
+#import "MainViewController.h"
 #import "Plugin.h"
+#import "PluginViewController.h"
+#import "Theme.h"
 #import "Util.h"
+#import "WalletHeaderView.h"
 
 @interface BuySellViewController () <UIWebViewDelegate, UITableViewDataSource, UITableViewDelegate, PluginViewControllerDelegate>
 {
@@ -48,6 +50,26 @@
 {
     [super viewWillAppear:animated];
     _pluginTable.editing = NO;
+    [self setupNavBar];
+}
+
+- (void)setupNavBar
+{
+    [MainViewController changeNavBarOwner:self];
+    [MainViewController changeNavBar:self title:[Theme Singleton].buySellText
+                                side:NAV_BAR_CENTER
+                              button:NO
+                              enable:true
+                              action:nil
+                          fromObject:self];
+    // Clear back button
+    [MainViewController changeNavBar:self
+                               title:nil
+                                side:NAV_BAR_LEFT
+                              button:YES
+                              enable:NO
+                              action:nil
+                          fromObject:self];
 }
 
 #pragma mark - UITableView
@@ -59,7 +81,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 44.0;
+    return 0.0;
 }
 
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -141,6 +163,7 @@
 
 - (void)PluginViewControllerDone:(PluginViewController *)controller
 {
+    [self setupNavBar];
     [Util animateOut:controller parentController:self complete:^(void) {
         _pluginViewController = nil;
     }];

@@ -11,6 +11,7 @@
 #import "CoreBridge.h"
 #import "SendConfirmationViewController.h"
 #import "Util.h"
+#import "Theme.h"
 #import "Notifications.h"
 #import "CommonTypes.h"
 #import "SpendTarget.h"
@@ -85,6 +86,9 @@ static const NSString *PROTOCOL = @"bridge://";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 
+    [MainViewController changeNavBarOwner:self];
+    [MainViewController changeNavBar:self title:[Theme Singleton].backButtonText side:NAV_BAR_LEFT button:true enable:true action:@selector(Back:) fromObject:self];
+
     [self resizeFrame:YES];
     [super viewWillAppear:animated];
 }
@@ -124,7 +128,7 @@ static const NSString *PROTOCOL = @"bridge://";
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     NSString *url = [request URL].absoluteString;
-    ABLog(2,@("url: %@"), url);
+    ABLog(0,@("url: %@"), url);
     if ([[url lowercaseString] hasPrefix:PROTOCOL]) {
         url = [url substringFromIndex:PROTOCOL.length];
         url = [url stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
@@ -148,6 +152,14 @@ static const NSString *PROTOCOL = @"bridge://";
         NSString *cbid = [callInfo objectForKey:@"cbid"];
         NSDictionary *args = [callInfo objectForKey:@"args"];
         [self execFunction:functionName withCbid:cbid withArgs:args];
+        return NO;
+    } else if ([[url lowercaseString] hasPrefix:@"airbitz://plugin"]) {
+        NSURL *base = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:_plugin.sourceFile
+                                                                             ofType:_plugin.sourceExtension
+                                                                        inDirectory:@"plugins"]];
+        NSString *newUrlString = [NSString stringWithFormat:@"%@?%@", [base absoluteString], [request URL].query];
+        NSURL *newUrl = [NSURL URLWithString:newUrlString];
+        [_webView loadRequest:[NSURLRequest requestWithURL:newUrl]];
         return NO;
     }
     return YES;
@@ -230,7 +242,7 @@ static const NSString *PROTOCOL = @"bridge://";
 
 #pragma mark - Action Methods
 
-- (IBAction)Back
+- (IBAction)Back:(id)sender
 {
     if (_sendConfirmationViewController != nil) {
         [self sendConfirmationViewControllerDidFinish:_sendConfirmationViewController
@@ -479,8 +491,13 @@ static const NSString *PROTOCOL = @"bridge://";
 {
     NSString *cbid = [params objectForKey:@"cbid"];
     NSDictionary *args = [params objectForKey:@"args"];
+    [MainViewController changeNavBar:self title:[args objectForKey:@"title"]
+                                side:NAV_BAR_CENTER
+                              button:NO
+                              enable:true
+                              action:nil
+                          fromObject:self];
 
-    _titleLabel.text = [args objectForKey:@"title"];
     [self setJsResults:cbid withArgs:[self jsonSuccess]];
 }
 
