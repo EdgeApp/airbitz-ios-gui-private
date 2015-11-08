@@ -250,7 +250,7 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
     {
         if ([[User Singleton] offerSendHelp])
         {
-            [MainViewController fadingAlertHelpPopup:[Theme Singleton].sendScreenHelpText];
+            [MainViewController fadingAlertHelpPopup:[Theme Singleton].scanScreenHelpText];
         }
     }
 
@@ -275,8 +275,8 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
 - (void)setupNavBar
 {
     [MainViewController changeNavBarOwner:self];
-    [MainViewController changeNavBar:self title:[Theme Singleton].closeButtonText side:NAV_BAR_LEFT button:true enable:bWalletListDropped action:@selector(didTapTitle:) fromObject:self];
-    [MainViewController changeNavBar:self title:[Theme Singleton].helpButtonText side:NAV_BAR_RIGHT button:true enable:true action:@selector(info:) fromObject:self];
+    [MainViewController changeNavBar:self title:[Theme Singleton].closeButtonText side:NAV_BAR_LEFT button:true enable:false action:@selector(didTapTitle:) fromObject:self];
+    [MainViewController changeNavBar:self title:[Theme Singleton].helpButtonText side:NAV_BAR_RIGHT button:true enable:true action:@selector(more:) fromObject:self];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -447,6 +447,11 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
 #endif
 
 #pragma mark - Action Methods
+
+- (IBAction)more:(id)sender
+{
+    [MainViewController showSlideout:YES];
+}
 
 - (IBAction)info:(id)sender
 {
@@ -1309,7 +1314,8 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
         else
             walletName = [NSString stringWithFormat:@"From: %@ ▼", [CoreBridge Singleton].currentWallet.strName];
 
-        [MainViewController changeNavBarTitleWithButton:self title:walletName action:@selector(didTapTitle:) fromObject:self];
+//        [MainViewController changeNavBarTitleWithButton:self title:walletName action:@selector(didTapTitle:) fromObject:self];
+        [MainViewController changeNavBarTitle:self title:@"Airbitz Authenticator"];
         if (!([[CoreBridge Singleton].arrayWallets containsObject:[CoreBridge Singleton].currentWallet]))
         {
             [FadingAlertView create:self.view

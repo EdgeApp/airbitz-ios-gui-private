@@ -530,7 +530,7 @@ MainViewController *singleton;
     [self launchViewControllerBasedOnAppMode];
 
     // Start on the Wallets tab to launch login screen
-    _appMode = APP_MODE_WALLETS;
+    _appMode = APP_MODE_SEND;
 
     self.tabBar.selectedItem = self.tabBar.items[_appMode];
 
@@ -1035,7 +1035,7 @@ MainViewController *singleton;
 {
     [self loadUserViews];
 
-	_appMode = APP_MODE_WALLETS;
+	_appMode = APP_MODE_SEND;
     self.tabBar.selectedItem = self.tabBar.items[_appMode];
 }
 
@@ -1067,7 +1067,7 @@ MainViewController *singleton;
     // After login, reset all the main views
     [self loadUserViews];
 
-    _appMode = APP_MODE_WALLETS;
+    _appMode = APP_MODE_SEND;
     self.tabBar.selectedItem = self.tabBar.items[_appMode];
     [MainViewController animateFadeOut:_loginViewController.view remove:YES];
 	[MainViewController showTabBarAnimated:YES];
@@ -1092,7 +1092,7 @@ MainViewController *singleton;
 {
 //    self.backgroundView.image = [Theme Singleton].backgroundApp;
 
-    _appMode = APP_MODE_WALLETS;
+    _appMode = APP_MODE_SEND;
     self.tabBar.selectedItem = self.tabBar.items[_appMode];
     [MainViewController showTabBarAnimated:YES];
     [MainViewController showNavBarAnimated:YES];
@@ -2203,6 +2203,16 @@ MainViewController *singleton;
 + (void)fadingAlertDismiss
 {
     [FadingAlertView dismiss:YES];
+}
+
+- (void)showSlideout:(BOOL) show;
+{
+    [slideoutView showSlideout:show];
+}
+
++ (void)showSlideout:(BOOL) show;
+{
+    [singleton showSlideout:show];
 }
 
 @end

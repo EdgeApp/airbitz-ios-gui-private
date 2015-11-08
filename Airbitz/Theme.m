@@ -104,6 +104,7 @@ static Theme *singleton = nil;  // this will be the one and only object this sta
     self.smsText                                            = NSLocalizedString(@"SMS", @"text for textmessage/SMS");
     self.emailText                                          = NSLocalizedString(@"Email", @"text for Email");
     self.sendScreenHelpText                                 = NSLocalizedString(@"Scan the QR code of payee to send payment or tap on a bluetooth request from the list below", nil);
+    self.scanScreenHelpText                                 = NSLocalizedString(@"Scan a BitID QR code to login", nil);
     self.creatingWalletText                                 = NSLocalizedString(@"Creating and securing wallet", nil);
     self.createAccountAndTransferFundsText                  = NSLocalizedString(@"Please create a new account and transfer your funds if you forgot your password.", nil);
     self.createPasswordForAccountText                       = NSLocalizedString(@"Please create a password for this account or you will not be able to recover your account if your device is lost or stolen.", nil);

@@ -38,16 +38,16 @@
 #define ANIMATION_DURATION_KEYBOARD_UP      0.30
 #define ANIMATION_DURATION_KEYBOARD_DOWN    0.25
 
-#define SECTION_BITCOIN_DENOMINATION    0
-#define SECTION_USERNAME                1
-#define SECTION_NAME                    2
-#define SECTION_OPTIONS                 3
-#define SECTION_DEFAULT_EXCHANGE        4
-#define SECTION_DEBUG                   5
+#define SECTION_BITCOIN_DENOMINATION    100
+#define SECTION_USERNAME                0
+#define SECTION_NAME                    101
+#define SECTION_OPTIONS                 1
+#define SECTION_DEFAULT_EXCHANGE        102
+#define SECTION_DEBUG                   2
 
 // If we are in debug include the DEBUG section in settings
 #if (DEBUG || 1) // Always enable debug section for now
-#define SECTION_COUNT                   6
+#define SECTION_COUNT                   3
 #else 
 #define SECTION_COUNT                   5
 #endif
@@ -68,14 +68,14 @@
 #define ROW_NICKNAME                    3
 
 #define ROW_AUTO_LOG_OFF                0
-#define ROW_DEFAULT_CURRENCY            1
-#define ROW_CHANGE_CATEGORIES           2
-#define ROW_SPEND_LIMITS                3
-#define ROW_TFA                         4
-#define ROW_MERCHANT_MODE               5
-#define ROW_BLE                         6
-#define ROW_PIN_RELOGIN                 7
-#define ROW_TOUCHID                     8
+#define ROW_DEFAULT_CURRENCY            10
+#define ROW_CHANGE_CATEGORIES           20
+#define ROW_SPEND_LIMITS                30
+#define ROW_TFA                         1
+#define ROW_MERCHANT_MODE               50
+#define ROW_BLE                         60
+#define ROW_PIN_RELOGIN                 2
+#define ROW_TOUCHID                     3
 
 #define ARRAY_EXCHANGES     @[@"Bitstamp", @"BraveNewCoin", @"Coinbase"]
 

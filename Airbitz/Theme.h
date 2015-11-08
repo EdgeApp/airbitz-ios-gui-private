@@ -66,6 +66,7 @@
 @property (nonatomic) NSString *smsText;
 @property (nonatomic) NSString *emailText;
 @property (nonatomic) NSString *sendScreenHelpText;
+@property (nonatomic) NSString *scanScreenHelpText;
 @property (nonatomic) NSString *creatingWalletText;
 @property (nonatomic) NSString *createAccountAndTransferFundsText;
 @property (nonatomic) NSString *createPasswordForAccountText;

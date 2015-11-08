@@ -73,6 +73,8 @@ typedef enum eNavBarSide
 + (void)generateListOfContactNames;
 + (void)generateListOfNearBusinesses;
 
+- (void)showSlideout:(BOOL) show;
++ (void)showSlideout:(BOOL) show;
 
 
 
