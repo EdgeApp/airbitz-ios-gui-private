@@ -211,7 +211,7 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
     [MainViewController changeNavBarTitle:self title:[Theme Singleton].settingsText];
 
     [MainViewController changeNavBar:self title:[Theme Singleton].backButtonText side:NAV_BAR_LEFT button:true enable:false action:nil fromObject:self];
-    [MainViewController changeNavBar:self title:[Theme Singleton].helpButtonText side:NAV_BAR_RIGHT button:true enable:true action:@selector(Info) fromObject:self];
+    [MainViewController changeNavBar:self title:[Theme Singleton].closeButtonText side:NAV_BAR_RIGHT button:true enable:true action:@selector(Info) fromObject:self];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -640,7 +640,8 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
 
 - (IBAction)Info
 {
-    [InfoView CreateWithHTML:@"infoSettings" forView:self.view];
+    [MainViewController showSettings:false];
+//    [InfoView CreateWithHTML:@"infoSettings" forView:self.view];
 }
 
 #pragma mark - textFieldCell delegates
@@ -1069,7 +1070,8 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
             break;
 
         case SECTION_OPTIONS:
-            return 9;
+//            return 9;
+            return 4;
             break;
 
         case SECTION_DEFAULT_EXCHANGE:

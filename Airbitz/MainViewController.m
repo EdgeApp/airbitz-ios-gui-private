@@ -1625,7 +1625,7 @@ MainViewController *singleton;
     }
 }
 
-- (void)switchToSettingsView:(UIViewController *)controller
+- (void)switchToSettingsView;
 {
     [MainViewController animateSwapViewControllers:_settingsViewController out:_selectedViewController];
     self.tabBar.selectedItem = self.tabBar.items[APP_MODE_MORE];
@@ -1634,14 +1634,14 @@ MainViewController *singleton;
 
 - (void)launchChangePassword
 {
-    [self switchToSettingsView:_settingsViewController];
+    [self switchToSettingsView];
     [_settingsViewController resetViews];
     [_settingsViewController bringUpSignUpViewInMode:SignUpMode_ChangePassword];
 }
 
 - (void)launchRecoveryQuestions:(NSNotification *)notification
 {
-    [self switchToSettingsView:_settingsViewController];
+    [self switchToSettingsView];
     [_settingsViewController resetViews];
     [_settingsViewController bringUpRecoveryQuestionsView];
 }
@@ -1649,7 +1649,7 @@ MainViewController *singleton;
 - (void)launchBuySell:(NSString *)country provider:(NSString *)provider
 {
     if ([_buySellViewController launchPluginByCountry:country provider:provider]) {
-        [self switchToSettingsView:_buySellViewController];
+        [self switchToSettingsView];
     } else {
         // Notify user no match!
     }
@@ -1786,6 +1786,14 @@ MainViewController *singleton;
     ABLog(2,@"MainViewController.slideoutAccount");
 }
 
++ (void)showSettings:(BOOL) show;
+{
+    if (show)
+        [singleton switchToSettingsView];
+    else
+        [singleton launchSend:nil];
+}
+
 - (void)slideoutSettings
 {
     [slideoutView showSlideout:NO];
@@ -1864,6 +1872,11 @@ MainViewController *singleton;
 
                 [FadingAlertView dismiss:YES];
             }];
+}
+
++ (void)logout;
+{
+    [singleton logout];
 }
 
 #pragma mark - Slideout Methods

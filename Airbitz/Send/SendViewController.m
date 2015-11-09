@@ -85,6 +85,7 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
 	tScanMode						scanMode;
     BOOL                            bWalletListDropped;
     BOOL                            bFlashOn;
+    BOOL                            bSlideout;
     UIAlertView                     *typeAddressAlertView;
     ImportDataModel                 _dataModel;
     NSString                        *_sweptAddress;
@@ -138,6 +139,7 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
 	[super viewDidLoad];
 
     bWalletListDropped = false;
+    bSlideout = false;
 
     self.buttonSelector.delegate = self;
     [self.buttonSelector disableButton];
@@ -275,8 +277,8 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
 - (void)setupNavBar
 {
     [MainViewController changeNavBarOwner:self];
-    [MainViewController changeNavBar:self title:[Theme Singleton].closeButtonText side:NAV_BAR_LEFT button:true enable:false action:@selector(didTapTitle:) fromObject:self];
-    [MainViewController changeNavBar:self title:[Theme Singleton].helpButtonText side:NAV_BAR_RIGHT button:true enable:true action:@selector(more:) fromObject:self];
+    [MainViewController changeNavBar:self title:[Theme Singleton].logoutButtonText side:NAV_BAR_LEFT button:true enable:true action:@selector(logout:) fromObject:self];
+    [MainViewController changeNavBar:self title:[Theme Singleton].settingsText side:NAV_BAR_RIGHT button:true enable:true action:@selector(more:) fromObject:self];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -450,7 +452,12 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
 
 - (IBAction)more:(id)sender
 {
-    [MainViewController showSlideout:YES];
+    [MainViewController showSettings:YES];
+}
+
+- (IBAction)logout:(id)sender
+{
+    [MainViewController logout];
 }
 
 - (IBAction)info:(id)sender
@@ -1302,6 +1309,8 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
 
 - (void)updateViews:(NSNotification *)notification
 {
+    NSString *strTitle = [NSString stringWithFormat:@"Airbitz Authenticator: %@", [User Singleton].name];
+
     if ([CoreBridge Singleton].arrayWallets && [CoreBridge Singleton].currentWallet)
     {
         self.buttonSelector.arrayItemsToSelect = [CoreBridge Singleton].arrayWalletNames;
@@ -1315,7 +1324,7 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
             walletName = [NSString stringWithFormat:@"From: %@ ▼", [CoreBridge Singleton].currentWallet.strName];
 
 //        [MainViewController changeNavBarTitleWithButton:self title:walletName action:@selector(didTapTitle:) fromObject:self];
-        [MainViewController changeNavBarTitle:self title:@"Airbitz Authenticator"];
+        [MainViewController changeNavBarTitle:self title:strTitle];
         if (!([[CoreBridge Singleton].arrayWallets containsObject:[CoreBridge Singleton].currentWallet]))
         {
             [FadingAlertView create:self.view

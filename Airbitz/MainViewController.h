@@ -75,6 +75,8 @@ typedef enum eNavBarSide
 
 - (void)showSlideout:(BOOL) show;
 + (void)showSlideout:(BOOL) show;
++ (void)showSettings:(BOOL) show;
++ (void)logout;
 
 
 

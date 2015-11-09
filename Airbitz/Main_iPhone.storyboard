@@ -238,7 +238,7 @@
                                 <animations/>
                             </imageView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V8c-6o-ibr" userLabel="View -BLE Table">
-                                <rect key="frame" x="0.0" y="365" width="320" height="100"/>
+                                <rect key="frame" x="0.0" y="414" width="320" height="100"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="9C3-ej-2l9">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
@@ -342,18 +342,18 @@
                                     <constraint firstAttribute="bottom" secondItem="9C3-ej-2l9" secondAttribute="bottom" id="fnB-bp-z3b"/>
                                 </constraints>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jrj-OZ-WpR" userLabel="BlurView" customClass="BlurView">
-                                <rect key="frame" x="0.0" y="465" width="320" height="54"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jrj-OZ-WpR" userLabel="BlurView" customClass="BlurView">
+                                <rect key="frame" x="0.0" y="514" width="320" height="54"/>
                                 <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="bSetBlurStyleDark" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wik-w7-rsL" userLabel="View -segmentedContainer">
-                                <rect key="frame" x="0.0" y="465" width="320" height="54"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wik-w7-rsL" userLabel="View -segmentedContainer">
+                                <rect key="frame" x="0.0" y="514" width="320" height="54"/>
                                 <subviews>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" momentary="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AOi-Wp-bVq">
+                                    <segmentedControl hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" momentary="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AOi-Wp-bVq">
                                         <rect key="frame" x="8" y="8" width="304" height="39"/>
                                         <animations/>
                                         <segments>
@@ -367,15 +367,26 @@
                                             <action selector="segmentedControlAction:" destination="c1q-yF-WIr" eventType="valueChanged" id="d1w-5Z-cmJ"/>
                                         </connections>
                                     </segmentedControl>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scan QR Code to Authenticate" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="une-cK-h5x">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="54"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <animations/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="une-cK-h5x" firstAttribute="leading" secondItem="Wik-w7-rsL" secondAttribute="leading" id="3t5-Sn-qOi"/>
                                     <constraint firstAttribute="bottom" secondItem="AOi-Wp-bVq" secondAttribute="bottom" constant="8" id="B1v-4Q-lJR"/>
                                     <constraint firstItem="AOi-Wp-bVq" firstAttribute="top" secondItem="Wik-w7-rsL" secondAttribute="top" constant="8" id="Cvq-Xe-AVe"/>
                                     <constraint firstAttribute="height" constant="54" id="GcJ-fp-viw"/>
                                     <constraint firstAttribute="trailing" secondItem="AOi-Wp-bVq" secondAttribute="trailing" constant="8" id="NGf-9a-5oR"/>
+                                    <constraint firstAttribute="trailing" secondItem="une-cK-h5x" secondAttribute="trailing" id="PG8-fc-bnc"/>
+                                    <constraint firstAttribute="bottom" secondItem="une-cK-h5x" secondAttribute="bottom" id="Sga-Wa-Lg1"/>
                                     <constraint firstItem="AOi-Wp-bVq" firstAttribute="leading" secondItem="Wik-w7-rsL" secondAttribute="leading" constant="8" id="u5G-PQ-bIK"/>
+                                    <constraint firstItem="une-cK-h5x" firstAttribute="top" secondItem="Wik-w7-rsL" secondAttribute="top" id="zg0-Ga-7vc"/>
                                 </constraints>
                             </view>
                             <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aan-73-l0U" userLabel="addressTextField">
@@ -414,7 +425,7 @@
                             <constraint firstItem="aan-73-l0U" firstAttribute="leading" secondItem="of2-42-Lef" secondAttribute="leading" constant="10" id="XGu-8e-3kr"/>
                             <constraint firstAttribute="trailing" secondItem="g9e-kM-2rC" secondAttribute="trailing" id="a1j-fU-gWs"/>
                             <constraint firstItem="IsP-NR-ytZ" firstAttribute="leading" secondItem="of2-42-Lef" secondAttribute="leading" id="gIb-dm-Eyq"/>
-                            <constraint firstAttribute="bottom" secondItem="Wik-w7-rsL" secondAttribute="bottom" constant="49" id="jMR-HN-Qff"/>
+                            <constraint firstAttribute="bottom" secondItem="Wik-w7-rsL" secondAttribute="bottom" id="jMR-HN-Qff"/>
                             <constraint firstItem="aan-73-l0U" firstAttribute="top" secondItem="of2-42-Lef" secondAttribute="top" constant="70" id="sQL-hq-oPg"/>
                             <constraint firstItem="Wik-w7-rsL" firstAttribute="top" secondItem="V8c-6o-ibr" secondAttribute="bottom" id="sbw-6l-sjS"/>
                             <constraint firstAttribute="trailing" secondItem="V8c-6o-ibr" secondAttribute="trailing" id="uVA-Gd-QqU"/>

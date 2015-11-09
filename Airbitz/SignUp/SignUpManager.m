@@ -78,11 +78,11 @@
     }
     else if (_current == _signupCameraController)
     {
-        if(!_bHasContactsAccess)
-        {
-            [self launchContactController];
-        }
-        else
+//        if(!_bHasContactsAccess)
+//        {
+//            [self launchContactController];
+//        }
+//        else
         {
             [self launchWriteItController];
         }

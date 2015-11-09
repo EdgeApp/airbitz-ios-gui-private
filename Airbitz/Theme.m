@@ -79,7 +79,9 @@ static Theme *singleton = nil;  // this will be the one and only object this sta
 
     self.backButtonText = NSLocalizedString(@"Back", @"Back button text on top left");
     self.exitButtonText = NSLocalizedString(@"Exit", @"Exit button text on top left");
+    self.logoutButtonText = NSLocalizedString(@"Logout", @"Logout button text on top left");
     self.helpButtonText = NSLocalizedString(@"Help", @"Help button text on top right");
+    self.moreButtonText = NSLocalizedString(@"More", @"More button text on top right");
     self.infoButtonText = NSLocalizedString(@"Info", @"Info button text on top right");
     self.doneButtonText = NSLocalizedString(@"Done", @"Generic DONE button text");
     self.cancelButtonText = NSLocalizedString(@"CANCEL", @"Generic CANCEL button text");

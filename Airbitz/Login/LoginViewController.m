@@ -47,6 +47,7 @@ typedef enum eLoginMode
     CGPoint                         _firstTouchPoint;
     BOOL                            _bSuccess;
     BOOL                            _bTouchesEnabled;
+    BOOL                            _bDirectoryEnabled;
     NSString                        *_strReason;
     NSString                        *_account;
     tABC_CC                         _resultCode;
@@ -125,6 +126,13 @@ static BOOL bInitialized = false;
     self.PINusernameSelector.delegate = self;
     self.spinnerView.hidden = YES;
     self.buttonOutsideTap.enabled = NO;
+    _bDirectoryEnabled = false;
+    
+    if (!_bDirectoryEnabled)
+    {
+        self.swipeRightArrow.hidden = YES;
+        self.swipeText.hidden = YES;
+    }
 
     [self getAllAccounts];
 
@@ -854,7 +862,7 @@ typedef enum eReloginState
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (!_bTouchesEnabled) {
+    if (!_bTouchesEnabled || !_bDirectoryEnabled) {
         return;
     }
 
@@ -864,7 +872,7 @@ typedef enum eReloginState
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (!_bTouchesEnabled) {
+    if (!_bTouchesEnabled || !_bDirectoryEnabled) {
         return;
     }
     
@@ -903,7 +911,7 @@ typedef enum eReloginState
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (!_bTouchesEnabled) {
+    if (!_bTouchesEnabled || !_bDirectoryEnabled) {
         return;
     }
     
