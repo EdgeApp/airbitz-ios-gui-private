@@ -272,6 +272,9 @@
 //    [self.view addGestureRecognizer:tap];
     self.amountBTCTextField.text = [CoreBridge formatSatoshi:_spendTarget.pSpend->amount withSymbol:false];
     self.maxAmountButton.hidden = ![_spendTarget isMutable];
+    if (![_spendTarget isMutable]) {
+        _selectedTextField = self.amountBTCTextField;
+    }
 
     NSString *prefix;
     NSString *suffix;
