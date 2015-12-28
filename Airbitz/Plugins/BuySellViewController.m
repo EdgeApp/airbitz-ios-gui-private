@@ -16,9 +16,14 @@
 #define SECTION_BUY_SELL        1
 #define SECTIONS_TOTAL          2
 
+#define INDEX_FROM_SECTION_ROW(section, row) [NSNumber numberWithInt:((row * SECTIONS_TOTAL) + section)]
+
 @interface BuySellViewController () <UIWebViewDelegate, UITableViewDataSource, UITableViewDelegate, PluginViewControllerDelegate>
 {
-    PluginViewController *_pluginViewController;
+    NSMutableDictionary *_pluginViewControllers;
+    int numBuySell;
+    int numGiftCard;
+    int numPlugins;
 }
 
 @property (nonatomic, strong) WalletHeaderView    *buySellHeaderView;
@@ -59,8 +64,48 @@
     _giftCardHeaderView.btn_addWallet.hidden = YES;
     _giftCardHeaderView.btn_exportWallet.hidden = YES;
     _giftCardHeaderView.btn_header.hidden = YES;
-    
+
     [Plugin initAll];
+    
+    numBuySell = (int)[[Plugin getBuySellPlugins] count];
+    numGiftCard = (int)[[Plugin getGiftCardPlugins] count];
+    numPlugins = (SECTIONS_TOTAL * MAX(numGiftCard, numBuySell));
+    
+    _pluginViewControllers = [[NSMutableDictionary alloc] initWithCapacity:numPlugins];
+    
+    // Fill Section 0
+    int numRows = numGiftCard;
+    
+    for (int row = 0; row < numRows; row++)
+    {
+        PluginViewController *pluginViewController;
+        Plugin *plugin = [[Plugin getGiftCardPlugins] objectAtIndex:row];
+        
+        UIStoryboard *pluginStoryboard = [UIStoryboard storyboardWithName:@"Plugins" bundle: nil];
+        pluginViewController = [pluginStoryboard instantiateViewControllerWithIdentifier:@"PluginViewController"];
+        pluginViewController.delegate = self;
+        pluginViewController.plugin = plugin;
+        pluginViewController.uri = nil;
+        [pluginViewController.view layoutSubviews];
+        _pluginViewControllers[INDEX_FROM_SECTION_ROW(SECTION_GIFT_CARDS, row)] = pluginViewController;
+    }
+
+    // Fill Section 1
+    numRows = numBuySell;
+    
+    for (int row = 0; row < numRows; row++)
+    {
+        PluginViewController *pluginViewController;
+        Plugin *plugin = [[Plugin getBuySellPlugins] objectAtIndex:row];
+        
+        UIStoryboard *pluginStoryboard = [UIStoryboard storyboardWithName:@"Plugins" bundle: nil];
+        pluginViewController = [pluginStoryboard instantiateViewControllerWithIdentifier:@"PluginViewController"];
+        pluginViewController.delegate = self;
+        pluginViewController.plugin = plugin;
+        pluginViewController.uri = nil;
+        [pluginViewController.view layoutSubviews];
+        _pluginViewControllers[INDEX_FROM_SECTION_ROW(SECTION_BUY_SELL, row)] = pluginViewController;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -122,16 +167,13 @@
     static NSString *CellIdentifier = @"BuySellCell";
     NSInteger section = [indexPath section];
     NSInteger row = [indexPath row];
-    Plugin *plugin;
+    PluginViewController *pluginViewController = _pluginViewControllers[INDEX_FROM_SECTION_ROW(section, row)];
+    Plugin *plugin = pluginViewController.plugin;
  
     BuySellCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[BuySellCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-    if (SECTION_BUY_SELL == section)
-        plugin = [[Plugin getBuySellPlugins] objectAtIndex:row];
-    else if (SECTION_GIFT_CARDS == section)
-        plugin = [[Plugin getGiftCardPlugins] objectAtIndex:row];
 
     [cell setInfo:row tableHeight:[tableView numberOfRowsInSection:indexPath.section]];
     cell.text.text = plugin.name;
@@ -146,7 +188,7 @@
     bgColorView.layer.masksToBounds = YES;
     cell.selectedBackgroundView = bgColorView;
     cell.backgroundColor = plugin.backgroundColor;
-    
+
     return cell;
 }
 
@@ -154,14 +196,14 @@
 {
     NSInteger section = [indexPath section];
     NSInteger row = [indexPath row];
-    Plugin *plugin;
+//    Plugin *plugin;
+//    
+//    if (SECTION_BUY_SELL == section)
+//        plugin = [[Plugin getBuySellPlugins] objectAtIndex:row];
+//    else if (SECTION_GIFT_CARDS == section)
+//        plugin = [[Plugin getGiftCardPlugins] objectAtIndex:row];
     
-    if (SECTION_BUY_SELL == section)
-        plugin = [[Plugin getBuySellPlugins] objectAtIndex:row];
-    else if (SECTION_GIFT_CARDS == section)
-        plugin = [[Plugin getGiftCardPlugins] objectAtIndex:row];
-    
-    [self launchPlugin:plugin uri:nil];
+    [self launchPluginSectionRow:(int)section row:(int)row];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -190,26 +232,43 @@
     return NO;
 }
 
+- (void)launchPluginSectionRow:(int)section row:(int)row
+{
+    [self resetViews];
+    PluginViewController *pluginViewController = _pluginViewControllers[INDEX_FROM_SECTION_ROW(section, row)];
+    
+    [pluginViewController.view layoutSubviews];
+    
+    [MainViewController animateSwapViewControllers:pluginViewController out:self];
+//   [Util animateController:pluginViewController parentController:self];
+    
+}
+
 - (void)launchPlugin:(Plugin *)plugin uri:(NSURL *)uri
 {
     [self resetViews];
 
     UIStoryboard *pluginStoryboard = [UIStoryboard storyboardWithName:@"Plugins" bundle: nil];
-    _pluginViewController = [pluginStoryboard instantiateViewControllerWithIdentifier:@"PluginViewController"];
-    _pluginViewController.delegate = self;
-    _pluginViewController.plugin = plugin;
-    _pluginViewController.uri = uri;
-    [Util animateController:_pluginViewController parentController:self];
+    PluginViewController *pluginViewController;
+    pluginViewController = [pluginStoryboard instantiateViewControllerWithIdentifier:@"PluginViewController"];
+    pluginViewController.delegate = self;
+    pluginViewController.plugin = plugin;
+    pluginViewController.uri = uri;
+    [Util animateController:pluginViewController parentController:self];
 }
 
 - (void)resetViews
 {
-    if (_pluginViewController)
+    for(id key in _pluginViewControllers)
     {
-        [_pluginViewController.view removeFromSuperview];
-        [_pluginViewController removeFromParentViewController];
-        _pluginViewController = nil;
+        PluginViewController *pluginViewController = [_pluginViewControllers objectForKey:key];
+        if (pluginViewController)
+        {
+            [pluginViewController.view removeFromSuperview];
+            [pluginViewController removeFromParentViewController];
+        }
     }
+//    [_pluginViewControllers removeAllObjects];
 }
 
 #pragma mark - PluginViewControllerDelegate
@@ -222,7 +281,7 @@
     [MainViewController changeNavBarTitle:self title:buySellText];
     [Util animateOut:controller parentController:self complete:^(void) {
         [self resetViews];
-        _pluginViewController = nil;
+        _pluginViewControllers = nil;
     }];
 }
 

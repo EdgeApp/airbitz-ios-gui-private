@@ -5,10 +5,12 @@
 
 #import <UIKit/UIKit.h>
 #import "Plugin.h"
+#import "AirbitzViewController.h"
 
 @protocol PluginViewControllerDelegate;
 
-@interface PluginViewController : UIViewController
+@interface PluginViewController : AirbitzViewController
+//@interface PluginViewController : UIViewController
 
 @property (assign) id<PluginViewControllerDelegate> delegate;
 @property (assign) Plugin *plugin;

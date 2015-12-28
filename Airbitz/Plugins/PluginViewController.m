@@ -727,7 +727,7 @@ static const NSString *PROTOCOL = @"bridge://";
     NSString *cbid = [params objectForKey:@"cbid"];
     NSDictionary *args = [params objectForKey:@"args"];
 
-    [MainViewController fadingAlertDismiss];
+    [FadingAlertView dismiss:YES];
     [self setJsResults:cbid withArgs:[self jsonSuccess]];
 }
 
@@ -934,7 +934,7 @@ static const NSString *PROTOCOL = @"bridge://";
     if (showSpinner) {
         duration = FADING_ALERT_HOLD_TIME_FOREVER_WITH_SPINNER; 
     }
-    [MainViewController fadingAlert:message holdTime:duration];
+    [FadingAlertView create:self.view message:message holdTime:duration];
 }
 
 #pragma mark - Keyboard Hack

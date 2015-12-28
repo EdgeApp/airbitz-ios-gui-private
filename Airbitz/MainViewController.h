@@ -39,6 +39,8 @@ typedef enum eNavBarSide
 + (void)animateFadeIn:(UIView *)view;
 + (void)animateFadeOut:(UIView *)view;
 + (void)animateFadeOut:(UIView *)view remove:(BOOL)removeFromView;
++ (void)animateSwapViewControllers:(AirbitzViewController *)in out:(AirbitzViewController *)out;
+
 
 + (void)animateView:(AirbitzViewController *)viewController withBlur:(BOOL)withBlur;
 + (void)animateView:(AirbitzViewController *)viewController withBlur:(BOOL)withBlur animate:(BOOL)animated;
