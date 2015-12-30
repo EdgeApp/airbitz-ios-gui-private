@@ -18,10 +18,11 @@
 #import "CommonTypes.h"
 #import "SpendTarget.h"
 #import "MainViewController.h"
+#import <WebKit/WebKit.h>
 
 static const NSString *PROTOCOL = @"bridge://";
 
-@interface PluginViewController () <UIWebViewDelegate, SendConfirmationViewControllerDelegate, UIImagePickerControllerDelegate>
+@interface PluginViewController () <WKNavigationDelegate, WKScriptMessageHandler, SendConfirmationViewControllerDelegate, UIImagePickerControllerDelegate>
 {
     FadingAlertView                *_fadingAlert;
     SendConfirmationViewController *_sendConfirmationViewController;
@@ -37,7 +38,8 @@ static const NSString *PROTOCOL = @"bridge://";
 
 @property (nonatomic, retain) IBOutlet UILabel            *titleLabel;
 @property (nonatomic, retain) IBOutlet UIButton           *backButton;
-@property (nonatomic, retain) IBOutlet UIWebView          *webView;
+//@property (nonatomic, retain) IBOutlet UIWebView          *webView;
+@property (strong,nonatomic)           WKWebView          *webView;
 @property (nonatomic, weak)   IBOutlet ButtonSelectorView2 *buttonSelector; //wallet dropdown
 
 @end
@@ -90,19 +92,39 @@ static const NSString *PROTOCOL = @"bridge://";
     };
 
     [NSHTTPCookieStorage sharedHTTPCookieStorage].cookieAcceptPolicy = NSHTTPCookieAcceptPolicyAlways;
-    _webView.delegate = self;
+    WKWebViewConfiguration *theConfiguration = [[WKWebViewConfiguration alloc] init];
+    [theConfiguration.userContentController addScriptMessageHandler:self name:@"ABCjs"];
+    _webView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:theConfiguration];
+    _webView.navigationDelegate = self;
     _webView.backgroundColor = [UIColor clearColor];
     _webView.opaque = NO;
-
+    
     NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:_plugin.sourceFile ofType:_plugin.sourceExtension]];
-    NSString *localFilePath = [url absoluteString];  
+    NSString *localFilePath = [url absoluteString];
 
     if (_uri != nil) {
         localFilePath = [NSString stringWithFormat:@"%@?%@", localFilePath, _uri.query];
     }
-
-    NSURLRequest *localRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:localFilePath]];
+//    localFilePath = @"https://airbitz.co";
+    NSURL *nsUrl=[NSURL URLWithString:localFilePath];
+    NSURLRequest *localRequest = [NSURLRequest requestWithURL:nsUrl];
     [_webView loadRequest:localRequest];
+    [self.view addSubview:_webView];
+    
+    UIView *parentView = self.view;
+
+    NSDictionary *viewsDictionary = NSDictionaryOfVariableBindings(parentView, _webView);
+    NSMutableArray *constraints = [[NSMutableArray alloc] init];
+    [_webView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[_webView]-0-|" options:0 metrics:nil views:viewsDictionary]];
+    [constraints addObjectsFromArray:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[_webView]-0-|" options:0 metrics:nil views:viewsDictionary]];
+    
+    [parentView addConstraints:constraints];
+    
+    _webView.scrollView.contentInset = UIEdgeInsetsMake([MainViewController getHeaderHeight], 0,
+                                                        [MainViewController getFooterHeight], 0);
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -143,6 +165,19 @@ static const NSString *PROTOCOL = @"bridge://";
         [MainViewController changeNavBar:self title:backButtonText side:NAV_BAR_LEFT button:true enable:true action:@selector(Back:) fromObject:self];
     }
     [MainViewController changeNavBar:self title:helpButtonText side:NAV_BAR_RIGHT button:true enable:false action:nil fromObject:self];
+}
+
+#pragma mark - WKScriptMessageHandler delegates
+
+- (void)userContentController:(WKUserContentController *)userContentController
+      didReceiveScriptMessage:(WKScriptMessage *)message {
+
+    if([message.name isEqualToString:@"debugLevel"]) {
+        NSDictionary *sentData = (NSDictionary *)message.body;
+        NSString *messageString = sentData[@"message"];
+        NSLog(@"Message received: %@", messageString);
+    }
+    
 }
 
 #pragma mark - ButtonSelectorView2 delegates
@@ -199,11 +234,11 @@ static const NSString *PROTOCOL = @"bridge://";
 
 #pragma mark - WebView Methods
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-    NSString *padding = @"document.body.style.margin='0';document.body.style.padding = '0'";
-    [_webView stringByEvaluatingJavaScriptFromString:padding];
-}
+//- (void)webViewDidFinishLoad:(UIWebView *)webView
+//{
+//    NSString *padding = @"document.body.style.margin='0';document.body.style.padding = '0'";
+//    [_webView stringByEvaluatingJavaScriptFromString:padding];
+//}
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -301,7 +336,7 @@ static const NSString *PROTOCOL = @"bridge://";
         ABLog(2,@"resp is null. count = %d", (unsigned int)[args count]);
     }
     dispatch_async(dispatch_get_main_queue(), ^ {
-        [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz._results[%@]=%@", cbid, resp]];
+//        [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz._results[%@]=%@", cbid, resp]];
     });
 }
 
@@ -320,7 +355,7 @@ static const NSString *PROTOCOL = @"bridge://";
         ABLog(2,@"resp is null. count = %d", (int)[args count]);
     }
     dispatch_async(dispatch_get_main_queue(), ^ {
-        [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz._callbacks[%@]('%@');", cbid, resp]];
+//        [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz._callbacks[%@]('%@');", cbid, resp]];
     });
 }
 
@@ -345,7 +380,7 @@ static const NSString *PROTOCOL = @"bridge://";
         }];
     } else {
         // Press back button
-        [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz.ui.back();"]];
+//        [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz.ui.back();"]];
     }
 }
 
@@ -399,7 +434,7 @@ static const NSString *PROTOCOL = @"bridge://";
         ABLog(2,@"resp is null. count = %d", (unsigned int)[data count]);
     }
     if (_webView) {
-        [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz._bridge.walletChanged('%@');", resp]];
+//        [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz._bridge.walletChanged('%@');", resp]];
         [self notifyDenominationChange];
     }
 }
@@ -422,7 +457,7 @@ static const NSString *PROTOCOL = @"bridge://";
     if (resp == nil) {
         ABLog(2,@"resp is null. count = %d", (unsigned int)[data count]);
     }
-    [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz._bridge.denominationUpdate('%@');", resp]];
+//    [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz._bridge.denominationUpdate('%@');", resp]];
 }
 
 - (void)selectedWallet:(NSDictionary *)params
@@ -501,14 +536,14 @@ static const NSString *PROTOCOL = @"bridge://";
     
     int SLICE_SIZE = 500;
     size_t len = [encodedString length];
-    [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz.bufferClear();"]];
+//    [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz.bufferClear();"]];
     for (int i = 0; i < len / SLICE_SIZE; ++i) {
         size_t start = i * SLICE_SIZE;
         size_t size = start + SLICE_SIZE > len ? len - start : SLICE_SIZE;
 
         NSString *chunk = [encodedString substringWithRange:NSMakeRange(start, size)];
-        [_webView stringByEvaluatingJavaScriptFromString:
-            [NSString stringWithFormat:@"Airbitz.bufferAdd('%s');", chunk]];
+//        [_webView stringByEvaluatingJavaScriptFromString:
+//            [NSString stringWithFormat:@"Airbitz.bufferAdd('%s');", chunk]];
     }
 
     [self dismissViewControllerAnimated:YES completion:nil];
