@@ -477,7 +477,7 @@ typedef enum eReloginState
 {
     [view resignFirstResponder];
     [self showSpinner:YES];
-    [self signIn:PINCode];
+    [self SignInPIN:PINCode];
 }
 
 - (void)didReceiveMemoryWarning
@@ -718,112 +718,86 @@ typedef enum eReloginState
 
 #pragma mark - ReLogin Methods
 
-- (void)signIn:(NSString *)PINCode
+
+- (void)SignInPIN:(NSString *)pin
 {
     [MainViewController showBackground:YES animate:YES];
 
-    _tempPin = PINCode;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
-    {
-        tABC_Error error;
-        [[AppDelegate abc] PINLoginWithPIN:PINCode error:&error];
-        dispatch_async(dispatch_get_main_queue(), ^
-        {
-            switch (error.code)
+    [[AppDelegate abc]
+            abcSignInWithPIN:[LocalSettings controller].cachedUsername
+                         pin:pin
+                    complete:^(void)
             {
-                case ABC_CC_Ok:
-                {
-                    [User login:[LocalSettings controller].cachedUsername password:NULL];
-                    [[User Singleton] resetPINLoginInvalidEntryCount];
-                    [self.delegate LoginViewControllerDidPINLogin];
+                [User login:[LocalSettings controller].cachedUsername password:NULL];
+//                [[User Singleton] resetPINLoginInvalidEntryCount];
+                [self.delegate LoginViewControllerDidPINLogin];
 
-                    if ([Keychain bHasSecureEnclave] && [[AppDelegate abc] passwordExists])
+                if ([Keychain bHasSecureEnclave] && [[AppDelegate abc] passwordExists])
+                {
+                    //
+                    // Check if user has not yet been asked to enable touchID on this device
+                    //
+
+                    BOOL onEnabled = ([[LocalSettings controller].touchIDUsersEnabled indexOfObject:self.usernameSelector.textField.text] != NSNotFound);
+                    BOOL onDisabled = ([[LocalSettings controller].touchIDUsersDisabled indexOfObject:self.usernameSelector.textField.text] != NSNotFound);
+
+                    if (!onEnabled && !onDisabled)
                     {
                         //
-                        // Check if user has not yet been asked to enable touchID on this device
+                        // Ask if they want TouchID enabled for this user on this device
                         //
-
-                        BOOL onEnabled  = ( [[LocalSettings controller].touchIDUsersEnabled indexOfObject:self.usernameSelector.textField.text] != NSNotFound );
-                        BOOL onDisabled = ( [[LocalSettings controller].touchIDUsersDisabled indexOfObject:self.usernameSelector.textField.text] != NSNotFound );
-
-                        if (!onEnabled && !onDisabled)
-                        {
-                            //
-                            // Ask if they want TouchID enabled for this user on this device
-                            //
-                            NSString *title = NSLocalizedString(@"Enable Touch ID", nil);
-                            NSString *message = NSLocalizedString(@"Would you like to enable TouchID for this account and device?", nil);
-                            _enableTouchIDAlertView = [[UIAlertView alloc] initWithTitle:title
-                                                                                 message:message
-                                                                                delegate:self
-                                                                       cancelButtonTitle:@"Later"
-                                                                       otherButtonTitles:@"OK", nil];
-                            _enableTouchIDAlertView.alertViewStyle = UIAlertViewStyleDefault;
-                            [_enableTouchIDAlertView show];
-                        }
-                        else
-                        {
-                            [Keychain updateLoginKeychainInfo:[User Singleton].name
-                                                     password:[User Singleton].password
-                                                   useTouchID:!onDisabled];
-                        }
-                    }
-
-                    break;
-                }
-                case ABC_CC_BadPassword:
-                {
-                    [MainViewController showBackground:NO animate:YES];
-                    if ([[User Singleton] haveExceededPINLoginInvalidEntries])
-                    {
-                        [[User Singleton] resetPINLoginInvalidEntryCount];
-                        [self PINabortPermanently];
+                        NSString *title = NSLocalizedString(@"Enable Touch ID", nil);
+                        NSString *message = NSLocalizedString(@"Would you like to enable TouchID for this account and device?", nil);
+                        _enableTouchIDAlertView = [[UIAlertView alloc] initWithTitle:title
+                                                                             message:message
+                                                                            delegate:self
+                                                                   cancelButtonTitle:@"Later"
+                                                                   otherButtonTitles:@"OK", nil];
+                        _enableTouchIDAlertView.alertViewStyle = UIAlertViewStyleDefault;
+                        [_enableTouchIDAlertView show];
                     }
                     else
                     {
-                        [MainViewController fadingAlert:NSLocalizedString(@"Invalid PIN", nil)];
-                        [self.PINCodeView becomeFirstResponder];
+                        [Keychain updateLoginKeychainInfo:[User Singleton].name
+                                                 password:[User Singleton].password
+                                               useTouchID:!onDisabled];
                     }
-                    break;
                 }
+                [self showSpinner:NO];
+                self.PINCodeView.PINCode = nil;
 
-                case ABC_CC_InvalidOTP: {
+            }
+            error:^(ABCConditionCode ccode, NSString *errorString)
+            {
+
+                [MainViewController showBackground:NO animate:YES];
+                [self.PINCodeView becomeFirstResponder];
+                [self showSpinner:NO];
+                self.PINCodeView.PINCode = nil;
+
+                if (ABCConditionCodeBadPassword == ccode)
+                {
+                    [MainViewController fadingAlert:NSLocalizedString(@"Invalid PIN", nil)];
+                    [self.PINCodeView becomeFirstResponder];
+                }
+                else if (ABCConditionCodeInvalidOTP == ccode)
+                {
                     [MainViewController showBackground:NO animate:YES];
                     [self launchTwoFactorMenu];
-                    break;
                 }
-
-                default:
+                else
                 {
                     NSString *reason;
-                    [MainViewController showBackground:NO animate:YES];
                     // Core doesn't return anything specific for the case where network is down.
                     // Make up a better response in this case
-                    if (error.code == ABC_CC_Error)
+                    if (ccode == ABCConditionCodeError)
                         reason = NSLocalizedString(@"An error occurred. Please check your network connection. You may also exit PIN login and use your username & password to login offline", nil);
                     else
-                        reason = [Util errorMap:&error];
+                        reason = errorString;
 
                     [MainViewController fadingAlert:reason];
-                    [self.PINCodeView becomeFirstResponder];
-
                 }
-            }
-            [self showSpinner:NO];
-            self.PINCodeView.PINCode = nil;
-        });
-    });
-}
-
-- (void)PINabortPermanently
-{
-    [MainViewController fadingAlert:NSLocalizedString(@"Invalid PIN. Please log in.", nil)];
-
-    bPINModeEnabled = false;
-    [self viewDidLoad];
-    [self viewWillAppear:true];
-
-
+            }];
 }
 
 

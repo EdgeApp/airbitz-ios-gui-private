@@ -77,8 +77,6 @@
 - (void)startInvalidEntryWait;
 - (void)endInvalidEntryWait;
 - (NSTimeInterval)getRemainingInvalidEntryWait;
-- (bool)haveExceededPINLoginInvalidEntries;
-- (void)resetPINLoginInvalidEntryCount;
 - (void)incPINorTouchIDLogin;
 - (void)loadLocalSettings:(tABC_AccountSettings *)pSettings;
 - (void)saveDisclaimerViewed;

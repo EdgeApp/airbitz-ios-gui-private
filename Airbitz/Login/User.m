@@ -279,24 +279,6 @@ static User *singleton = nil;  // this will be the one and only object this stat
     return INVALID_ENTRY_WAIT - [current timeIntervalSinceDate:start];
 }
 
-/* Increment the count of invalid entries and return true if the maximum has
- * been exceeded.
- */
-- (bool)haveExceededPINLoginInvalidEntries
-{
-    ++self.PINLoginInvalidEntryCount;
-    if (LOGIN_INVALID_ENTRY_COUNT_MAX <= self.PINLoginInvalidEntryCount)
-    {
-        return YES;
-    }
-    return NO;
-}
-
-- (void)resetPINLoginInvalidEntryCount
-{
-    self.PINLoginInvalidEntryCount = 0;
-}
-
 - (void)incPINorTouchIDLogin
 {
     tABC_Error error;
