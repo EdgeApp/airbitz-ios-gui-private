@@ -38,41 +38,8 @@ const int RECOVERY_REMINDER_COUNT = 2;
 
 static CoreBridge *singleton = nil;
 
-@implementation BitidSignature
-- (id)init
-{
-   self = [super init];
-   return self;
-}
-@end
-
 @interface CoreBridge ()
 {
-    NSDictionary                                    *localeAsCurrencyNum;
-    long long                                       logoutTimeStamp;
-
-    BOOL                                            bInitialized;
-    BOOL                                            bDataFetched;
-    long                                            iLoginTimeSeconds;
-    NSOperationQueue                                *loadedQueue;
-    NSOperationQueue                                *exchangeQueue;
-    NSOperationQueue                                *dataQueue;
-    NSOperationQueue                                *walletsQueue;
-    NSOperationQueue                                *genQRQueue;
-    NSOperationQueue                                *txSearchQueue;
-    NSOperationQueue                                *miscQueue;
-    NSOperationQueue                                *watcherQueue;
-    NSLock                                          *watcherLock;
-    NSMutableDictionary                             *watchers;
-    NSMutableDictionary                             *currencyCodesCache;
-    NSMutableDictionary                             *currencySymbolCache;
-
-    NSTimer                                         *exchangeTimer;
-    NSTimer                                         *dataSyncTimer;
-    NSTimer                                         *notificationTimer;
-    BOOL                                            bOtpError;
-
-
 }
 
 @end
@@ -282,41 +249,6 @@ static CoreBridge *singleton = nil;
     if (loadedQueue)
         [loadedQueue cancelAllOperations];
 
-}
-
-- (void)postToSyncQueue:(void(^)(void))cb;
-{
-    [dataQueue addOperationWithBlock:cb];
-}
-
-- (void)postToLoadedQueue:(void(^)(void))cb;
-{
-    [loadedQueue addOperationWithBlock:cb];
-}
-
-- (void)postToWalletsQueue:(void(^)(void))cb;
-{
-    [walletsQueue addOperationWithBlock:cb];
-}
-
-- (void)postToGenQRQueue:(void(^)(void))cb;
-{
-    [genQRQueue addOperationWithBlock:cb];
-}
-
-- (void)postToTxSearchQueue:(void(^)(void))cb;
-{
-    [txSearchQueue addOperationWithBlock:cb];
-}
-
-- (void)postToMiscQueue:(void(^)(void))cb;
-{
-    [miscQueue addOperationWithBlock:cb];
-}
-
-- (void)postToWatcherQueue:(void(^)(void))cb;
-{
-    [watcherQueue addOperationWithBlock:cb];
 }
 
 - (int)dataOperationCount

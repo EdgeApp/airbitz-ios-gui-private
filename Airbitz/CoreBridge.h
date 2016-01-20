@@ -8,48 +8,20 @@
 #import "Transaction.h"
 #import "FadingAlertView.h"
 #import "Theme.h"
+#import "AirbitzCore.h"
 
 #define CONFIRMED_CONFIRMATION_COUNT 6
 #define PIN_REQUIRED_PERIOD_SECONDS     120
 
-@interface BitidSignature : NSObject
-@property (nonatomic, strong) NSString *address;
-@property (nonatomic, strong) NSString *signature;
-@end
-
-@interface CoreBridge : NSObject
-
-@property (nonatomic, strong) NSMutableArray            *arrayWallets;
-@property (nonatomic, strong) NSMutableArray            *arrayArchivedWallets;
-@property (nonatomic, strong) NSMutableArray            *arrayWalletNames;
-@property (nonatomic, strong) NSMutableArray            *arrayUUIDs;
-@property (nonatomic, strong) Wallet                    *currentWallet;
-@property (nonatomic, strong) NSArray                   *arrayCurrencyCodes;
-@property (nonatomic, strong) NSArray                   *arrayCurrencyNums;
-@property (nonatomic, strong) NSArray                   *arrayCurrencyStrings;
-@property (nonatomic, strong) NSArray                   *arrayCategories;
-@property (nonatomic)         int                       currentWalletID;
-@property (nonatomic)         BOOL                      bAllWalletsLoaded;
-@property (nonatomic)         int                       numWalletsLoaded;
-@property (nonatomic)         int                       numTotalWallets;
-@property (nonatomic)         int                       currencyCount;
-@property (nonatomic)         int                       numCategories;
-
+@interface CoreBridge : AirbitzCore
 
 - (void)initAll;
 - (void)freeAll;
 - (void)startQueues;
 - (void)stopQueues;
-- (void)postToSyncQueue:(void(^)(void))cb;
 
 - (void)clearSyncQueue;
 - (void)clearTxSearchQueue;
-
-- (void)postToLoadedQueue:(void(^)(void))cb;
-- (void)postToWalletsQueue:(void(^)(void))cb;
-- (void)postToGenQRQueue:(void(^)(void))cb;
-- (void)postToTxSearchQueue:(void(^)(void))cb;
-- (void)postToMiscQueue:(void(^)(void))cb;
 
 - (int)dataOperationCount;
 
