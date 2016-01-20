@@ -492,7 +492,7 @@ static CoreBridge *singleton = nil;
 {
     dispatch_async(dispatch_get_main_queue(),^{
         if (self.arrayWallets.count == 0) {
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_WALLETS_LOADING object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:ABC_NOTIFICATION_WALLETS_LOADING object:self];
         }
     });
     [self postToWatcherQueue:^(void) {
@@ -539,7 +539,7 @@ static CoreBridge *singleton = nil;
                 if (loadingCount == 0)
                 {
                     self.bAllWalletsLoaded = YES;
-                    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_WALLETS_LOADED object:self];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:ABC_NOTIFICATION_WALLETS_LOADED object:self];
                 }
                 else
                 {
@@ -575,7 +575,7 @@ static CoreBridge *singleton = nil;
 
 - (void) postNotificationWalletsChanged
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_WALLETS_CHANGED
+    [[NSNotificationCenter defaultCenter] postNotificationName:ABC_NOTIFICATION_WALLETS_CHANGED
                                                         object:self userInfo:nil];
     [self updateWidgetQRCode];
 }
@@ -1876,7 +1876,7 @@ static CoreBridge *singleton = nil;
         }
 
         dispatch_async(dispatch_get_main_queue(),^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_EXCHANGE_RATE_CHANGE object:self];
+            [[NSNotificationCenter defaultCenter] postNotificationName:ABC_NOTIFICATION_EXCHANGE_RATE_CHANGE object:self];
         });
     }
 }
@@ -2205,7 +2205,7 @@ static CoreBridge *singleton = nil;
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_DATA_SYNC_UPDATE object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:ABC_NOTIFICATION_DATA_SYNC_UPDATE object:nil];
             [FadingAlertView dismiss:FadingAlertDismissGradual];
         });
         [self startWatchers];
@@ -2500,7 +2500,7 @@ static CoreBridge *singleton = nil;
     {
         [self refreshWallets:^
         {
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_TX_RECEIVED object:self userInfo:params[0]];
+            [[NSNotificationCenter defaultCenter] postNotificationName:ABC_NOTIFICATION_TX_RECEIVED object:self userInfo:params[0]];
         }];
     }
 
@@ -2508,12 +2508,12 @@ static CoreBridge *singleton = nil;
 
 - (void)notifyOtpRequired:(NSArray *)params
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_OTP_REQUIRED object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ABC_NOTIFICATION_OTP_REQUIRED object:self];
 }
 
 - (void)notifyOtpSkew:(NSArray *)params
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_OTP_SKEW object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ABC_NOTIFICATION_OTP_SKEW object:self];
 }
 
 - (void)notifyDataSync:(NSArray *)params
@@ -2527,7 +2527,7 @@ static CoreBridge *singleton = nil;
     
     [self refreshWallets:^
     {
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_DATA_SYNC_UPDATE object:self];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ABC_NOTIFICATION_DATA_SYNC_UPDATE object:self];
 
         // if there are new wallets, we need to start their watchers
         if ([self.arrayWallets count] + [self.arrayArchivedWallets count] != numWallets)
@@ -2555,7 +2555,7 @@ static CoreBridge *singleton = nil;
 
 - (void)notifyRemotePasswordChange:(NSArray *)params
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_REMOTE_PASSWORD_CHANGE object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ABC_NOTIFICATION_REMOTE_PASSWORD_CHANGE object:self];
 }
 
 - (void)otpSetError:(tABC_CC)cc
@@ -2804,7 +2804,7 @@ void ABC_Sweep_Complete_Callback(tABC_CC cc, const char *szID, uint64_t amount)
 
     // broadcast message out that the sweep is done
     dispatch_async(dispatch_get_main_queue(), ^ {
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_SWEEP
+        [[NSNotificationCenter defaultCenter] postNotificationName:ABC_NOTIFICATION_SWEEP
                                                             object:nil
                                                         userInfo:sweepData];
     });

@@ -4,6 +4,20 @@
 #import <Foundation/Foundation.h>
 #import "Wallet.h"
 
+#define ABC_NOTIFICATION_LOGOUT_ACCOUT                      @"ABC_Logout_Account"
+#define ABC_NOTIFICATION_REMOTE_PASSWORD_CHANGE             @"ABC_Remote_Password_Change"
+#define ABC_NOTIFICATION_OTP_REQUIRED                       @"ABC_Otp_Required"
+#define ABC_NOTIFICATION_OTP_SKEW                           @"ABC_Otp_Skew"
+#define ABC_NOTIFICATION_EXCHANGE_RATE_CHANGE               @"ABC_Exchange_Rate_Change"
+#define ABC_NOTIFICATION_DATA_SYNC_UPDATE                   @"ABC_Data_Sync_Update"
+#define ABC_NOTIFICATION_HANDLE_BITCOIN_URI                 @"ABC_Handle_Bitcoin_URI"
+#define ABC_NOTIFICATION_TX_RECEIVED                        @"ABC_Transaction_Received"
+#define ABC_NOTIFICATION_SWEEP                              @"ABC_Notification_Sweep"
+#define ABC_NOTIFICATION_VIEW_SWEEP_TX                      @"ABC_Notification_View_Sweep_Transaction_Details"
+#define ABC_NOTIFICATION_WALLETS_LOADING                    @"ABC_Wallets_Loading"
+#define ABC_NOTIFICATION_WALLETS_LOADED                     @"ABC_Wallets_Loaded"
+#define ABC_NOTIFICATION_WALLETS_CHANGED                    @"ABC_Wallets_Changed"
+
 @interface BitidSignature : NSObject
 @property (nonatomic, strong) NSString *address;
 @property (nonatomic, strong) NSString *signature;
@@ -92,7 +106,7 @@
            error:(void (^)(ABCConditionCode ccode, NSString *errorString)) errorHandler;
 
 /*
- * signInWithPINAsync
+ * abcSignInWithPIN
  * @param NSString* username: username to login
  * @param NSString* pin: user's 4 digit PIN
  *

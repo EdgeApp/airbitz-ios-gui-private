@@ -107,7 +107,7 @@ static CoreBridge *airbitzCore;
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
     NSDictionary *d = @{ KEY_URL: url };
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_HANDLE_BITCOIN_URI object:self userInfo:d];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ABC_NOTIFICATION_HANDLE_BITCOIN_URI object:self userInfo:d];
     return YES;
 }
 

@@ -3,8 +3,6 @@
 #import "Transaction.h"
 #import "TxOutput.h"
 #import "User.h"
-#import "Util.h"
-#import "LocalSettings.h"
 #import "Keychain.h"
 
 #import "AirbitzCore.h"
@@ -259,39 +257,29 @@
     {
         tABC_Error error;
         ABC_PinLoginExists([username UTF8String], &exists, &error);
-        if (ABC_CC_Ok != error.code)
-        {
-            [self printABC_Error:&error];
-        }
         [self setLastErrors:error];
 
     }
     return exists;
 }
 
+/////////////////////////
 #pragma internal routines
+/////////////////////////
 
-- (void)printABC_Error:(const tABC_Error *)pError
+- (void)logError:(const tABC_Error)error
 {
-    if (pError)
+    if (error.code != ABC_CC_Ok)
     {
-        if (pError->code != ABC_CC_Ok)
-        {
-            NSString *log;
-
-            log = [NSString stringWithFormat:@"Code: %d, Desc: %s, Func: %s, File: %s, Line: %d\n",
-                                             pError->code,
-                                             pError->szDescription,
-                                             pError->szSourceFunc,
-                                             pError->szSourceFile,
-                                             pError->nSourceLine];
-            ABC_Log([log UTF8String]);
-        }
-        if (pError->code == ABC_CC_DecryptError
-                || pError->code == ABC_CC_DecryptFailure)
-        {
-            [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_MAIN_RESET object:self];
-        }
+        NSString *log;
+        
+        log = [NSString stringWithFormat:@"Code: %d, Desc: %s, Func: %s, File: %s, Line: %d\n",
+               error.code,
+               error.szDescription,
+               error.szSourceFunc,
+               error.szSourceFile,
+               error.nSourceLine];
+        ABC_Log([log UTF8String]);
     }
 }
 
@@ -305,6 +293,15 @@
     else
     {
         lastErrorString = [self errorMap:error];
+        if (ABC_CC_Ok != error.code)
+        {
+            [self logError:error];
+            if (error.code == ABC_CC_DecryptError
+                    || error.code == ABC_CC_DecryptFailure)
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:ABC_NOTIFICATION_LOGOUT_ACCOUT object:self];
+            }
+        }
     }
     return lastConditionCode;
 }
