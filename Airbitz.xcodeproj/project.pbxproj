@@ -13,6 +13,9 @@
 		346443381EDD48998D3F87FC /* GiftCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 346445D195B1F9C065B7CDBC /* GiftCardViewController.m */; };
 		346444E4A468604A4B66F175 /* SignUpPINController.m in Sources */ = {isa = PBXBuildFile; fileRef = 346442B19C664D7BA4B070CF /* SignUpPINController.m */; };
 		346445A65D1AF39AD0044785 /* GiftCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 346445D195B1F9C065B7CDBC /* GiftCardViewController.m */; };
+		346446A819A3EEE425AB6CBF /* ABCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 34644C62CB0450AA89F7EA60 /* ABCUser.m */; };
+		346449EF7F20BF16B9494389 /* ABCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 34644C62CB0450AA89F7EA60 /* ABCUser.m */; };
+		34644B331FA3205D201F34E6 /* ABCUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 34644C62CB0450AA89F7EA60 /* ABCUser.m */; };
 		34644DCDB063C438DFE4F489 /* GiftCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 346445D195B1F9C065B7CDBC /* GiftCardViewController.m */; };
 		DA10BB8E1BFEB8280086AD8B /* logo_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA10BB8D1BFEB8280086AD8B /* logo_icon@2x.png */; };
 		DA10BB8F1BFEB8280086AD8B /* logo_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA10BB8D1BFEB8280086AD8B /* logo_icon@2x.png */; };
@@ -1448,9 +1451,11 @@
 		3464423FFD78CBD7BC1D7172 /* SignUpPINController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpPINController.h; sourceTree = "<group>"; };
 		346442B19C664D7BA4B070CF /* SignUpPINController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpPINController.m; sourceTree = "<group>"; };
 		346445D195B1F9C065B7CDBC /* GiftCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GiftCardViewController.m; sourceTree = "<group>"; };
+		346449C43E3D11A0803EE827 /* ABCUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABCUser.h; sourceTree = "<group>"; };
 		34644A774ED9B0786711E100 /* BrandStrings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrandStrings.h; sourceTree = "<group>"; };
 		34644A95F98F7C787C35866F /* Strings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Strings.h; sourceTree = "<group>"; };
 		34644B5A90803E3840979781 /* GiftCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GiftCardViewController.h; sourceTree = "<group>"; };
+		34644C62CB0450AA89F7EA60 /* ABCUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABCUser.m; sourceTree = "<group>"; };
 		61962A913BC3099D425D6DDE /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		DA10BB8D1BFEB8280086AD8B /* logo_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo_icon@2x.png"; sourceTree = "<group>"; };
 		DA10BB961BFF90980086AD8B /* background-fade@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "background-fade@2x.jpg"; sourceTree = "<group>"; };
@@ -3396,6 +3401,8 @@
 				DA9EF6E01BC730400063DA07 /* Airbitz-Develop-Info.plist */,
 				DA9EF6E61BC7304C0063DA07 /* Airbitz-Testnet-Info.plist */,
 				DAD1AD7A1BC6065100C648C4 /* Supporting Files */,
+				34644C62CB0450AA89F7EA60 /* ABCUser.m */,
+				346449C43E3D11A0803EE827 /* ABCUser.h */,
 			);
 			path = Airbitz;
 			sourceTree = "<group>";
@@ -4733,6 +4740,7 @@
 				DA9EF3D91BC7285D0063DA07 /* GDrive.m in Sources */,
 				346443381EDD48998D3F87FC /* GiftCardViewController.m in Sources */,
 				3464426A362C97FF7C89103B /* SignUpPINController.m in Sources */,
+				346449EF7F20BF16B9494389 /* ABCUser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4878,6 +4886,7 @@
 				DA9EF5A01BC729FA0063DA07 /* GDrive.m in Sources */,
 				34644DCDB063C438DFE4F489 /* GiftCardViewController.m in Sources */,
 				346444E4A468604A4B66F175 /* SignUpPINController.m in Sources */,
+				34644B331FA3205D201F34E6 /* ABCUser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5023,6 +5032,7 @@
 				DA9EEC461BC6332F0063DA07 /* GDrive.m in Sources */,
 				346445A65D1AF39AD0044785 /* GiftCardViewController.m in Sources */,
 				346441D46B7AA497A77A5758 /* SignUpPINController.m in Sources */,
+				346446A819A3EEE425AB6CBF /* ABCUser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

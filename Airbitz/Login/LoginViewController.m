@@ -729,7 +729,6 @@ typedef enum eReloginState
                     complete:^(void)
             {
                 [User login:[LocalSettings controller].cachedUsername password:NULL];
-//                [[User Singleton] resetPINLoginInvalidEntryCount];
                 [self.delegate LoginViewControllerDidPINLogin];
 
                 if ([Keychain bHasSecureEnclave] && [[AppDelegate abc] passwordExists])

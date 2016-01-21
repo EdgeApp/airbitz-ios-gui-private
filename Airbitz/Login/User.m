@@ -60,32 +60,19 @@ static User *singleton = nil;  // this will be the one and only object this stat
     return singleton;
 }
 
-+ (BOOL)isLoggedIn
+- (void)login:(NSString *)name password:(NSString *)pword
 {
-    return [User Singleton].name.length;// && [User Singleton].password.length;
+    [self login:name password:pword setupPIN:NO];
 }
 
-+ (void)login:(NSString *)name password:(NSString *)pword
+- (void)login:(NSString *)name password:(NSString *)pword setupPIN:(BOOL)setupPIN
 {
-    [User login:name password:pword setupPIN:NO];
-}
+    [super login:name password:pword setupPIN:setupPIN];
 
-+ (void)login:(NSString *)name password:(NSString *)pword setupPIN:(BOOL)setupPIN
-{
-    [User Singleton].name = name;
-    [User Singleton].password = pword;
-    [[User Singleton] loadSettings];
+    self.notifiedSend = NO;
+    self.notifiedRequest = NO;
+    self.notifiedBle = NO;
 
-    [User Singleton].notifiedSend = NO;
-    [User Singleton].notifiedRequest = NO;
-    [User Singleton].notifiedBle = NO;
-
-    if (setupPIN) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            [[AppDelegate abc] setupLoginPIN];
-        });
-    }
-    [[AppDelegate abc] login];
 }
 
 - (id)init
@@ -102,7 +89,6 @@ static User *singleton = nil;  // this will be the one and only object this stat
     self.sendInvalidEntryCount = 0;
     self.sendState = kNormal;
     self.runLoop = [NSRunLoop currentRunLoop];
-    self.PINLoginInvalidEntryCount = 0;
     self.reviewNotified = NO;
     self.bDisclaimerViewed = NO;
     self.loginCount = 0;

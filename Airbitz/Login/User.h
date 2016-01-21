@@ -11,35 +11,15 @@
 #import "CommonTypes.h"
 #import "ABC.h"
 #import "AppDelegate.h"
+#import "ABCUser.h"
 
-@interface User : NSObject
 
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *password;
+@interface User : ABCUser
 
-// User Settings
-@property (nonatomic) int minutesAutoLogout;
-@property (nonatomic) int defaultCurrencyNum;
-@property (nonatomic) int64_t denomination;
-@property (nonatomic, copy) NSString* denominationLabel;
-@property (nonatomic) int denominationType;
-@property (nonatomic, copy) NSString* firstName;
-@property (nonatomic, copy) NSString* lastName;
-@property (nonatomic, copy) NSString* nickName;
-@property (nonatomic, copy) NSString* fullName;
-@property (nonatomic, copy) NSString* strPIN;
-@property (nonatomic) bool bNameOnPayments;
-@property (nonatomic, copy) NSString* denominationLabelShort;
-@property (nonatomic) bool bDailySpendLimit;
-@property (nonatomic) int64_t dailySpendLimitSatoshis;
-@property (nonatomic) bool bSpendRequirePin;
-@property (nonatomic) int64_t spendRequirePinSatoshis;
-@property (nonatomic) bool bDisablePINLogin;
 @property (nonatomic) NSUInteger sendInvalidEntryCount;
 @property (nonatomic) NSUInteger sendState;
 @property (nonatomic) NSRunLoop *runLoop;
 @property (nonatomic) NSTimer *sendInvalidEntryTimer;
-@property (nonatomic) NSUInteger PINLoginInvalidEntryCount;
 @property (nonatomic) bool reviewNotified;
 @property (nonatomic) bool bDisclaimerViewed;
 @property (nonatomic) NSDate *firstLoginTime;
@@ -58,10 +38,7 @@
 + (void)initAll;
 + (void)freeAll;
 + (User *)Singleton;
-+ (BOOL)isLoggedIn;
 + (BOOL)offerUserReview;
-+ (void)login:(NSString *)user password:(NSString *)pword;
-+ (void)login:(NSString *)user password:(NSString *)pword setupPIN:(BOOL)setupPIN;
 
 - (BOOL)offerRequestHelp;
 - (BOOL)offerSendHelp;
@@ -69,9 +46,6 @@
 - (BOOL)offerWalletHelp;
 - (BOOL)offerDisclaimer;
 
-- (id)init;
-- (void)clear;
-- (void)loadSettings;
 - (void)saveLocalSettings;
 - (SendViewState)sendInvalidEntry;
 - (void)startInvalidEntryWait;

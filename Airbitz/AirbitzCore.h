@@ -1,5 +1,4 @@
 
-#import "AirbitzCore.h"
 #import "ABCConditionCode.h"
 #import <Foundation/Foundation.h>
 #import "Wallet.h"
