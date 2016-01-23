@@ -135,7 +135,7 @@ static CoreBridge *airbitzCore;
     [[SDImageCache sharedImageCache] cleanDisk];
     [[SDImageCache sharedImageCache] clearMemory];
 
-    if ([User isLoggedIn])
+    if ([abcCore isLoggedIn])
     {
         [airbitzCore saveLogoutDate];
     }

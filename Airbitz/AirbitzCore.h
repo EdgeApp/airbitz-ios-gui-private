@@ -3,6 +3,8 @@
 #import <Foundation/Foundation.h>
 #import "Wallet.h"
 
+@class ABCUser;
+
 #define ABC_NOTIFICATION_LOGOUT_ACCOUT                      @"ABC_Logout_Account"
 #define ABC_NOTIFICATION_REMOTE_PASSWORD_CHANGE             @"ABC_Remote_Password_Change"
 #define ABC_NOTIFICATION_OTP_REQUIRED                       @"ABC_Otp_Required"
@@ -36,10 +38,31 @@
 //
 //@end
 
+@interface ABCSettings : NSObject
+
+// User Settings synced to git server
+@property (nonatomic) int minutesAutoLogout;
+@property (nonatomic) int defaultCurrencyNum;
+@property (nonatomic) int64_t denomination;
+@property (nonatomic, copy) NSString* denominationLabel;
+@property (nonatomic) int denominationType;
+@property (nonatomic, copy) NSString* firstName;
+@property (nonatomic, copy) NSString* lastName;
+@property (nonatomic, copy) NSString* nickName;
+@property (nonatomic, copy) NSString* fullName;
+@property (nonatomic, copy) NSString* strPIN;
+@property (nonatomic) bool bNameOnPayments;
+@property (nonatomic, copy) NSString* denominationLabelShort;
+@property (nonatomic) bool bDisablePINLogin;
+@property (nonatomic) bool bSpendRequirePin;
+@property (nonatomic) int64_t spendRequirePinSatoshis;
+
+@end
+
 
 @interface AirbitzCore : NSObject
 {
-
+    ABCSettings                                     *settings;
     NSDictionary                                    *localeAsCurrencyNum;
     long long                                       logoutTimeStamp;
 
@@ -70,24 +93,31 @@
 
 }
 
-@property (nonatomic, strong) NSMutableArray            *arrayWallets;
-@property (nonatomic, strong) NSMutableArray            *arrayArchivedWallets;
-@property (nonatomic, strong) NSMutableArray            *arrayWalletNames;
-@property (nonatomic, strong) NSMutableArray            *arrayUUIDs;
-@property (nonatomic, strong) Wallet                    *currentWallet;
-@property (nonatomic, strong) NSArray                   *arrayCurrencyCodes;
-@property (nonatomic, strong) NSArray                   *arrayCurrencyNums;
-@property (nonatomic, strong) NSArray                   *arrayCurrencyStrings;
-@property (nonatomic, strong) NSArray                   *arrayCategories;
-@property (nonatomic)         int                       currentWalletID;
-@property (nonatomic)         BOOL                      bAllWalletsLoaded;
-@property (nonatomic)         int                       numWalletsLoaded;
-@property (nonatomic)         int                       numTotalWallets;
-@property (nonatomic)         int                       currencyCount;
-@property (nonatomic)         int                       numCategories;
+@property (nonatomic, strong)   NSMutableArray          *arrayWallets;
+@property (nonatomic, strong)   NSMutableArray          *arrayArchivedWallets;
+@property (nonatomic, strong)   NSMutableArray          *arrayWalletNames;
+@property (nonatomic, strong)   NSMutableArray          *arrayUUIDs;
+@property (nonatomic, strong)   Wallet                  *currentWallet;
+@property (nonatomic, strong)   NSArray                 *arrayCurrencyCodes;
+@property (nonatomic, strong)   NSArray                 *arrayCurrencyNums;
+@property (nonatomic, strong)   NSArray                 *arrayCurrencyStrings;
+@property (nonatomic, strong)   NSArray                 *arrayCategories;
+@property (nonatomic)           int                     currentWalletID;
+@property (nonatomic)           BOOL                    bAllWalletsLoaded;
+@property (nonatomic)           int                     numWalletsLoaded;
+@property (nonatomic)           int                     numTotalWallets;
+@property (nonatomic)           int                     currencyCount;
+@property (nonatomic)           int                     numCategories;
+
+// Airbitz User
+@property (nonatomic, copy)     NSString                *name;
+@property (nonatomic, copy)     NSString                *password;
+
+
+
 
 /*
- * abcSignIn
+ * signIn
  * @param NSString* username: username to login
  * @param NSString* password: password of user
  * @param NSString* otp: One Time Password token (optional) send nil if logging in w/o OTP
@@ -99,13 +129,13 @@
  *
  * @return ABCConditionCode
  */
-- (ABCConditionCode)abcSignIn:(NSString *)username password:(NSString *)password otp:(NSString *)otp;
-- (ABCConditionCode)abcSignIn:(NSString *)username password:(NSString *)password otp:(NSString *)otp
+- (ABCConditionCode)signIn:(NSString *)username password:(NSString *)password otp:(NSString *)otp;
+- (ABCConditionCode)signIn:(NSString *)username password:(NSString *)password otp:(NSString *)otp
         complete:(void (^)(void)) completionHandler
            error:(void (^)(ABCConditionCode ccode, NSString *errorString)) errorHandler;
 
 /*
- * abcSignInWithPIN
+ * signInWithPIN
  * @param NSString* username: username to login
  * @param NSString* pin: user's 4 digit PIN
  *
@@ -115,10 +145,19 @@
  *                          @param ABCConditionCode       ccode: ABC error code
  * @return ABCConditionCode
  */
-- (ABCConditionCode)abcSignInWithPIN:(NSString *)username pin:(NSString *)pin;
-- (ABCConditionCode)abcSignInWithPIN:(NSString *)username pin:(NSString *)pin
+- (ABCConditionCode)signInWithPIN:(NSString *)username pin:(NSString *)pin;
+- (ABCConditionCode)signInWithPIN:(NSString *)username pin:(NSString *)pin
         complete:(void (^)(void)) completionHandler
            error:(void (^)(ABCConditionCode ccode, NSString *errorString)) errorHandler;
+
+
+/*
+ * isLoggedIn
+ * Returns true if the current AirbitzCore has a logged in user
+ * @param void
+ * @return BOOL
+ */
+- (BOOL)isLoggedIn;
 
 
 /*
@@ -132,8 +171,7 @@
  * @return void
  */
 - (void)checkRecoveryAnswersAsync:(NSString *)username answers:(NSString *)strAnswers
-        complete:(void (^)(ABCConditionCode ccode,
-        BOOL bABCValid)) completionHandler;
+        complete:(void (^)(ABCConditionCode ccode, BOOL bABCValid)) completionHandler;
 
 /*
  * getRecoveryQuestionsChoicesAsync

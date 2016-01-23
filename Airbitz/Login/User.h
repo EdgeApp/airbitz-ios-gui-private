@@ -14,7 +14,7 @@
 #import "ABCUser.h"
 
 
-@interface User : ABCUser
+@interface User : NSObject
 
 @property (nonatomic) NSUInteger sendInvalidEntryCount;
 @property (nonatomic) NSUInteger sendState;
@@ -34,6 +34,9 @@
 @property (nonatomic) BOOL notifiedRequest;
 @property (nonatomic) BOOL notifiedBle;
 @property (nonatomic) BOOL notifiedWallet;
+@property (nonatomic) bool bDailySpendLimit;
+@property (nonatomic) int64_t dailySpendLimitSatoshis;
+
 
 + (void)initAll;
 + (void)freeAll;

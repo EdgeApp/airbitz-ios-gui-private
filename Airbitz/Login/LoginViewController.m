@@ -602,7 +602,7 @@ typedef enum eReloginState
         ABLog(1, @"_bNewDeviceLogin=%d", (int) _bNewDeviceLogin);
 
         [[AppDelegate abc]
-                abcSignIn:self.usernameSelector.textField.text
+                signIn:self.usernameSelector.textField.text
                  password:self.passwordTextField.text
                       otp:nil
                  complete:^(void) {
@@ -724,7 +724,7 @@ typedef enum eReloginState
     [MainViewController showBackground:YES animate:YES];
 
     [[AppDelegate abc]
-            abcSignInWithPIN:[LocalSettings controller].cachedUsername
+            signInWithPIN:[LocalSettings controller].cachedUsername
                          pin:pin
                     complete:^(void)
             {
@@ -1184,7 +1184,7 @@ typedef enum eReloginState
         // Perform the two factor sign in
 
         [[AppDelegate abc]
-                abcSignIn:self.usernameSelector.textField.text
+                signIn:self.usernameSelector.textField.text
                  password:self.passwordTextField.text
                       otp:secret
                  complete:^(void) {

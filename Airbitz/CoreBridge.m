@@ -224,61 +224,6 @@ static CoreBridge *singleton = nil;
     }
 }
 
-- (void)stopQueues
-{
-    if (exchangeTimer) {
-        [exchangeTimer invalidate];
-        exchangeTimer = nil;
-    }
-    if (dataSyncTimer) {
-        [dataSyncTimer invalidate];
-        dataSyncTimer = nil;
-    }
-    if (dataQueue)
-        [dataQueue cancelAllOperations];
-    if (walletsQueue)
-        [walletsQueue cancelAllOperations];
-    if (genQRQueue)
-        [genQRQueue cancelAllOperations];
-    if (txSearchQueue)
-        [txSearchQueue cancelAllOperations];
-    if (exchangeQueue)
-        [exchangeQueue cancelAllOperations];
-    if (miscQueue)
-        [miscQueue cancelAllOperations];
-    if (loadedQueue)
-        [loadedQueue cancelAllOperations];
-
-}
-
-- (int)dataOperationCount
-{
-    int total = 0;
-    total += dataQueue == nil     ? 0 : [dataQueue operationCount];
-    total += exchangeQueue == nil ? 0 : [exchangeQueue operationCount];
-    total += walletsQueue == nil  ? 0 : [walletsQueue operationCount];
-    total += genQRQueue == nil  ? 0 : [genQRQueue operationCount];
-    total += txSearchQueue == nil  ? 0 : [txSearchQueue operationCount];
-    total += loadedQueue == nil  ? 0 : [loadedQueue operationCount];
-    total += watcherQueue == nil  ? 0 : [watcherQueue operationCount];
-    return total;
-}
-
-- (void)clearSyncQueue
-{
-    [dataQueue cancelAllOperations];
-}
-
-- (void)clearTxSearchQueue;
-{
-    [txSearchQueue cancelAllOperations];
-}
-
-- (void)clearMiscQueue;
-{
-    [miscQueue cancelAllOperations];
-}
-
 // select the wallet with the given UUID
 - (Wallet *)selectWalletWithUUID:(NSString *)strUUID
 {
@@ -328,8 +273,8 @@ static CoreBridge *singleton = nil;
     char **aUUIDS = NULL;
     unsigned int nCount;
 
-    tABC_CC result = ABC_GetWalletUUIDs([[User Singleton].name UTF8String],
-                                        [[User Singleton].password UTF8String],
+    tABC_CC result = ABC_GetWalletUUIDs([self.name UTF8String],
+                                        [self.password UTF8String],
                                         &aUUIDS, &nCount, &Error);
     if (ABC_CC_Ok == result)
     {
@@ -363,7 +308,7 @@ static CoreBridge *singleton = nil;
 
     if ([self watcherExists:uuid]) {
         char *szName = NULL;
-        ABC_WalletName([[User Singleton].name UTF8String], [uuid UTF8String], &szName, &error);
+        ABC_WalletName([self.name UTF8String], [uuid UTF8String], &szName, &error);
         if (error.code == ABC_CC_Ok) {
             wallet.strName = [NSString safeStringWithUTF8String:szName];
         }
@@ -372,7 +317,7 @@ static CoreBridge *singleton = nil;
         }
 
         int currencyNum;
-        ABC_WalletCurrency([[User Singleton].name UTF8String], [uuid UTF8String], &currencyNum, &error);
+        ABC_WalletCurrency([self.name UTF8String], [uuid UTF8String], &currencyNum, &error);
         if (error.code == ABC_CC_Ok) {
             wallet.currencyNum = currencyNum;
             wallet.currencyAbbrev = [self currencyAbbrevLookup:wallet.currencyNum];
@@ -385,7 +330,7 @@ static CoreBridge *singleton = nil;
         }
 
         int64_t balance;
-        ABC_WalletBalance([[User Singleton].name UTF8String], [uuid UTF8String], &balance, &error);
+        ABC_WalletBalance([self.name UTF8String], [uuid UTF8String], &balance, &error);
         if (error.code == ABC_CC_Ok) {
             wallet.balance = balance;
         } else {
@@ -393,8 +338,8 @@ static CoreBridge *singleton = nil;
         }
     }
 
-    bool archived = false;
-    ABC_WalletArchived([[User Singleton].name UTF8String], [uuid UTF8String], &archived, &error);
+    BOOL archived = false;
+    ABC_WalletArchived([self.name UTF8String], [uuid UTF8String], &archived, &error);
     wallet.archived = archived ? YES : NO;
 
     return wallet;
@@ -468,24 +413,6 @@ static CoreBridge *singleton = nil;
 
     [self postNotificationWalletsChanged];
 
-}
-
-- (void)cleanWallets
-{
-    self.arrayWallets = nil;
-    self.arrayArchivedWallets = nil;
-    self.arrayWalletNames = nil;
-    self.arrayUUIDs = nil;
-    self.currentWallet = nil;
-    self.currentWalletID = 0;
-    self.numWalletsLoaded = 0;
-    self.numTotalWallets = 0;
-    self.bAllWalletsLoaded = NO;
-}
-
-- (void)refreshWallets
-{
-    [self refreshWallets:nil];
 }
 
 - (void)refreshWallets:(void(^)(void))cb
@@ -620,8 +547,8 @@ static CoreBridge *singleton = nil;
                     return;
                 }
                 tABC_Error error;
-                ABC_DataSyncWallet([[User Singleton].name UTF8String],
-                            [[User Singleton].password UTF8String],
+                ABC_DataSyncWallet([self.name UTF8String],
+                            [self.password UTF8String],
                             [walletUUID UTF8String],
                             ABC_BitCoin_Event_Callback,
                             (__bridge void *) singleton,
@@ -665,8 +592,8 @@ static CoreBridge *singleton = nil;
         ABLog(2,@("Could not find wallet for %@"), walletUUID);
         return nil;
     }
-    tABC_CC result = ABC_GetTransaction([[User Singleton].name UTF8String],
-                                        [[User Singleton].password UTF8String],
+    tABC_CC result = ABC_GetTransaction([self.name UTF8String],
+                                        [self.password UTF8String],
                                         [walletUUID UTF8String], [szTxId UTF8String],
                                         &pTrans, &Error);
     if (ABC_CC_Ok == result)
@@ -710,8 +637,8 @@ static CoreBridge *singleton = nil;
     unsigned int tCount = 0;
     Transaction *transaction;
     tABC_TxInfo **aTransactions = NULL;
-    tABC_CC result = ABC_GetTransactions([[User Singleton].name UTF8String],
-                                         [[User Singleton].password UTF8String],
+    tABC_CC result = ABC_GetTransactions([self.name UTF8String],
+                                         [self.password UTF8String],
                                          [wallet.strUUID UTF8String],
                                          ABC_GET_TX_ALL_TIMES,
                                          ABC_GET_TX_ALL_TIMES, 
@@ -762,7 +689,7 @@ static CoreBridge *singleton = nil;
     if (pTrans->szMalleableTxId) {
         transaction.strMallealbeID = [NSString stringWithUTF8String: pTrans->szMalleableTxId];
     }
-    bool bSyncing = NO;
+    BOOL bSyncing = NO;
     transaction.confirmations = [self calcTxConfirmations:wallet
                                                  withTxId:transaction.strID
                                                 isSyncing:&bSyncing];
@@ -787,7 +714,7 @@ static CoreBridge *singleton = nil;
     transaction.bizId = pTrans->pDetails->bizId;
 }
 
-- (int)calcTxConfirmations:(Wallet *) wallet withTxId:(NSString *)txId isSyncing:(bool *)syncing
+- (int)calcTxConfirmations:(Wallet *) wallet withTxId:(NSString *)txId isSyncing:(BOOL *)syncing
 {
     tABC_Error Error;
     int txHeight = 0;
@@ -829,8 +756,8 @@ static CoreBridge *singleton = nil;
     unsigned int tCount = 0;
     Transaction *transaction;
     tABC_TxInfo **aTransactions = NULL;
-    tABC_CC result = ABC_SearchTransactions([[User Singleton].name UTF8String],
-                                            [[User Singleton].password UTF8String],
+    tABC_CC result = ABC_SearchTransactions([self.name UTF8String],
+                                            [self.password UTF8String],
                                             [wallet.strUUID UTF8String], [term UTF8String],
                                             &aTransactions, &tCount, &Error);
     if (ABC_CC_Ok == result)
@@ -897,8 +824,8 @@ static CoreBridge *singleton = nil;
     }
 
     NSString *ids = [uuids stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    if (ABC_SetWalletOrder([[User Singleton].name UTF8String],
-                           [[User Singleton].password UTF8String],
+    if (ABC_SetWalletOrder([self.name UTF8String],
+                           [self.password UTF8String],
                            (char *)[ids UTF8String],
                            &Error) != ABC_CC_Ok)
     {
@@ -909,11 +836,11 @@ static CoreBridge *singleton = nil;
     [self refreshWallets];
 }
 
-- (bool)setWalletAttributes: (Wallet *) wallet
+- (BOOL)setWalletAttributes: (Wallet *) wallet
 {
     tABC_Error Error;
-    tABC_CC result = ABC_SetWalletArchived([[User Singleton].name UTF8String],
-                                           [[User Singleton].password UTF8String],
+    tABC_CC result = ABC_SetWalletArchived([self.name UTF8String],
+                                           [self.password UTF8String],
                                            [wallet.strUUID UTF8String],
                                            wallet.archived, &Error);
     if (ABC_CC_Ok == result)
@@ -934,8 +861,8 @@ static CoreBridge *singleton = nil;
 
         tABC_Error Error;
         tABC_TxDetails *pDetails;
-        tABC_CC result = ABC_GetTransactionDetails([[User Singleton].name UTF8String],
-                [[User Singleton].password UTF8String],
+        tABC_CC result = ABC_GetTransactionDetails([self.name UTF8String],
+                [self.password UTF8String],
                 [transaction.strWalletUUID UTF8String],
                 [transaction.strID UTF8String],
                 &pDetails, &Error);
@@ -952,8 +879,8 @@ static CoreBridge *singleton = nil;
         pDetails->amountCurrency = transaction.amountFiat;
         pDetails->bizId = transaction.bizId;
 
-        result = ABC_SetTransactionDetails([[User Singleton].name UTF8String],
-                [[User Singleton].password UTF8String],
+        result = ABC_SetTransactionDetails([self.name UTF8String],
+                [self.password UTF8String],
                 [transaction.strWalletUUID UTF8String],
                 [transaction.strID UTF8String],
                 pDetails, &Error);
@@ -992,7 +919,7 @@ static CoreBridge *singleton = nil;
     return [self formatCurrency:currency withCurrencyNum:currencyNum withSymbol:true];
 }
 
-- (NSString *)formatCurrency:(double) currency withCurrencyNum:(int) currencyNum withSymbol:(bool) symbol
+- (NSString *)formatCurrency:(double) currency withCurrencyNum:(int) currencyNum withSymbol:(BOOL) symbol
 {
     NSNumberFormatter *f = [self generateNumberFormatter];
     [f setNumberStyle: NSNumberFormatterCurrencyStyle];
@@ -1010,7 +937,7 @@ static CoreBridge *singleton = nil;
 - (int) currencyDecimalPlaces
 {
     int decimalPlaces = 5;
-    switch ([[User Singleton] denominationType]) {
+    switch ([settings denominationType]) {
         case ABC_DENOMINATION_BTC:
             decimalPlaces = 6;
             break;
@@ -1027,7 +954,7 @@ static CoreBridge *singleton = nil;
 - (int) maxDecimalPlaces
 {
     int decimalPlaces = 8;
-    switch ([[User Singleton] denominationType]) {
+    switch ([settings denominationType]) {
         case ABC_DENOMINATION_BTC:
             decimalPlaces = 8;
             break;
@@ -1053,17 +980,17 @@ static CoreBridge *singleton = nil;
     return [self formatSatoshi:amount withSymbol:true];
 }
 
-- (NSString *)formatSatoshi: (int64_t) amount withSymbol:(bool) symbol
+- (NSString *)formatSatoshi: (int64_t) amount withSymbol:(BOOL) symbol
 {
     return [self formatSatoshi:amount withSymbol:symbol cropDecimals:-1];
 }
 
-- (NSString *)formatSatoshi: (int64_t) amount withSymbol:(bool) symbol forceDecimals:(int) forcedecimals
+- (NSString *)formatSatoshi: (int64_t) amount withSymbol:(BOOL) symbol forceDecimals:(int) forcedecimals
 {
     return [self formatSatoshi:amount withSymbol:symbol cropDecimals:-1 forceDecimals:forcedecimals];
 }
 
-- (NSString *)formatSatoshi: (int64_t) amount withSymbol:(bool) symbol cropDecimals:(int) decimals
+- (NSString *)formatSatoshi: (int64_t) amount withSymbol:(BOOL) symbol cropDecimals:(int) decimals
 {
     return [self formatSatoshi:amount withSymbol:symbol cropDecimals:decimals forceDecimals:-1];
 }
@@ -1084,12 +1011,12 @@ static CoreBridge *singleton = nil;
  *  
 **/
 
-- (NSString *)formatSatoshi: (int64_t) amount withSymbol:(bool) symbol cropDecimals:(int) decimals forceDecimals:(int) forcedecimals
+- (NSString *)formatSatoshi: (int64_t) amount withSymbol:(BOOL) symbol cropDecimals:(int) decimals forceDecimals:(int) forcedecimals
 {
     tABC_Error error;
     char *pFormatted = NULL;
     int decimalPlaces = forcedecimals > -1 ? forcedecimals : [self maxDecimalPlaces];
-    bool negative = amount < 0;
+    BOOL negative = amount < 0;
     amount = llabs(amount);
     if (ABC_FormatAmount(amount, &pFormatted, decimalPlaces, false, &error) != ABC_CC_Ok)
     {
@@ -1103,7 +1030,7 @@ static CoreBridge *singleton = nil;
             [formatted appendString: @"-"];
         if (symbol)
         {
-            [formatted appendString: [User Singleton].denominationLabelShort];
+            [formatted appendString: [settings denominationLabelShort]];
             [formatted appendString: @" "];
         }
         const char *p = pFormatted;
@@ -1145,22 +1072,22 @@ static CoreBridge *singleton = nil;
     return [self conversionStringFromNum:wallet.currencyNum withAbbrev:YES];
 }
 
-- (NSString *)conversionStringFromNum:(int) currencyNum withAbbrev:(bool) includeAbbrev
+- (NSString *)conversionStringFromNum:(int) currencyNum withAbbrev:(BOOL) includeAbbrev
 {
     double currency;
     tABC_Error error;
 
-    double denomination = [User Singleton].denomination;
-    NSString *denominationLabel = [User Singleton].denominationLabel;
-    tABC_CC result = ABC_SatoshiToCurrency([[User Singleton].name UTF8String],
-                                           [[User Singleton].password UTF8String],
+    double denomination = [settings denomination];
+    NSString *denominationLabel = [settings denominationLabel];
+    tABC_CC result = ABC_SatoshiToCurrency([self.name UTF8String],
+                                           [self.password UTF8String],
                                            denomination, &currency, currencyNum, &error);
     [Util printABC_Error:&error];
     if (result == ABC_CC_Ok)
     {
         NSString *abbrev = [self currencyAbbrevLookup:currencyNum];
         NSString *symbol = [self currencySymbolLookup:currencyNum];
-        if ([User Singleton].denominationType == ABC_DENOMINATION_UBTC)
+        if ([settings denominationType] == ABC_DENOMINATION_UBTC)
         {
             if(includeAbbrev) {
                 return [NSString stringWithFormat:@"1000 %@ = %@ %.3f %@", denominationLabel, symbol, currency*1000, abbrev];
@@ -1234,7 +1161,7 @@ static CoreBridge *singleton = nil;
 - (BOOL)recoveryAnswers:(NSString *)strAnswers areValidForUserName:(NSString *)strUserName status:(tABC_Error *)error
 {
     BOOL bValid = NO;
-    bool bABCValid = false;
+    BOOL bABCValid = false;
 
     tABC_CC result = ABC_CheckRecoveryAnswers([strUserName UTF8String],
                                               [strAnswers UTF8String],
@@ -1269,12 +1196,12 @@ static CoreBridge *singleton = nil;
 {
     tABC_Error error;
     tABC_AccountSettings *pSettings = NULL;
-    tABC_CC cc = ABC_LoadAccountSettings([[User Singleton].name UTF8String],
-        [[User Singleton].password UTF8String], &pSettings, &error);
+    tABC_CC cc = ABC_LoadAccountSettings([self.name UTF8String],
+        [self.password UTF8String], &pSettings, &error);
     if (cc == ABC_CC_Ok) {
         pSettings->recoveryReminderCount += val;
-        ABC_UpdateAccountSettings([[User Singleton].name UTF8String],
-            [[User Singleton].password UTF8String], pSettings, &error);
+        ABC_UpdateAccountSettings([self.name UTF8String],
+            [self.password UTF8String], pSettings, &error);
     }
     ABC_FreeAccountSettings(pSettings);
 }
@@ -1284,8 +1211,8 @@ static CoreBridge *singleton = nil;
     int count = 0;
     tABC_Error error;
     tABC_AccountSettings *pSettings = NULL;
-    tABC_CC cc = ABC_LoadAccountSettings([[User Singleton].name UTF8String],
-        [[User Singleton].password UTF8String], &pSettings, &error);
+    tABC_CC cc = ABC_LoadAccountSettings([self.name UTF8String],
+        [self.password UTF8String], &pSettings, &error);
     if (cc == ABC_CC_Ok) {
         count = pSettings->recoveryReminderCount;
     }
@@ -1300,7 +1227,7 @@ static CoreBridge *singleton = nil;
     if (wallet.balance >= RECOVERY_REMINDER_AMOUNT && reminderCount < RECOVERY_REMINDER_COUNT) {
         BOOL bQuestions = NO;
         NSMutableString *errorMsg = [[NSMutableString alloc] init];
-        [self getRecoveryQuestionsForUserName:[User Singleton].name
+        [self getRecoveryQuestionsForUserName:self.name
                                             isSuccess:&bQuestions
                                             errorMsg:errorMsg];
         if (!bQuestions) {
@@ -1313,16 +1240,16 @@ static CoreBridge *singleton = nil;
     return bResult;
 }
 
-- (bool)PINLoginExists
+- (BOOL)PINLoginExists
 {
     NSString *username = [LocalSettings controller].cachedUsername;
     
     return [self PINLoginExists:username];
 }
 
-- (bool)PINLoginExists:(NSString *)username
+- (BOOL)PINLoginExists:(NSString *)username
 {
-    bool exists = NO;
+    BOOL exists = NO;
     if (username && 0 < username.length)
     {
         tABC_Error error;
@@ -1342,7 +1269,7 @@ static CoreBridge *singleton = nil;
     NSString *username = NULL;
     if ([User isLoggedIn])
     {
-        username = [User Singleton].name;
+        username = self.name;
     }
 
     if (!username || 0 == username.length)
@@ -1359,44 +1286,6 @@ static CoreBridge *singleton = nil;
         {
             [Util printABC_Error:&error];
         }
-    }
-}
-
-- (void)setupLoginPIN
-{
-    NSString *name = [User Singleton].name;
-    if (name && 0 < name.length)
-    {
-        const char *username = [name UTF8String];
-        NSString *pass = [User Singleton].password;
-        const char *password = (nil == pass ? NULL : [pass UTF8String]);
-
-        // retrieve the user's settings to check whether PIN logins are disabled
-        tABC_CC cc = ABC_CC_Ok;
-        tABC_Error Error;
-        tABC_AccountSettings *pSettings = NULL;
-        
-        cc = ABC_LoadAccountSettings(username,
-                                     password,
-                                     &pSettings,
-                                     &Error);
-        if (cc == ABC_CC_Ok) {
-            if (!pSettings->bDisablePINLogin)
-            {
-                // attempt to setup the PIN package on disk
-                tABC_Error error;
-                tABC_CC result = ABC_PinSetup(username,
-                                              password,
-                                              &error);
-                if (ABC_CC_Ok != result)
-                {
-                    [Util printABC_Error:&error];
-                }
-            }
-        } else {
-            [Util printABC_Error:&Error];
-        }
-        ABC_FreeAccountSettings(pSettings);
     }
 }
 
@@ -1423,30 +1312,6 @@ static CoreBridge *singleton = nil;
 {
     long now = (long) [[NSDate date] timeIntervalSince1970];
     return now - iLoginTimeSeconds <= PIN_REQUIRED_PERIOD_SECONDS;
-}
-
-- (void)login
-{
-    NSString *username = [User Singleton].name;
-    if (username && 0 < username.length)
-    {
-        [LocalSettings controller].cachedUsername = [User Singleton].name;
-    }
-
-    [LocalSettings saveAll];
-    bDataFetched = NO;
-    bOtpError = NO;
-    [self startPrimaryWallet];
-    [self postToWatcherQueue: ^
-    {
-        [self postToLoadedQueue:^
-        {
-            [self startAsyncTasks];
-        }];
-    }];
-
-    iLoginTimeSeconds = [self saveLogoutDate];
-    [self loadCategories];
 }
 
 - (BOOL)didLoginExpire:(NSString *)username;
@@ -1481,11 +1346,11 @@ static CoreBridge *singleton = nil;
 - (long) saveLogoutDate;
 {
     long currentTimeStamp = (long) [[NSDate date] timeIntervalSince1970];
-    logoutTimeStamp = currentTimeStamp + (60 * [User Singleton].minutesAutoLogout);
+    logoutTimeStamp = currentTimeStamp + (60 * [settings minutesAutoLogout]);
 
     // Save in iOS Keychain
     [Keychain setKeychainInt:logoutTimeStamp
-                         key:[Keychain createKeyWithUsername:[User Singleton].name key:LOGOUT_TIME_KEY]
+                         key:[Keychain createKeyWithUsername:self.name key:LOGOUT_TIME_KEY]
                authenticated:YES];
 
     return currentTimeStamp;
@@ -1499,7 +1364,7 @@ static CoreBridge *singleton = nil;
         NSString *uuid = arrayWallets[0];
         [self postToLoadedQueue:^{
             tABC_Error error;
-            ABC_WalletLoad([[User Singleton].name UTF8String], [uuid UTF8String], &error);
+            ABC_WalletLoad([self.name UTF8String], [uuid UTF8String], &error);
             [Util printABC_Error:&error];
             [self startWatcher:uuid];
             
@@ -1514,7 +1379,7 @@ static CoreBridge *singleton = nil;
 {
     NSMutableArray *arrayWallets = [[NSMutableArray alloc] init];
     [self loadWalletUUIDs: arrayWallets];
-    bool bIsFirstWallet = YES;
+    BOOL bIsFirstWallet = YES;
     for (NSString *uuid in arrayWallets) {
         if (bIsFirstWallet)
         {
@@ -1523,7 +1388,7 @@ static CoreBridge *singleton = nil;
         }
         [self postToLoadedQueue:^{
             tABC_Error error;
-            ABC_WalletLoad([[User Singleton].name UTF8String], [uuid UTF8String], &error);
+            ABC_WalletLoad([self.name UTF8String], [uuid UTF8String], &error);
             [Util printABC_Error:&error];
             [self startWatcher:uuid];
         }];
@@ -1540,54 +1405,10 @@ static CoreBridge *singleton = nil;
     }];
 }
 
-- (void)stopAsyncTasks
-{
-    [self stopQueues];
-
-    unsigned long wq, dq, gq, txq, eq, mq, lq;
-
-    // XXX: prevents crashing on logout
-    while (YES)
-    {
-        wq = (unsigned long)[walletsQueue operationCount];
-        dq = (unsigned long)[dataQueue operationCount];
-        gq = (unsigned long)[genQRQueue operationCount];
-        txq = (unsigned long)[txSearchQueue operationCount];
-        eq = (unsigned long)[exchangeQueue operationCount];
-        mq = (unsigned long)[miscQueue operationCount];
-        lq = (unsigned long)[loadedQueue operationCount];
-
-//        if (0 == (wq + dq + gq + txq + eq + mq + lq))
-        if (0 == (wq + gq + txq + eq + mq + lq))
-            break;
-
-        ABLog(0,
-            @"Waiting for queues to complete wq=%lu dq=%lu gq=%lu txq=%lu eq=%lu mq=%lu lq=%lu",
-            wq, dq, gq, txq, eq, mq, lq);
-        [NSThread sleepForTimeInterval:.2];
-    }
-
-    [self stopWatchers];
-    [self cleanWallets];
-}
-
-- (void)logout
-{
-    [self stopAsyncTasks];
-
-    tABC_Error Error;
-    tABC_CC result = ABC_ClearKeyCache(&Error);
-
-    if (ABC_CC_Ok != result)
-    {
-        [Util printABC_Error:&Error];
-    }
-}
-
 - (BOOL)passwordOk:(NSString *)password
 {
-    NSString *name = [User Singleton].name;
-    bool ok = false;
+    NSString *name = self.name;
+    BOOL ok = false;
     if (name && 0 < name.length)
     {
         const char *username = [name UTF8String];
@@ -1601,13 +1422,13 @@ static CoreBridge *singleton = nil;
 
 - (BOOL)passwordExists
 {
-    return [self passwordExists:[User Singleton].name];
+    return [self passwordExists:self.name];
 }
 
 - (BOOL)passwordExists:(NSString *)username;
 {
     tABC_Error error;
-    bool exists = false;
+    BOOL exists = false;
     ABC_PasswordExists([username UTF8String], &exists, &error);
     if (error.code == ABC_CC_Ok) {
         return exists == true ? YES : NO;
@@ -1623,62 +1444,6 @@ static CoreBridge *singleton = nil;
 - (BOOL)watcherIsReady:(NSString *)UUID
 {
     return YES;
-}
-
-- (void)startWatchers
-{
-    NSMutableArray *arrayWallets = [[NSMutableArray alloc] init];
-    [self loadWalletUUIDs: arrayWallets];
-    for (NSString *uuid in arrayWallets) {
-        [self startWatcher:uuid];
-    }
-    if (bDataFetched) {
-        [self connectWatchers];
-    }
-}
-
-- (void)connectWatchers
-{
-    if ([User isLoggedIn]) {
-        NSMutableArray *arrayWallets = [[NSMutableArray alloc] init];
-        [self loadWalletUUIDs:arrayWallets];
-        for (NSString *uuid in arrayWallets)
-        {
-            [self connectWatcher:uuid];
-        }
-    }
-}
-
-- (void)connectWatcher:(NSString *)uuid
-{
-//    dispatch_async(dispatch_get_main_queue(),^{
-    [self postToWatcherQueue: ^{
-        if ([User isLoggedIn]) {
-            tABC_Error Error;
-            ABC_WatcherConnect([uuid UTF8String], &Error);
-
-            [Util printABC_Error:&Error];
-            [self watchAddresses:uuid];
-        }
-    }];
-//    });
-}
-
-- (void)disconnectWatchers
-{
-    if ([User isLoggedIn])
-    {
-        NSMutableArray *arrayWallets = [[NSMutableArray alloc] init];
-        [self loadWalletUUIDs: arrayWallets];
-        for (NSString *uuid in arrayWallets) {
-            [self postToWatcherQueue: ^{
-                const char *szUUID = [uuid UTF8String];
-                tABC_Error Error;
-                ABC_WatcherDisconnect(szUUID, &Error);
-                [Util printABC_Error:&Error];
-            }];
-        }
-    }
 }
 
 - (BOOL)watcherExists:(NSString *)uuid
@@ -1717,8 +1482,8 @@ static CoreBridge *singleton = nil;
         if (![self watcherExists:walletUUID]) {
             tABC_Error Error;
             const char *szUUID = [walletUUID UTF8String];
-            ABC_WatcherStart([[User Singleton].name UTF8String],
-                            [[User Singleton].password UTF8String],
+            ABC_WatcherStart([self.name UTF8String],
+                            [self.password UTF8String],
                             szUUID, &Error);
             [Util printABC_Error: &Error];
 
@@ -1741,38 +1506,6 @@ static CoreBridge *singleton = nil;
             [self requestWalletDataSync:walletUUID];
         }
     }];
-}
-
-- (void)stopWatchers
-{
-    NSMutableArray *arrayWallets = [[NSMutableArray alloc] init];
-    [self loadWalletUUIDs: arrayWallets];
-    // stop watchers
-    [self postToWatcherQueue: ^{
-        for (NSString *uuid in arrayWallets) {
-            tABC_Error Error;
-            ABC_WatcherStop([uuid UTF8String], &Error);
-        }
-        // wait for threads to finish
-        for (NSString *uuid in arrayWallets) {
-            NSOperationQueue *queue = [self watcherGet:uuid];
-            if (queue == nil) {
-                continue;
-            }
-            // Wait until operations complete
-            [queue waitUntilAllOperationsAreFinished];
-            // Remove the watcher from the dictionary
-            [self watcherRemove:uuid];
-        }
-        // Destroy watchers
-        for (NSString *uuid in arrayWallets) {
-            tABC_Error Error;
-            ABC_WatcherDelete([uuid UTF8String], &Error);
-            [Util printABC_Error:&Error];
-        }
-    }];
-    
-    while ([watcherQueue operationCount]);
 }
 
 - (void)deleteWatcherCache;
@@ -1809,8 +1542,8 @@ static CoreBridge *singleton = nil;
 
     [self postToWatcherQueue:^{
         tABC_Error Error;
-        ABC_PrioritizeAddress([[User Singleton].name UTF8String],
-                              [[User Singleton].password UTF8String],
+        ABC_PrioritizeAddress([self.name UTF8String],
+                              [self.password UTF8String],
                               [walletUUID UTF8String],
                               [address UTF8String],
                               &Error);
@@ -1822,8 +1555,8 @@ static CoreBridge *singleton = nil;
 - (void)watchAddresses: (NSString *) walletUUID
 {
     tABC_Error Error;
-    ABC_WatchAddresses([[User Singleton].name UTF8String],
-                    [[User Singleton].password UTF8String],
+    ABC_WatchAddresses([self.name UTF8String],
+                    [self.password UTF8String],
                     [walletUUID UTF8String], &Error);
     [Util printABC_Error: &Error];
 }
@@ -1860,8 +1593,8 @@ static CoreBridge *singleton = nil;
     {
         tABC_Error error;
         // Check the default currency for updates
-        ABC_RequestExchangeRateUpdate([[User Singleton].name UTF8String],
-                                      [[User Singleton].password UTF8String],
+        ABC_RequestExchangeRateUpdate([self.name UTF8String],
+                                      [self.password UTF8String],
                                       [User Singleton].defaultCurrencyNum, &error);
         [Util printABC_Error: &error];
 
@@ -1869,8 +1602,8 @@ static CoreBridge *singleton = nil;
         for (NSNumber *n in currencyNums)
         {
             // We pass no callback so this call is blocking
-            ABC_RequestExchangeRateUpdate([[User Singleton].name UTF8String],
-                                          [[User Singleton].password UTF8String],
+            ABC_RequestExchangeRateUpdate([self.name UTF8String],
+                                          [self.password UTF8String],
                                           [n intValue], &error);
             [Util printABC_Error: &error];
         }
@@ -1900,8 +1633,8 @@ static CoreBridge *singleton = nil;
             [[NSThread currentThread] setName:@"Data Sync"];
             tABC_Error error;
             tABC_CC cc =
-                ABC_DataSyncAccount([[User Singleton].name UTF8String],
-                                    [[User Singleton].password UTF8String],
+                ABC_DataSyncAccount([self.name UTF8String],
+                                    [self.password UTF8String],
                                     ABC_BitCoin_Event_Callback,
                                     (__bridge void *) singleton,
                                     &error);
@@ -1936,8 +1669,8 @@ static CoreBridge *singleton = nil;
 {
     [dataQueue addOperationWithBlock:^{
         tABC_Error error;
-        ABC_DataSyncWallet([[User Singleton].name UTF8String],
-                        [[User Singleton].password UTF8String],
+        ABC_DataSyncWallet([self.name UTF8String],
+                        [self.password UTF8String],
                         [uuid UTF8String],
                         ABC_BitCoin_Event_Callback,
                         (__bridge void *) singleton,
@@ -1952,9 +1685,9 @@ static CoreBridge *singleton = nil;
     }];
 }
 
-- (bool)isTestNet
+- (BOOL)isTestNet
 {
-    bool result = false;
+    BOOL result = false;
     tABC_Error Error;
 
     if (ABC_IsTestNet(&result, &Error) != ABC_CC_Ok) {
@@ -2044,19 +1777,19 @@ static CoreBridge *singleton = nil;
 /*
  * set a new default currency for the account based on the parameter
  */
-- (bool)setDefaultCurrencyNum:(int)currencyNum
+- (BOOL)setDefaultCurrencyNum:(int)currencyNum
 {
     tABC_CC cc = ABC_CC_Ok;
     tABC_Error Error;
     tABC_AccountSettings *pSettings = NULL;
-    cc = ABC_LoadAccountSettings([[User Singleton].name UTF8String],
-                                 [[User Singleton].password UTF8String],
+    cc = ABC_LoadAccountSettings([self.name UTF8String],
+                                 [self.password UTF8String],
                                  &pSettings,
                                  &Error);
     if (cc == ABC_CC_Ok) {
         pSettings->currencyNum = currencyNum;
-        ABC_UpdateAccountSettings([[User Singleton].name UTF8String],
-                                  [[User Singleton].password UTF8String],
+        ABC_UpdateAccountSettings([self.name UTF8String],
+                                  [self.password UTF8String],
                                   pSettings,
                                   &Error);
         if (cc == ABC_CC_Ok)
@@ -2114,8 +1847,8 @@ static CoreBridge *singleton = nil;
         char *szRequestAddress = NULL;
 
         // create the request
-        result = ABC_CreateReceiveRequest([[User Singleton].name UTF8String],
-                [[User Singleton].password UTF8String],
+        result = ABC_CreateReceiveRequest([self.name UTF8String],
+                [self.password UTF8String],
                 [strUUID UTF8String],
                 &_details,
                 &pRequestID,
@@ -2126,8 +1859,8 @@ static CoreBridge *singleton = nil;
             unsigned int width = 0;
             UIImage *qrImage;
 
-            result = ABC_GenerateRequestQRCode([[User Singleton].name UTF8String],
-                    [[User Singleton].password UTF8String],
+            result = ABC_GenerateRequestQRCode([self.name UTF8String],
+                    [self.password UTF8String],
                     [strUUID UTF8String],
                     pRequestID,
                     &pszURI,
@@ -2140,8 +1873,8 @@ static CoreBridge *singleton = nil;
                 qrImage = [Util dataToImage:pData withWidth:width andHeight:width];
 
 
-                tABC_CC result = ABC_GetRequestAddress([[User Singleton].name UTF8String],
-                        [[User Singleton].password UTF8String],
+                tABC_CC result = ABC_GetRequestAddress([self.name UTF8String],
+                        [self.password UTF8String],
                         [strUUID UTF8String],
                         pRequestID,
                         &szRequestAddress,
@@ -2164,7 +1897,7 @@ static CoreBridge *singleton = nil;
                     [tempSharedUserDefs setObject:imageData forKey:APP_GROUP_LAST_QR_IMAGE_KEY];
                     [tempSharedUserDefs setObject:addressString forKey:APP_GROUP_LAST_ADDRESS_KEY];
                     [tempSharedUserDefs setObject:self.currentWallet.strName forKey:APP_GROUP_LAST_WALLET_KEY];
-                    [tempSharedUserDefs setObject:[User Singleton].name forKey:APP_GROUP_LAST_ACCOUNT_KEY];
+                    [tempSharedUserDefs setObject:self.name forKey:APP_GROUP_LAST_ACCOUNT_KEY];
                     [tempSharedUserDefs synchronize];
                 }
             }
@@ -2195,7 +1928,7 @@ static CoreBridge *singleton = nil;
             // create first wallet if it doesn't already exist
             tABC_Error error;
             char *szUUID = NULL;
-            ABC_CreateWallet([[User Singleton].name UTF8String], [[User Singleton].password UTF8String],
+            ABC_CreateWallet([self.name UTF8String], [self.password UTF8String],
                     [NSLocalizedString(@"My Wallet", @"Name of initial wallet") UTF8String],
                     currencyNum, &szUUID, &error);
             if (szUUID) {
@@ -2222,8 +1955,8 @@ static CoreBridge *singleton = nil;
     {
         // add the category to the core
         tABC_Error Error;
-        ABC_AddCategory([[User Singleton].name UTF8String],
-                        [[User Singleton].password UTF8String],
+        ABC_AddCategory([self.name UTF8String],
+                        [self.password UTF8String],
                         (char *)[strCategory UTF8String], &Error);
         [Util printABC_Error:&Error];
     }
@@ -2241,8 +1974,8 @@ static CoreBridge *singleton = nil;
             
             // get the categories from the core
             tABC_Error error;
-            ABC_GetCategories([[User Singleton].name UTF8String],
-                              [[User Singleton].password UTF8String],
+            ABC_GetCategories([self.name UTF8String],
+                              [self.password UTF8String],
                               &aszCategories,
                               &countCategories,
                               &error);
@@ -2400,8 +2133,8 @@ static CoreBridge *singleton = nil;
                     NSString *strCategory = [arrayCategories objectAtIndex:i];
                     [mutableArrayCategories addObject:strCategory];
                     
-                    ABC_AddCategory([[User Singleton].name UTF8String],
-                                    [[User Singleton].password UTF8String],
+                    ABC_AddCategory([self.name UTF8String],
+                                    [self.password UTF8String],
                                     (char *)[strCategory UTF8String], &error);
                     [Util printABC_Error:&error];
                 }
@@ -2454,7 +2187,7 @@ static CoreBridge *singleton = nil;
         else
         {
             // it doesn't exist in our new list so delete it from the core
-            ABC_RemoveCategory([[User Singleton].name UTF8String], [[User Singleton].password UTF8String], (char *)[strCategory UTF8String], &Error);
+            ABC_RemoveCategory([self.name UTF8String], [self.password UTF8String], (char *)[strCategory UTF8String], &Error);
             [Util printABC_Error:&Error];
         }
     }
@@ -2462,7 +2195,7 @@ static CoreBridge *singleton = nil;
     // add any categories from our new list that didn't exist in the core list
     for (NSString *strCategory in saveArrayCategories)
     {
-        ABC_AddCategory([[User Singleton].name UTF8String], [[User Singleton].password UTF8String], (char *)[strCategory UTF8String], &Error);
+        ABC_AddCategory([self.name UTF8String], [self.password UTF8String], (char *)[strCategory UTF8String], &Error);
         [Util printABC_Error:&Error];
     }
     [self loadCategories];
@@ -2475,8 +2208,8 @@ static CoreBridge *singleton = nil;
     tABC_Error Error;
     char *pszAddress = NULL;
     void *pData = NULL;
-    result = ABC_SweepKey([[User Singleton].name UTF8String],
-                  [[User Singleton].password UTF8String],
+    result = ABC_SweepKey([self.name UTF8String],
+                  [self.password UTF8String],
                   [walletUUID UTF8String],
                   [privateKey UTF8String],
                   &pszAddress,
@@ -2578,7 +2311,7 @@ static CoreBridge *singleton = nil;
     tABC_Error error;
     NSString *secret = nil;
     char *szSecret = NULL;
-    ABC_OtpKeyGet([[User Singleton].name UTF8String], &szSecret, &error);
+    ABC_OtpKeyGet([self.name UTF8String], &szSecret, &error);
     if (error.code == ABC_CC_Ok && szSecret) {
         secret = [NSString stringWithUTF8String:szSecret];
     }
@@ -2595,7 +2328,7 @@ static CoreBridge *singleton = nil;
     char *szURLDomain = NULL;
     NSString *urlDomain;
 
-    ABC_BitidParseUri([[User Singleton].name UTF8String], nil, [uri UTF8String], &szURLDomain, &error);
+    ABC_BitidParseUri([self.name UTF8String], nil, [uri UTF8String], &szURLDomain, &error);
 
     if (error.code == ABC_CC_Ok && szURLDomain) {
         urlDomain = [NSString stringWithUTF8String:szURLDomain];
@@ -2612,7 +2345,7 @@ static CoreBridge *singleton = nil;
 {
     tABC_Error error;
 
-    ABC_BitidLogin([[User Singleton].name UTF8String], nil, [uri UTF8String], &error);
+    ABC_BitidLogin([self.name UTF8String], nil, [uri UTF8String], &error);
 
     if (error.code == ABC_CC_Ok)
         return YES;
@@ -2627,7 +2360,7 @@ static CoreBridge *singleton = nil;
     BitidSignature *bitid = [[BitidSignature alloc] init];
 
     tABC_CC result = ABC_BitidSign(
-        [[User Singleton].name UTF8String], [[User Singleton].password UTF8String],
+        [self.name UTF8String], [self.password UTF8String],
         [uri UTF8String], [message UTF8String], &szAddress, &szSignature, &error);
     if (result == ABC_CC_Ok) {
         bitid.address = [NSString stringWithUTF8String:szAddress];
@@ -2682,7 +2415,7 @@ static CoreBridge *singleton = nil;
         return NO;
     }
     tABC_Error error;
-    bool result;
+    BOOL result;
     ABC_AccountSyncExists([username UTF8String],
                           &result,
                           &error);
@@ -2707,7 +2440,7 @@ static CoreBridge *singleton = nil;
     
     [self postToMiscQueue:^{
         tABC_Error error;
-        ABC_UploadLogs([[User Singleton].name UTF8String], NULL, &error);
+        ABC_UploadLogs([self.name UTF8String], NULL, &error);
         dispatch_async(dispatch_get_main_queue(),^{
             if (ABC_CC_Ok == error.code) {
                 if (cb) cb();
@@ -2750,7 +2483,7 @@ static CoreBridge *singleton = nil;
         ABLog(1,@"Deleting wallet [%@]", uuid);
         tABC_Error error;
 
-        ABC_WalletRemove([[User Singleton].name UTF8String], [uuid UTF8String], &error);
+        ABC_WalletRemove([self.name UTF8String], [uuid UTF8String], &error);
 
         [Util printABC_Error:&error];
         [self refreshWallets];

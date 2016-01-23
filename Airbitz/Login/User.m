@@ -31,6 +31,14 @@
 
 static BOOL bInitialized = NO;
 
+@interface User ()
+{
+
+}
+@property (nonatomic, strong)   AirbitzCore                 *airbitzCore;
+
+@end
+
 @implementation User
 
 static User *singleton = nil;  // this will be the one and only object this static singleton class has
@@ -60,21 +68,6 @@ static User *singleton = nil;  // this will be the one and only object this stat
     return singleton;
 }
 
-- (void)login:(NSString *)name password:(NSString *)pword
-{
-    [self login:name password:pword setupPIN:NO];
-}
-
-- (void)login:(NSString *)name password:(NSString *)pword setupPIN:(BOOL)setupPIN
-{
-    [super login:name password:pword setupPIN:setupPIN];
-
-    self.notifiedSend = NO;
-    self.notifiedRequest = NO;
-    self.notifiedBle = NO;
-
-}
-
 - (id)init
 {
     self = [super init];
@@ -82,10 +75,10 @@ static User *singleton = nil;  // this will be the one and only object this stat
     {
         [self clear];
     }
-    self.denomination = 100000000;
-    self.denominationType = ABC_DENOMINATION_UBTC;
-    self.denominationLabel = @"bits";
-    self.denominationLabelShort = @"Ƀ ";
+//    self.denomination = 100000000;
+//    self.denominationType = ABC_DENOMINATION_UBTC;
+//    self.denominationLabel = @"bits";
+//    self.denominationLabelShort = @"Ƀ ";
     self.sendInvalidEntryCount = 0;
     self.sendState = kNormal;
     self.runLoop = [NSRunLoop currentRunLoop];
@@ -101,65 +94,69 @@ static User *singleton = nil;  // this will be the one and only object this stat
     return self;
 }
 
-- (void)loadSettings
+- (void)login:(AirbitzCore *)airbitzCore
 {
-    tABC_Error Error;
-    tABC_AccountSettings *pSettings = NULL;
-    tABC_CC result = ABC_LoadAccountSettings([self.name UTF8String],
-                                             [self.password UTF8String],
-                                             &pSettings,
-                                             &Error);
-    if (ABC_CC_Ok == result)
-    {
-        self.minutesAutoLogout = pSettings->minutesAutoLogout;
-        self.defaultCurrencyNum = pSettings->currencyNum;
-        if (pSettings->bitcoinDenomination.satoshi > 0)
-        {
-            self.denomination = pSettings->bitcoinDenomination.satoshi;
-            self.denominationType = pSettings->bitcoinDenomination.denominationType;
-
-            switch (self.denominationType) {
-                case ABC_DENOMINATION_BTC:
-                    self.denominationLabel = @"BTC";
-                    self.denominationLabelShort = @"Ƀ ";
-                    break;
-                case ABC_DENOMINATION_MBTC:
-                    self.denominationLabel = @"mBTC";
-                    self.denominationLabelShort = @"mɃ ";
-                    break;
-                case ABC_DENOMINATION_UBTC:
-                    self.denominationLabel = @"bits";
-                    self.denominationLabelShort = @"ƀ ";
-                    break;
-
-            }
-        }
-        self.firstName = pSettings->szFirstName ? [NSString stringWithUTF8String:pSettings->szFirstName] : nil;
-        self.lastName = pSettings->szLastName ? [NSString stringWithUTF8String:pSettings->szLastName] : nil;
-        self.nickName = pSettings->szNickname ? [NSString stringWithUTF8String:pSettings->szNickname] : nil;
-        self.fullName = pSettings->szFullName ? [NSString stringWithUTF8String:pSettings->szFullName] : nil;
-        self.strPIN   = pSettings->szPIN ? [NSString stringWithUTF8String:pSettings->szPIN] : nil;
-        self.bNameOnPayments = pSettings->bNameOnPayments;
-
-        [self loadLocalSettings:pSettings];
-
-        self.bSpendRequirePin = pSettings->bSpendRequirePin;
-        self.spendRequirePinSatoshis = pSettings->spendRequirePinSatoshis;
-        self.bDisablePINLogin = pSettings->bDisablePINLogin;
-    }
-    else
-    {
-        [Util printABC_Error:&Error];
-    }
-    ABC_FreeAccountSettings(pSettings);
+    self.airbitzCore = airbitzCore;
+    [self loadLocalSettings];
 }
+
+//    tABC_Error Error;
+//    tABC_AccountSettings *pSettings = NULL;
+//    tABC_CC result = ABC_LoadAccountSettings([self.name UTF8String],
+//                                             [self.password UTF8String],
+//                                             &pSettings,
+//                                             &Error);
+//    if (ABC_CC_Ok == result)
+//    {
+//        self.minutesAutoLogout = pSettings->minutesAutoLogout;
+//        self.defaultCurrencyNum = pSettings->currencyNum;
+//        if (pSettings->bitcoinDenomination.satoshi > 0)
+//        {
+//            self.denomination = pSettings->bitcoinDenomination.satoshi;
+//            self.denominationType = pSettings->bitcoinDenomination.denominationType;
+//
+//            switch (self.denominationType) {
+//                case ABC_DENOMINATION_BTC:
+//                    self.denominationLabel = @"BTC";
+//                    self.denominationLabelShort = @"Ƀ ";
+//                    break;
+//                case ABC_DENOMINATION_MBTC:
+//                    self.denominationLabel = @"mBTC";
+//                    self.denominationLabelShort = @"mɃ ";
+//                    break;
+//                case ABC_DENOMINATION_UBTC:
+//                    self.denominationLabel = @"bits";
+//                    self.denominationLabelShort = @"ƀ ";
+//                    break;
+//
+//            }
+//        }
+//        self.firstName = pSettings->szFirstName ? [NSString stringWithUTF8String:pSettings->szFirstName] : nil;
+//        self.lastName = pSettings->szLastName ? [NSString stringWithUTF8String:pSettings->szLastName] : nil;
+//        self.nickName = pSettings->szNickname ? [NSString stringWithUTF8String:pSettings->szNickname] : nil;
+//        self.fullName = pSettings->szFullName ? [NSString stringWithUTF8String:pSettings->szFullName] : nil;
+//        self.strPIN   = pSettings->szPIN ? [NSString stringWithUTF8String:pSettings->szPIN] : nil;
+//        self.bNameOnPayments = pSettings->bNameOnPayments;
+//
+//        [self loadLocalSettings:pSettings];
+//
+//        self.bSpendRequirePin = pSettings->bSpendRequirePin;
+//        self.spendRequirePinSatoshis = pSettings->spendRequirePinSatoshis;
+//        self.bDisablePINLogin = pSettings->bDisablePINLogin;
+//    }
+//    else
+//    {
+//        [Util printABC_Error:&Error];
+//    }
+//    ABC_FreeAccountSettings(pSettings);
+//}
 
 - (NSString *)userKey:(NSString *)base
 {
     return [NSString stringWithFormat:@"%@_%@", self.name, base];
 }
 
-- (void)loadLocalSettings:(tABC_AccountSettings *)pSettings
+- (void)loadLocalSettings
 {
     NSUserDefaults *localConfig = [NSUserDefaults standardUserDefaults];
     self.bDisclaimerViewed = [localConfig boolForKey:DISCLAIMER_VIEWED];
@@ -171,17 +168,8 @@ static User *singleton = nil;  // this will be the one and only object this stat
     self.bleViewCount = [localConfig integerForKey:BLE_VIEW_COUNT];
     self.walletsViewCount = [localConfig integerForKey:WALLETS_VIEW_COUNT];
 
-    if ([localConfig objectForKey:[self userKey:SPENDING_LIMIT_AMOUNT]]) {
-        self.dailySpendLimitSatoshis = [[localConfig objectForKey:[self userKey:SPENDING_LIMIT_AMOUNT]] unsignedLongLongValue];
-        self.bDailySpendLimit = [localConfig boolForKey:[self userKey:SPENDING_LIMIT_ENABLED]];
-    } else {
-        if (pSettings)
-        {
-            self.dailySpendLimitSatoshis = pSettings->dailySpendLimitSatoshis;
-            self.bDailySpendLimit = pSettings->bDailySpendLimit > 0;
-            [self saveLocalSettings];
-        }
-    }
+    self.dailySpendLimitSatoshis = [[localConfig objectForKey:[self userKey:SPENDING_LIMIT_AMOUNT]] unsignedLongLongValue];
+    self.bDailySpendLimit = [localConfig boolForKey:[self userKey:SPENDING_LIMIT_ENABLED]];
 }
 
 - (void)saveLocalSettings
@@ -211,12 +199,11 @@ static User *singleton = nil;  // this will be the one and only object this stat
     }
     [[NSUserDefaults standardUserDefaults] synchronize];
 
-    if ([User isLoggedIn])
+    if (self.airbitzCore && [self.airbitzCore isLoggedIn])
     {
-        [[AppDelegate abc] logout];
+        [_airbitzCore logout];
     }
-    self.password = nil;
-    self.name = nil;
+    self.airbitzCore = nil;
 }
 
 - (SendViewState)sendInvalidEntry
@@ -265,6 +252,8 @@ static User *singleton = nil;  // this will be the one and only object this stat
     return INVALID_ENTRY_WAIT - [current timeIntervalSinceDate:start];
 }
 
+
+// XXX make this a localsetting
 - (void)incPINorTouchIDLogin
 {
     tABC_Error error;
