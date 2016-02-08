@@ -73,16 +73,16 @@
 {
     [MainViewController changeNavBarOwner:self];
     
-    if (abc.arrayWallets && abc.currentWallet)
+    if (abc.arrayWallets && abcUser.currentWallet)
     {
         self.buttonSelector.arrayItemsToSelect = abc.arrayWalletNames;
-        [self.buttonSelector.button setTitle:abc.currentWallet.strName forState:UIControlStateNormal];
+        [self.buttonSelector.button setTitle:abcUser.currentWallet.strName forState:UIControlStateNormal];
         self.buttonSelector.selectedItemIndex = abc.currentWalletID;
         
-        NSString *walletName = [NSString stringWithFormat:navbarToWalletPrefixText, abc.currentWallet.strName];
+        NSString *walletName = [NSString stringWithFormat:navbarToWalletPrefixText, abcUser.currentWallet.strName];
         [MainViewController changeNavBarTitleWithButton:self title:walletName action:@selector(didTapTitle:) fromObject:self];
         
-        if (!([abc.arrayWallets containsObject:abc.currentWallet]))
+        if (!([abc.arrayWallets containsObject:abcUser.currentWallet]))
         {
             [FadingAlertView create:self.view
                             message:walletHasBeenArchivedText
@@ -99,7 +99,7 @@
 //    [MainViewController changeNavBar:self title:helpButtonText side:NAV_BAR_RIGHT button:true enable:false action:nil fromObject:self];
 //
 //    _walletSelector.arrayItemsToSelect = abc.arrayWalletNames;
-//    [_walletSelector.button setTitle:abc.currentWallet.strName forState:UIControlStateNormal];
+//    [_walletSelector.button setTitle:abcUser.currentWallet.strName forState:UIControlStateNormal];
 //    _walletSelector.selectedItemIndex = abc.currentWalletID;
 }
 
@@ -152,16 +152,15 @@
 {
     [self.view endEditing:YES];
 
-    ABCRequest  *request  = [ABCRequest alloc];
+    ABCRequest *request  = [ABCRequest alloc];
     
     if (_successUrl) {
         
-        request.walletUUID = abc.currentWallet.strUUID;
         request.payeeName = strName;
         request.category = strCategory;
         request.notes = strNotes;
 
-        [abc createReceiveRequestWithDetails:request];
+        [abcUser.currentWallet createReceiveRequestWithDetails:request];
         
         NSString *url = [_successUrl absoluteString];
         NSMutableString *query;

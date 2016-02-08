@@ -382,9 +382,9 @@ static BOOL bInitialized = false;
     [abc autoReloginOrTouchIDIfPossible:[abc getLastAccessedAccount] doBeforeLogin:^{
         [self showSpinner:YES];
         [MainViewController showBackground:YES animate:YES];
-    } completeWithLogin:^(BOOL usedTouchID) {
+    } completeWithLogin:^(ABCUser *user, BOOL usedTouchID) {
         _bUsedTouchIDToLogin = usedTouchID;
-        [self signInComplete];
+        [self signInComplete:user];
     } completeNoLogin:^{
         [self assignFirstResponder];
     } error:^(ABCConditionCode ccode, NSString *errorString) {
@@ -536,9 +536,9 @@ static BOOL bInitialized = false;
         [abc signIn:self.usernameSelector.textField.text
                          password:self.passwordTextField.text
                               otp:nil
-                         complete:^(void)
+                         complete:^(ABCUser *user)
          {
-             [self signInComplete];
+             [self signInComplete:user];
          }
                             error:^(ABCConditionCode ccode, NSString *errorString)
          {
@@ -557,8 +557,6 @@ static BOOL bInitialized = false;
              {
                  [MainViewController showBackground:NO animate:YES];
                  [MainViewController fadingAlert:errorString];
-                 abc.name = nil;
-                 abc.password = nil;
              }
          }];
 
@@ -1005,15 +1003,16 @@ static BOOL bInitialized = false;
     return NO;
 }
 
-- (void)signInComplete
+- (void)signInComplete:(ABCUser *)user
 {
+    abcUser = user;
     [self showSpinner:NO];
 
     [User login:self.usernameSelector.textField.text
        password:self.passwordTextField.text];
     [self.delegate loginViewControllerDidLogin:NO newDevice:_bNewDeviceLogin usedTouchID:_bUsedTouchIDToLogin];
 
-    if ([abc shouldAskUserToEnableTouchID])
+    if ([abcUser shouldAskUserToEnableTouchID])
     {
         //
         // Ask if they want TouchID enabled for this user on this device
@@ -1083,9 +1082,9 @@ static BOOL bInitialized = false;
          signIn:self.usernameSelector.textField.text
          password:self.passwordTextField.text
          otp:secret
-         complete:^(void)
+         complete:^(ABCUser *user)
          {
-             [self signInComplete];
+             [self signInComplete:user];
          }
          error:^(ABCConditionCode ccode, NSString *errorString)
          {

@@ -531,8 +531,8 @@ typedef enum eRequestType
         [abc storeTransaction: self.transaction];
     }
 
-    [abc postToTxSearchQueue:^{
-        if (_wallet && !_bOldTransaction && [abc needsRecoveryQuestionsReminder:_wallet]) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+        if (_wallet && !_bOldTransaction && [abcUser needsRecoveryQuestionsReminder]) {
             _recoveryAlert = [[UIAlertView alloc]
                                 initWithTitle:NSLocalizedString(@"Recovery Password Reminder", nil)
                                 message:NSLocalizedString(@"You've received Bitcoin! We STRONGLY recommend setting up Password Recovery questions and answers. Otherwise you will NOT be able to access your account if your password is forgotten.", nil)
@@ -547,7 +547,7 @@ typedef enum eRequestType
                 [self exit:YES];
             });
         }
-    }];
+    });
 }
 
 - (IBAction)PopupPickerViewSelected:(PopupPickerView *)view onRow:(NSInteger)row userData:(id)data

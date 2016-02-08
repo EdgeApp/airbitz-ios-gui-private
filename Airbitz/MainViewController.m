@@ -69,7 +69,7 @@ typedef enum eAppMode
                                   LoginViewControllerDelegate, SendViewControllerDelegate,
                                   TransactionDetailsViewControllerDelegate, UIAlertViewDelegate, FadingAlertViewDelegate, SlideoutViewDelegate,
                                   TwoFactorScanViewControllerDelegate, AddressRequestControllerDelegate, InfoViewDelegate, SignUpViewControllerDelegate,
-                                  MFMailComposeViewControllerDelegate, BuySellViewControllerDelegate,GiftCardViewControllerDelegate,CoreBridgeDelegate>
+                                  MFMailComposeViewControllerDelegate, BuySellViewControllerDelegate,GiftCardViewControllerDelegate,AirbitzCoreDelegate>
 {
 	DirectoryViewController     *_directoryViewController;
 	RequestViewController       *_requestViewController;
@@ -179,8 +179,6 @@ MainViewController *singleton;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(launchRequest:) name:NOTIFICATION_LAUNCH_REQUEST_FOR_WALLET object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(launchRecoveryQuestions:) name:NOTIFICATION_LAUNCH_RECOVERY_QUESTIONS object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleBitcoinUri:) name:NOTIFICATION_HANDLE_BITCOIN_URI object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyOtpRequired:) name:ABC_NOTIFICATION_OTP_REQUIRED object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyOtpSkew:) name:ABC_NOTIFICATION_OTP_SKEW object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(launchViewSweep:) name:NOTIFICATION_VIEW_SWEEP_TX object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayNextNotification) name:NOTIFICATION_NOTIFICATION_RECEIVED object:nil];
 
@@ -1131,7 +1129,7 @@ MainViewController *singleton;
 - (void)LoginViewControllerDidPINLogin
 {
     // if the user has a password, increment PIN login count
-    if ([abc passwordExists]) {
+    if ([abcUser passwordExists]) {
         [[User Singleton] incPINorTouchIDLogin];
     }
     
@@ -1186,7 +1184,7 @@ MainViewController *singleton;
     if (_uri) {
         [self processBitcoinURI:_uri];
         _uri = nil;
-    } else if (![abc passwordExists] && !bNewAccount) {
+    } else if (![abcUser passwordExists] && !bNewAccount) {
         [self showPasswordSetAlert];
     } else if ([User Singleton].needsPasswordCheck) {
         [self showPasswordCheckAlert];
@@ -1320,7 +1318,7 @@ MainViewController *singleton;
 {
 }
 
-#pragma mark - CoreBridgeDelegates
+#pragma mark - AirbitzCoreDelegates
 
 - (void) airbitzCoreWalletsLoading;
 {
@@ -1383,6 +1381,7 @@ MainViewController *singleton;
     [self resetViews];
     [MainViewController hideTabBarAnimated:NO];
     [MainViewController hideNavBarAnimated:NO];
+    abcUser = nil;
 }
 
 - (void) airbitzCoreDataSyncUpdate
@@ -1460,7 +1459,7 @@ MainViewController *singleton;
     //
     // If we just received money on the currentWallet then update the Widget's address & QRcode
     //
-    if ([_strWalletUUID isEqualToString:abc.currentWallet.strUUID])
+    if ([_strWalletUUID isEqualToString:abcUser.currentWallet.strUUID])
     {
         [self updateWidgetQRCode];
     }
@@ -1468,15 +1467,14 @@ MainViewController *singleton;
 
 - (void)updateWidgetQRCode;
 {
-    if (!abc.currentWallet || !abc.currentWallet.strUUID)
+    if (!abcUser.currentWallet || !abcUser.currentWallet.strUUID)
         return;
     
     ABCRequest *request = [[ABCRequest alloc] init];
     
-    request.walletUUID = abc.currentWallet.strUUID;
     request.payeeName = abc.settings.fullName;
 
-    ABCConditionCode ccode = [abc createReceiveRequestWithDetails:request complete:^
+    ABCConditionCode ccode = [abcUser.currentWallet createReceiveRequestWithDetails:request complete:^
     {
         if (ABCConditionCodeOk == ccode)
         {
@@ -1491,7 +1489,7 @@ MainViewController *singleton;
             
             [tempSharedUserDefs setObject:imageData forKey:APP_GROUP_LAST_QR_IMAGE_KEY];
             [tempSharedUserDefs setObject:request.address forKey:APP_GROUP_LAST_ADDRESS_KEY];
-            [tempSharedUserDefs setObject:abc.currentWallet.strName forKey:APP_GROUP_LAST_WALLET_KEY];
+            [tempSharedUserDefs setObject:abcUser.currentWallet.strName forKey:APP_GROUP_LAST_WALLET_KEY];
             [tempSharedUserDefs setObject:abc.name forKey:APP_GROUP_LAST_ACCOUNT_KEY];
             [tempSharedUserDefs synchronize];
         }
@@ -1601,6 +1599,7 @@ MainViewController *singleton;
     {
         _passwordChangeAlert = nil;
         [abc logout];
+        abcUser = nil;
     }
     else if (_otpRequiredAlert == alertView && buttonIndex == 1)
     {
@@ -2088,6 +2087,7 @@ MainViewController *singleton;
                    holdTime:FADING_ALERT_HOLD_TIME_FOREVER_WITH_SPINNER notify:^{
                 // Log the user out and reset UI
                 [abc logout];
+                       abcUser = nil;
 
                 [FadingAlertView dismiss:FadingAlertDismissFast];
             }];

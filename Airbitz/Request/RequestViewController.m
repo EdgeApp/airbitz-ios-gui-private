@@ -175,8 +175,8 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
     // create a dummy view to replace the keyboard if we are on a 4.5" screen
     UIView *dummyView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-    [self.segmentedControlBTCUSD setTitle:abc.settings.denominationLabel forSegmentAtIndex:1];
-    _btcLabel.text = abc.settings.denominationLabel;
+    [self.segmentedControlBTCUSD setTitle:abcUser.settings.denominationLabel forSegmentAtIndex:1];
+    _btcLabel.text = abcUser.settings.denominationLabel;
 
     self.BTC_TextField.inputView = dummyView;
     self.USD_TextField.inputView = dummyView;
@@ -205,7 +205,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     [self changeTopField:true animate:false];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViews:) name:NOTIFICATION_WALLETS_CHANGED object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(exchangeRateUpdate:) name:ABC_NOTIFICATION_EXCHANGE_RATE_CHANGE object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(exchangeRateUpdate:) name:NOTIFICATION_EXCHANGE_RATE_CHANGED object:nil];
 
     if ([[LocalSettings controller] offerRequestHelp]) {
         [MainViewController fadingAlertHelpPopup:NSLocalizedString(@"Present QR code to Sender and have them scan to send you payment",nil)];
@@ -221,20 +221,20 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
 - (void)updateViews:(NSNotification *)notification
 {
-    if (abc.arrayWallets && abc.currentWallet)
+    if (abcUser.arrayWallets && abcUser.currentWallet)
     {
-        self.buttonSelector.arrayItemsToSelect = abc.arrayWalletNames;
-        [self.buttonSelector.button setTitle:abc.currentWallet.strName forState:UIControlStateNormal];
-        self.buttonSelector.selectedItemIndex = abc.currentWalletID;
+        self.buttonSelector.arrayItemsToSelect = abcUser.arrayWalletNames;
+        [self.buttonSelector.button setTitle:abcUser.currentWallet.strName forState:UIControlStateNormal];
+        self.buttonSelector.selectedItemIndex = abcUser.currentWalletID;
 
-        NSString *walletName = [NSString stringWithFormat:@"To: %@ ▼", abc.currentWallet.strName];
+        NSString *walletName = [NSString stringWithFormat:@"To: %@ ▼", abcUser.currentWallet.strName];
         [MainViewController changeNavBarTitleWithButton:self title:walletName action:@selector(didTapTitle:) fromObject:self];
 
-        self.keypadView.currencyNum = abc.currentWallet.currencyNum;
+        self.keypadView.currencyNum = abcUser.currentWallet.currencyNum;
 
         [self updateTextFieldContents:YES];
 
-        if (!([abc.arrayWallets containsObject:abc.currentWallet]))
+        if (!([abcUser.arrayWallets containsObject:abcUser.currentWallet]))
         {
             self.textUnderQRCode.text = walletHasBeenArchivedText;
             self.qrCodeImageView.hidden = YES;
@@ -283,7 +283,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     if (self.qrTimer)
         [self.qrTimer invalidate];
 
-    [abc prioritizeAddress:nil inWallet:abc.currentWallet.strUUID];
+    [abcUser prioritizeAddress:nil inWallet:abcUser.currentWallet.strUUID];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -294,7 +294,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     {
         return NO;
     }
-    ABCTransaction *transaction = [abc getTransaction:walletUUID withTx:txId];
+    ABCTransaction *transaction = [abcUser getTransaction:walletUUID withTx:txId];
     for (ABCTxOutput *output in transaction.outputs)
     {
         if (!output.bInput 
@@ -372,11 +372,11 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
 - (IBAction)Refresh
 {
-    if (abc.arrayWallets && abc.currentWallet)
+    if (abcUser.arrayWallets && abcUser.currentWallet)
     {
         _refreshButton.hidden = YES;
         _refreshSpinner.hidden = NO;
-        [abc rotateWalletServer:abc.currentWallet.strUUID refreshData:NO notify:^
+        [abc rotateWalletServer:abcUser.currentWallet.strUUID refreshData:NO notify:^
         {
             [NSThread sleepForTimeInterval:2.0f];
             _refreshSpinner.hidden = YES;
@@ -464,7 +464,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
     BOOL mm = [LocalSettings controller].bMerchantMode;
     self.amountSatoshiReceived += incomingSatoshi;
-    self.amountSatoshiRequested = [abc denominationToSatoshi:self.BTC_TextField.text];
+    self.amountSatoshiRequested = [abcUser denominationToSatoshi:self.BTC_TextField.text];
     SInt64 remaining = self.amountSatoshiRequested;
 
     if (self.previousAmountSatoshiRequested != self.amountSatoshiRequested)
@@ -472,9 +472,9 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
         self.previousAmountSatoshiRequested = self.amountSatoshiRequested;
         bChangeRequest = true;
     }
-    if (previousWalletUUID != abc.currentWallet.strUUID)
+    if (previousWalletUUID != abcUser.currentWallet.strUUID)
     {
-        previousWalletUUID = abc.currentWallet.strUUID;
+        previousWalletUUID = abcUser.currentWallet.strUUID;
         bChangeRequest = true;
     }
     if (incomingSatoshi)
@@ -570,7 +570,6 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     }
 
     ABCWallet *wallet = [self getCurrentWallet];
-    NSString *strUUID = wallet.strUUID;
     NSNumber *nsRemaining = [NSNumber numberWithLongLong:remaining];
 
     //
@@ -580,7 +579,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     if (self.qrTimer)
         [self.qrTimer invalidate];
 
-    NSArray *args = [NSArray arrayWithObjects:strName,strUUID,strNotes,strCategory,nsRemaining,nil];
+    NSArray *args = [NSArray arrayWithObjects:strName,wallet,strNotes,strCategory,nsRemaining,nil];
 
     ABCLog(2,@"updateQRCode setTimer req=%llu", [nsRemaining longLongValue]);
     self.qrTimer = [NSTimer scheduledTimerWithTimeInterval:[Theme Singleton].qrCodeGenDelayTime target:self selector:@selector(updateQRAsync:) userInfo:args repeats:NO];
@@ -611,7 +610,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     int i = 0;
 
     NSString *strName = [args objectAtIndex:i++];
-    NSString *strUUID = [args objectAtIndex:i++];
+    ABCWallet *wallet = [args objectAtIndex:i++];
 
     NSString *strNotes = [args objectAtIndex:i++];
     NSString *strCategory = [args objectAtIndex:i++];
@@ -623,13 +622,12 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     ABCRequest *request = [ABCRequest alloc];
     ABCConditionCode ccode;
 
-    request.walletUUID      = strUUID;
     request.payeeName       = strName;
     request.category        = strCategory;
     request.notes           = strNotes;
     request.amountSatoshi   = remaining;
 
-    ccode = [abc createReceiveRequestWithDetails:request complete:^
+    ccode = [wallet createReceiveRequestWithDetails:request complete:^
     {
         UIImage *qrImage;
 
@@ -931,7 +929,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
 
 - (ABCWallet *) getCurrentWallet
 {
-    return abc.currentWallet;
+    return abcUser.currentWallet;
 }
 
 -(void)showConnectedPopup
@@ -1436,7 +1434,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
     NSDate *now = [NSDate date];
     
-    ABCWallet *wallet = abc.currentWallet;
+    ABCWallet *wallet = abcUser.currentWallet;
     self.abcRequest.amountSatoshi = _amountSatoshiRequested;
     
     double currency;

@@ -57,16 +57,11 @@ typedef enum eExportOption
 
 @property (weak, nonatomic) IBOutlet UIView                     *viewPassword;
 @property (weak, nonatomic) IBOutlet UITableView                *tableView;
-//@property (weak, nonatomic) IBOutlet UILabel        *labelFromDate;
-//@property (weak, nonatomic) IBOutlet UILabel        *labelToDate;
-//@property (weak, nonatomic) IBOutlet UIView			*viewHeader;
 @property (weak, nonatomic) IBOutlet ButtonSelectorView2        *buttonSelector;
 @property (nonatomic, weak) IBOutlet MinCharTextField           *passwordTextField;
 
 @property (nonatomic, strong) ExportWalletPDFViewController     *exportWalletPDFViewController;
 @property (nonatomic, strong) NSArray                           *arrayChoices;
-//@property (nonatomic, strong) NSArray                       *arrayWalletUUIDs;
-//@property (nonatomic, strong) NSArray                       *arrayWallets;
 
 @end
 
@@ -91,7 +86,7 @@ typedef enum eExportOption
 
     self.arrayChoices = [ARRAY_CHOICES_FOR_TYPES objectAtIndex:(NSUInteger) self.type];
 
-    if (![abc passwordExists]) {
+    if (![abcUser passwordExists]) {
         self.viewPassword.hidden = YES;
     } else if (WalletExportType_PrivateSeed == self.type) {
         self.viewPassword.hidden = NO;
@@ -145,17 +140,17 @@ typedef enum eExportOption
 
 - (void)updateViews
 {
-    if (abc.arrayWallets && abc.currentWallet)
+    if (abc.arrayWallets && abcUser.currentWallet)
     {
         self.buttonSelector.arrayItemsToSelect = abc.arrayWalletNames;
-        [self.buttonSelector.button setTitle:abc.currentWallet.strName forState:UIControlStateNormal];
+        [self.buttonSelector.button setTitle:abcUser.currentWallet.strName forState:UIControlStateNormal];
         self.buttonSelector.selectedItemIndex = abc.currentWalletID;
 
         NSString *walletName;
-        walletName = [NSString stringWithFormat:@"Export From: %@ ▼", abc.currentWallet.strName];
+        walletName = [NSString stringWithFormat:@"Export From: %@ ▼", abcUser.currentWallet.strName];
 
         [MainViewController changeNavBarTitleWithButton:self title:walletName action:@selector(didTapTitle) fromObject:self];
-        if (!([abc.arrayWallets containsObject:abc.currentWallet]))
+        if (!([abc.arrayWallets containsObject:abcUser.currentWallet]))
         {
             [FadingAlertView create:self.view
                             message:walletHasBeenArchivedText
@@ -303,7 +298,7 @@ typedef enum eExportOption
 
             NSString *strPrivateSeed = [[NSString alloc] initWithData:dataExport encoding:NSUTF8StringEncoding];
             NSMutableString *strBody = [[NSMutableString alloc] init];
-            [strBody appendFormat:@"Wallet: %@\n\n", abc.currentWallet.strName];
+            [strBody appendFormat:@"Wallet: %@\n\n", abcUser.currentWallet.strName];
             [strBody appendString:@"Private Seed:\n"];
             [strBody appendString:strPrivateSeed];
             [strBody appendString:@"\n\n"];
@@ -361,7 +356,7 @@ typedef enum eExportOption
         [strBody appendString:@"<html><body>\n"];
 
 //        [strBody appendString:NSLocalizedString(@"Attached are the transactions for the AirBitz Bitcoin Wallet: ", nil)];
-        [strBody appendString:abc.currentWallet.strName];
+        [strBody appendString:abcUser.currentWallet.strName];
         [strBody appendString:@"\n"];
         [strBody appendString:@"<br><br>\n"];
 
@@ -381,7 +376,7 @@ typedef enum eExportOption
         if (dataExport == nil)
             return;
 
-        NSString *strFilename = [NSString stringWithFormat:@"%@.%@", abc.currentWallet.strName, [self suffixFor:self.type]];
+        NSString *strFilename = [NSString stringWithFormat:@"%@.%@", abcUser.currentWallet.strName, [self suffixFor:self.type]];
         NSString *strMimeType = [self mimeTypeFor:self.type];
         [_mailComposer addAttachmentData:dataExport mimeType:strMimeType fileName:strFilename];
 
@@ -473,7 +468,7 @@ typedef enum eExportOption
         {
             NSMutableString *str = [[NSMutableString alloc] init];
             
-            ABCConditionCode ccode = [abc exportTransactionsToCSV:abc.currentWallet.strUUID csvString:str];
+            ABCConditionCode ccode = [abc exportTransactionsToCSV:abcUser.currentWallet.strUUID csvString:str];
             if (ABCConditionCodeOk == ccode)
             {
                 dataExport = [str dataUsingEncoding:NSUTF8StringEncoding];
@@ -518,7 +513,7 @@ typedef enum eExportOption
         {
             NSMutableString *str = [[NSMutableString alloc] init];
             
-            ABCConditionCode ccode = [abc exportWalletPrivateSeed:abc.currentWallet.strUUID seed:str];
+            ABCConditionCode ccode = [abc exportWalletPrivateSeed:abcUser.currentWallet.strUUID seed:str];
             if (ABCConditionCodeOk == ccode)
             {
                 dataExport = [str dataUsingEncoding:NSUTF8StringEncoding];
@@ -649,7 +644,7 @@ typedef enum eExportOption
 		NSData *dataExport = [self getExportDataInForm:self.type];
         if (dataExport == nil)
             return;
-		NSString *strFilename = [NSString stringWithFormat:@"%@.%@", abc.currentWallet.strName, [self suffixFor:self.type]];
+		NSString *strFilename = [NSString stringWithFormat:@"%@.%@", abcUser.currentWallet.strName, [self suffixFor:self.type]];
 		NSString *strMimeType = [self mimeTypeFor:self.type];
 		
 		[gDrive uploadFile:dataExport name:strFilename mimeType:strMimeType];
@@ -727,7 +722,7 @@ typedef enum eExportOption
     }
     else
     {
-        if ([abc passwordExists] && ![abc passwordOk:self.passwordTextField.text])
+        if ([abcUser passwordExists] && ![abc passwordOk:self.passwordTextField.text])
         {
             [MainViewController fadingAlert:NSLocalizedString(@"Incorrect password", nil)];
             [self.passwordTextField becomeFirstResponder];

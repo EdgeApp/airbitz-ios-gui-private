@@ -48,7 +48,7 @@
     [super viewDidLoad];
     self.passwordTextField.delegate = self;
     self.passwordTextField.minimumCharacters = [AirbitzCore getMinimumPasswordLength];
-    if (![abc passwordExists]) {
+    if (![abcUser passwordExists]) {
         self.passwordTextField.hidden = YES;
     }
 
@@ -64,14 +64,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tabBarButtonReselect:) name:NOTIFICATION_TAB_BAR_BUTTON_RESELECT object:nil];
 
     _dailySpendLimitSwitch.on = [User Singleton].bDailySpendLimit;
-    _dailySpendLimitField.text = [abc formatSatoshi:[User Singleton].dailySpendLimitSatoshis withSymbol:false];
+    _dailySpendLimitField.text = [abcUser formatSatoshi:[User Singleton].dailySpendLimitSatoshis withSymbol:false];
     _dailySpendLimitField.keyboardType = UIKeyboardTypeDecimalPad;
-    _dailyDenomination.text = abc.settings.denominationLabelShort;
+    _dailyDenomination.text = abcUser.settings.denominationLabelShort;
 
-    _pinSpendLimitSwitch.on = abc.settings.bSpendRequirePin > 0;
-    _pinSpendLimitField.text = [abc formatSatoshi:abc.settings.spendRequirePinSatoshis withSymbol:false];
+    _pinSpendLimitSwitch.on = abcUser.settings.bSpendRequirePin > 0;
+    _pinSpendLimitField.text = [abcUser formatSatoshi:abcUser.settings.spendRequirePinSatoshis withSymbol:false];
     _pinSpendLimitField.keyboardType = UIKeyboardTypeDecimalPad;
-    _pinDenomination.text = abc.settings.denominationLabelShort;
+    _pinDenomination.text = abcUser.settings.denominationLabelShort;
 
     [self switchFlipped:_dailySpendLimitSwitch];
     [self switchFlipped:_pinSpendLimitSwitch];

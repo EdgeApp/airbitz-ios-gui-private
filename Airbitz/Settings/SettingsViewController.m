@@ -861,7 +861,7 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
         {
 			cell.name.text = NSLocalizedString(@"PIN Re-Login", @"settings text");
             [cell.state setOn:!abc.settings.bDisablePINLogin animated:NO];
-            if ([abc passwordExists]) {
+            if ([abcUser passwordExists]) {
                 cell.state.userInteractionEnabled = YES;
             } else {
                 cell.state.userInteractionEnabled = NO;
@@ -875,7 +875,7 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
                 cell.state.userInteractionEnabled = NO;
                 [cell.state setOn:NO animated:NO];
             }
-            else if (![abc passwordExists])
+            else if (![abcUser passwordExists])
             {
                 cell.name.text = NSLocalizedString(@"TouchID: Set password first", @"settings text");
                 cell.state.userInteractionEnabled = NO;
@@ -890,7 +890,7 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
                 else
                     [cell.state setOn:NO animated:NO];
 
-                if ([abc passwordExists] && 1) {
+                if ([abcUser passwordExists] && 1) {
                     cell.state.userInteractionEnabled = YES;
                 } else {
                     cell.state.userInteractionEnabled = NO;

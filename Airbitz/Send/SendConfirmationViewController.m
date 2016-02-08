@@ -158,7 +158,7 @@
     _maxLocked = NO;
 
     // Should this be threaded?
-    _totalSentToday = [abc getTotalSentToday:abc.currentWallet];
+    _totalSentToday = [abc getTotalSentToday:abcUser.currentWallet];
 
     [self checkAuthorization];
     [_confirmationSlider resetIn:0.1];
@@ -172,7 +172,7 @@
                                                object:self.withdrawlPIN];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(exchangeRateUpdate:)
-                                                 name:ABC_NOTIFICATION_EXCHANGE_RATE_CHANGE
+                                                 name:NOTIFICATION_EXCHANGE_RATE_CHANGED
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViews:) name:NOTIFICATION_WALLETS_CHANGED object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(transactionDetailsExit) name:NOTIFICATION_TRANSACTION_DETAILS_EXITED object:nil];
@@ -193,20 +193,20 @@
 
 - (void)updateViews:(NSNotification *)notification
 {
-    if (abc.arrayWallets && abc.currentWallet)
+    if (abc.arrayWallets && abcUser.currentWallet)
     {
         self.walletSelector.arrayItemsToSelect = abc.arrayWalletNames;
-        [self.walletSelector.button setTitle:abc.currentWallet.strName forState:UIControlStateNormal];
+        [self.walletSelector.button setTitle:abcUser.currentWallet.strName forState:UIControlStateNormal];
         self.walletSelector.selectedItemIndex = abc.currentWalletID;
 
         if (_currencyNumOverride)
             self.keypadView.currencyNum = _currencyNum;
         else
-            self.keypadView.currencyNum = abc.currentWallet.currencyNum;
+            self.keypadView.currencyNum = abcUser.currentWallet.currencyNum;
 
-        NSString *walletName = [NSString stringWithFormat:@"From: %@ ▼", abc.currentWallet.strName];
+        NSString *walletName = [NSString stringWithFormat:@"From: %@ ▼", abcUser.currentWallet.strName];
         [MainViewController changeNavBarTitleWithButton:self title:walletName action:@selector(didTapTitle:) fromObject:self];
-        if (!([abc.arrayWallets containsObject:abc.currentWallet]))
+        if (!([abc.arrayWallets containsObject:abcUser.currentWallet]))
         {
             [FadingAlertView create:self.view
                             message:walletHasBeenArchivedText
@@ -289,7 +289,7 @@
     }
 
     _currencyNumOverride = NO;
-    _currencyNum = abc.currentWallet.currencyNum;
+    _currencyNum = abcUser.currentWallet.currencyNum;
     self.amountFiatLabel.textColor = [Theme Singleton].colorTextLinkOnDark;
     
     double currency;
@@ -417,14 +417,14 @@
 - (IBAction)selectMaxAmount
 {
     [self dismissErrorMessage];
-    if (abc.currentWallet != nil && _maxLocked == NO)
+    if (abcUser.currentWallet != nil && _maxLocked == NO)
     {
         _maxLocked = YES;
         _selectedTextField = self.amountBTCTextField;
 
         // We use a serial queue for this calculation
         [abc postToMiscQueue:^{
-            int64_t maxAmount = [_abcSpend maxSpendable:abc.currentWallet.strUUID];
+            int64_t maxAmount = [_abcSpend maxSpendable:abcUser.currentWallet.strUUID];
             dispatch_async(dispatch_get_main_queue(), ^{
                 _maxLocked = NO;
                 _maxAmount = maxAmount;
@@ -499,12 +499,12 @@
 
 - (void)initiateSendRequest
 {
-    if (abc.currentWallet)
+    if (abcUser.currentWallet)
     {
         [self performSelectorOnMainThread:@selector(showSendStatus:) withObject:nil waitUntilDone:FALSE];
         _callbackTimestamp = [[NSDate date] timeIntervalSince1970];
 
-        _abcSpend.srcWallet = abc.currentWallet;
+        _abcSpend.srcWallet = abcUser.currentWallet;
         _abcSpend.amountFiat = _overrideCurrency;
 
         if (_bSignOnly)
@@ -552,7 +552,7 @@
     
     self.transactionDetailsController.delegate = self;
     self.transactionDetailsController.transaction = transaction;
-    self.transactionDetailsController.wallet = abc.currentWallet;
+    self.transactionDetailsController.wallet = abcUser.currentWallet;
     if (_abcSpend.returnURL) {
         self.transactionDetailsController.returnUrl = _abcSpend.returnURL;
     }
@@ -686,7 +686,7 @@
         self.helpButton.hidden = YES;
         return;
     }
-    [_abcSpend calcSendFees:abc.currentWallet.strUUID complete:^(uint64_t totalFees) {
+    [_abcSpend calcSendFees:abcUser.currentWallet.strUUID complete:^(uint64_t totalFees) {
         [self updateFeeFieldContents:totalFees error:NO errorString:nil];
     } error:^(ABCConditionCode ccode, NSString *errorString) {
         [self updateFeeFieldContents:0 error:YES errorString:errorString];
