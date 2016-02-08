@@ -130,7 +130,7 @@
 //    self.buttonSelectorView.textLabel.text = NSLocalizedString(@"Currency:", @"name of button on wallets view");
     
     // Default currency for new wallets should be the currency set in the account settings
-    currencyNum = abc.settings.defaultCurrencyNum;
+    currencyNum = abcUser.settings.defaultCurrencyNum;
     currencyString = [abc currencyAbbrevLookup:currencyNum];
 //	[self.buttonSelectorView.button setTitle:currencyString forState:UIControlStateNormal];
 //    ABCLog(2,self.buttonSelectorView.button.currentTitle);

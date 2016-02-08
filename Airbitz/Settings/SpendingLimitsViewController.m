@@ -228,19 +228,19 @@
     if (bAuthenticated) {
         if (_dailySpendLimitSwitch.on) {
             [User Singleton].bDailySpendLimit = YES;
-            [User Singleton].dailySpendLimitSatoshis = [abc denominationToSatoshi:_dailySpendLimitField.text];
+            [User Singleton].dailySpendLimitSatoshis = [abcUser denominationToSatoshi:_dailySpendLimitField.text];
         } else {
             [User Singleton].bDailySpendLimit = NO;
         }
 
         if (_pinSpendLimitSwitch.on) {
-            abc.settings.bSpendRequirePin = true;
-            abc.settings.spendRequirePinSatoshis = [abc denominationToSatoshi:_pinSpendLimitField.text];
+            abcUser.settings.bSpendRequirePin = true;
+            abcUser.settings.spendRequirePinSatoshis = [abcUser denominationToSatoshi:_pinSpendLimitField.text];
         } else {
-            abc.settings.bSpendRequirePin = false;
+            abcUser.settings.bSpendRequirePin = false;
         }
         [[User Singleton] saveLocalSettings];
-        ABCConditionCode ccode = [abc.settings saveSettings];
+        ABCConditionCode ccode = [abcUser.settings saveSettings];
         if (!(ABCConditionCodeOk == ccode))
         {
             UIAlertView *alert =

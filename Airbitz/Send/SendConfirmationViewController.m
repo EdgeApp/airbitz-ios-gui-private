@@ -141,7 +141,7 @@
         NSAssert((_abcSpend.destWallet != nil), @"Empty destWallet");
         _destUUID = _abcSpend.destUUID;
         NSMutableArray *newArr = [[NSMutableArray alloc] init];
-        for (ABCWallet *w in abc.arrayWallets) {
+        for (ABCWallet *w in abcUser.arrayWallets) {
             if (![w.strName isEqualToString:_sendTo]) {
                 [newArr addObject:w];
             } else {
@@ -158,7 +158,7 @@
     _maxLocked = NO;
 
     // Should this be threaded?
-    _totalSentToday = [abc getTotalSentToday:abcUser.currentWallet];
+    _totalSentToday = [abcUser.currentWallet getTotalSentToday];
 
     [self checkAuthorization];
     [_confirmationSlider resetIn:0.1];
@@ -193,11 +193,11 @@
 
 - (void)updateViews:(NSNotification *)notification
 {
-    if (abc.arrayWallets && abcUser.currentWallet)
+    if (abcUser.arrayWallets && abcUser.currentWallet)
     {
-        self.walletSelector.arrayItemsToSelect = abc.arrayWalletNames;
+        self.walletSelector.arrayItemsToSelect = abcUser.arrayWalletNames;
         [self.walletSelector.button setTitle:abcUser.currentWallet.strName forState:UIControlStateNormal];
-        self.walletSelector.selectedItemIndex = abc.currentWalletID;
+        self.walletSelector.selectedItemIndex = abcUser.currentWalletID;
 
         if (_currencyNumOverride)
             self.keypadView.currencyNum = _currencyNum;
@@ -206,7 +206,7 @@
 
         NSString *walletName = [NSString stringWithFormat:@"From: %@ ▼", abcUser.currentWallet.strName];
         [MainViewController changeNavBarTitleWithButton:self title:walletName action:@selector(didTapTitle:) fromObject:self];
-        if (!([abc.arrayWallets containsObject:abcUser.currentWallet]))
+        if (!([abcUser.arrayWallets containsObject:abcUser.currentWallet]))
         {
             [FadingAlertView create:self.view
                             message:walletHasBeenArchivedText
@@ -271,7 +271,7 @@
 {
     [super viewWillAppear:animated];
 //    [self.view addGestureRecognizer:tap];
-    self.amountBTCTextField.text = [abc formatSatoshi:_abcSpend.amount withSymbol:false];
+    self.amountBTCTextField.text = [abcUser formatSatoshi:_abcSpend.amount withSymbol:false];
     self.maxAmountButton.hidden = ![_abcSpend isMutable];
 
     NSString *prefix;
@@ -294,7 +294,7 @@
     
     double currency;
 
-    ABCConditionCode ccode = [abc satoshiToCurrency:_abcSpend.amount currencyNum:_currencyNum currency:&currency];
+    ABCConditionCode ccode = [abcUser satoshiToCurrency:_abcSpend.amount currencyNum:_currencyNum currency:&currency];
 
     if(ABCConditionCodeOk == ccode)
     {
@@ -423,13 +423,13 @@
         _selectedTextField = self.amountBTCTextField;
 
         // We use a serial queue for this calculation
-        [abc postToMiscQueue:^{
+        [abcUser postToMiscQueue:^{
             int64_t maxAmount = [_abcSpend maxSpendable:abcUser.currentWallet.strUUID];
             dispatch_async(dispatch_get_main_queue(), ^{
                 _maxLocked = NO;
                 _maxAmount = maxAmount;
                 _abcSpend.amount = maxAmount;
-                self.amountBTCTextField.text = [abc formatSatoshi:_abcSpend.amount withSymbol:false];
+                self.amountBTCTextField.text = [abcUser formatSatoshi:_abcSpend.amount withSymbol:false];
 
                 [self updateTextFieldContents];
                 if (_pinRequired || _passwordRequired) {
@@ -602,7 +602,7 @@
     }
     ABCWallet *wallet = params[0];
     NSString *txId = params[1];
-    ABCTransaction *transaction = [abc getTransaction:wallet.strUUID withTx:txId];
+    ABCTransaction *transaction = [wallet getTransaction:txId];
     [self launchTransactionDetailsWithTransaction:wallet withTx:transaction];
 }
 
@@ -613,8 +613,8 @@
 
     if (_selectedTextField == self.amountBTCTextField)
     {
-        _abcSpend.amount = [abc denominationToSatoshi: self.amountBTCTextField.text];
-        if ([abc satoshiToCurrency:_abcSpend.amount currencyNum:_currencyNum currency:&currency] == ABCConditionCodeOk)
+        _abcSpend.amount = [abcUser denominationToSatoshi: self.amountBTCTextField.text];
+        if ([abcUser satoshiToCurrency:_abcSpend.amount currencyNum:_currencyNum currency:&currency] == ABCConditionCodeOk)
         {
             self.amountFiatTextField.text = [NSString stringWithFormat:@"%.2f", currency];
         }
@@ -626,13 +626,13 @@
         if (ABCConditionCodeOk == ccode)
         {
             _abcSpend.amount = satoshi;
-            self.amountBTCTextField.text = [abc formatSatoshi:satoshi
+            self.amountBTCTextField.text = [abcUser formatSatoshi:satoshi
                                                           withSymbol:false
                                                     cropDecimals:[abc currencyDecimalPlaces]];
         }
     }
-    self.amountBTCSymbol.text = abc.settings.denominationLabelShort;
-    self.amountBTCLabel.text = abc.settings.denominationLabel;
+    self.amountBTCSymbol.text = abcUser.settings.denominationLabelShort;
+    self.amountBTCLabel.text = abcUser.settings.denominationLabel;
     self.amountFiatSymbol.text = [abc currencySymbolLookup:_currencyNum];
     self.amountFiatLabel.text = [abc currencyAbbrevLookup:_currencyNum];
     self.conversionLabel.text = [abc conversionStringFromNum:_currencyNum withAbbrev:YES];
@@ -655,8 +655,8 @@
         _withdrawlPIN.keyboardType = UIKeyboardTypeDefault;
         _imagePINEmboss.hidden = NO;
     } else if (!_bAddressIsWalletUUID
-                && abc.settings.bSpendRequirePin
-                && _abcSpend.amount >= abc.settings.spendRequirePinSatoshis
+                && abcUser.settings.bSpendRequirePin
+                && _abcSpend.amount >= abcUser.settings.spendRequirePinSatoshis
                 && ![abc recentlyLoggedIn]) {
         // Show PIN pad
         _pinRequired = YES;
@@ -719,14 +719,14 @@
         NSMutableString *coinFeeString = [[NSMutableString alloc] init];
         NSMutableString *fiatFeeString = [[NSMutableString alloc] init];
         [coinFeeString appendString:@"+ "];
-        [coinFeeString appendString:[abc formatSatoshi:txFees withSymbol:false]];
+        [coinFeeString appendString:[abcUser formatSatoshi:txFees withSymbol:false]];
         [coinFeeString appendString:@" "];
-        [coinFeeString appendString:abc.settings.denominationLabel];
+        [coinFeeString appendString:abcUser.settings.denominationLabel];
 
-        if ([abc satoshiToCurrency:txFees currencyNum:_currencyNum currency:&currencyFees])
+        if ([abcUser satoshiToCurrency:txFees currencyNum:_currencyNum currency:&currencyFees])
         {
             [fiatFeeString appendString:@"+ "];
-            [fiatFeeString appendString:[abc formatCurrency:currencyFees
+            [fiatFeeString appendString:[abcUser formatCurrency:currencyFees
                                                    withCurrencyNum:_currencyNum
                                                         withSymbol:false]];
             [fiatFeeString appendString:@" "];
@@ -841,7 +841,7 @@
 {
     NSIndexPath *indexPath = [[NSIndexPath alloc]init];
     indexPath = [NSIndexPath indexPathForItem:itemIndex inSection:0];
-    [abc makeCurrentWalletWithIndex:indexPath];
+    [abcUser makeCurrentWalletWithIndex:indexPath];
     bWalletListDropped = false;
 }
 
@@ -892,7 +892,7 @@
             return;
         }
 
-        NSString *PIN = abc.settings.strPIN;
+        NSString *PIN = abcUser.settings.strPIN;
         if (_pinRequired && ![self.withdrawlPIN.text isEqualToString:PIN]) {
             if (kInvalidEntryWait == [user sendInvalidEntry])
             {

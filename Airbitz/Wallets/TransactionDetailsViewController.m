@@ -326,7 +326,7 @@ typedef enum eRequestType
         if (self.transaction.amountFiat == 0)
         {
             double currency;
-            if ([abc satoshiToCurrency:self.transaction.amountSatoshi currencyNum:_wallet.currencyNum currency:&currency] == ABCConditionCodeOk)
+            if ([abcUser satoshiToCurrency:self.transaction.amountSatoshi currencyNum:_wallet.currencyNum currency:&currency] == ABCConditionCodeOk)
             self.fiatTextField.text = [NSString stringWithFormat:@"%.2f", currency];
         }
         else
@@ -344,19 +344,19 @@ typedef enum eRequestType
     if (self.transaction.amountSatoshi < 0)
     {
         [coinFormatted appendString:
-            [abc formatSatoshi:self.transaction.amountSatoshi + (self.transaction.minerFees + self.transaction.abFees) withSymbol:false]];
+            [abcUser formatSatoshi:self.transaction.amountSatoshi + (self.transaction.minerFees + self.transaction.abFees) withSymbol:false]];
 
         [feeFormatted appendFormat:@"+%@ fee",
-         [abc formatSatoshi:self.transaction.minerFees + self.transaction.abFees withSymbol:false]];
+         [abcUser formatSatoshi:self.transaction.minerFees + self.transaction.abFees withSymbol:false]];
     }
     else
     {
         [coinFormatted appendString:
-            [abc formatSatoshi:self.transaction.amountSatoshi withSymbol:false]];
+            [abcUser formatSatoshi:self.transaction.amountSatoshi withSymbol:false]];
     }
     self.labelFee.text = feeFormatted;
     self.bitCoinLabel.text = coinFormatted;
-    self.labelBTC.text = abc.settings.denominationLabel;
+    self.labelBTC.text = abcUser.settings.denominationLabel;
     
     
     if (self.categoryButton.titleLabel.text == nil)
@@ -607,7 +607,7 @@ typedef enum eRequestType
         [baseUrl appendString:@"https://insight.bitpay.com/"];
     }
     for (ABCTxOutput *t in self.transaction.outputs) {
-        NSString *val = [abc formatSatoshi:t.value];
+        NSString *val = [abcUser formatSatoshi:t.value];
         NSString *html = [NSString stringWithFormat:@("<div class=\"wrapped\"><a href=\"%@/address/%@\">%@</a></div><div>%@</div>"),
                           baseUrl, t.strAddress, t.strAddress, val];
         if (t.bInput) {
@@ -623,13 +623,13 @@ typedef enum eRequestType
     //transaction ID
     content = [content stringByReplacingOccurrencesOfString:@"*1" withString:txIdLink];
     //Total sent
-    content = [content stringByReplacingOccurrencesOfString:@"*2" withString:[abc formatSatoshi:totalSent]];
+    content = [content stringByReplacingOccurrencesOfString:@"*2" withString:[abcUser formatSatoshi:totalSent]];
     //source
     content = [content stringByReplacingOccurrencesOfString:@"*3" withString:inAddresses];
     //Destination
     content = [content stringByReplacingOccurrencesOfString:@"*4" withString:outAddresses];
     //Miner Fee
-    content = [content stringByReplacingOccurrencesOfString:@"*5" withString:[abc formatSatoshi:fees]];
+    content = [content stringByReplacingOccurrencesOfString:@"*5" withString:[abcUser formatSatoshi:fees]];
     [Util replaceHtmlTags:&content];
     iv.htmlInfoToDisplay = content;
     [self.view addSubview:iv];

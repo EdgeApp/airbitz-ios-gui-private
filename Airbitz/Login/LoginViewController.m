@@ -1273,12 +1273,12 @@ static BOOL bInitialized = false;
     {
         if (0 == buttonIndex)
         {
-            [abc.settings disableTouchID];
+            [abcUser.settings disableTouchID];
         }
         else
         {
             if ([abc.password length] > 0)
-                [abc.settings enableTouchID];
+                [abcUser.settings enableTouchID];
             else
             {
                 [self showPasswordCheckAlertForTouchID];
@@ -1295,7 +1295,7 @@ static BOOL bInitialized = false;
             // Need to disable TouchID in settings.
             //
             // Disable TouchID in LocalSettings
-            [abc.settings disableTouchID];
+            [abcUser.settings disableTouchID];
             [MainViewController fadingAlert:NSLocalizedString(@"Touch ID Disabled", nil)];
         }
         else
@@ -1318,7 +1318,7 @@ static BOOL bInitialized = false;
         if (buttonIndex == 0)
         {
             [MainViewController fadingAlert:NSLocalizedString(@"Touch ID Disabled", nil)];
-            [abc.settings disableTouchID];
+            [abcUser.settings disableTouchID];
         }
         else if (buttonIndex == 1)
         {
@@ -1395,7 +1395,7 @@ static BOOL bInitialized = false;
         [MainViewController fadingAlert:NSLocalizedString(@"Touch ID Enabled", nil)];
 
         // Enable Touch ID
-        [abc.settings enableTouchID];
+        [abcUser.settings enableTouchID];
 
     }
     else

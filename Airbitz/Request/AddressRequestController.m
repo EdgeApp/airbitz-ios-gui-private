@@ -73,16 +73,16 @@
 {
     [MainViewController changeNavBarOwner:self];
     
-    if (abc.arrayWallets && abcUser.currentWallet)
+    if (abcUser.arrayWallets && abcUser.currentWallet)
     {
-        self.buttonSelector.arrayItemsToSelect = abc.arrayWalletNames;
+        self.buttonSelector.arrayItemsToSelect = abcUser.arrayWalletNames;
         [self.buttonSelector.button setTitle:abcUser.currentWallet.strName forState:UIControlStateNormal];
-        self.buttonSelector.selectedItemIndex = abc.currentWalletID;
+        self.buttonSelector.selectedItemIndex = abcUser.currentWalletID;
         
         NSString *walletName = [NSString stringWithFormat:navbarToWalletPrefixText, abcUser.currentWallet.strName];
         [MainViewController changeNavBarTitleWithButton:self title:walletName action:@selector(didTapTitle:) fromObject:self];
         
-        if (!([abc.arrayWallets containsObject:abcUser.currentWallet]))
+        if (!([abcUser.arrayWallets containsObject:abcUser.currentWallet]))
         {
             [FadingAlertView create:self.view
                             message:walletHasBeenArchivedText
@@ -98,9 +98,9 @@
 //    [MainViewController changeNavBar:self title:backButtonText side:NAV_BAR_LEFT button:true enable:false action:nil fromObject:self];
 //    [MainViewController changeNavBar:self title:helpButtonText side:NAV_BAR_RIGHT button:true enable:false action:nil fromObject:self];
 //
-//    _walletSelector.arrayItemsToSelect = abc.arrayWalletNames;
+//    _walletSelector.arrayItemsToSelect = abcUser.arrayWalletNames;
 //    [_walletSelector.button setTitle:abcUser.currentWallet.strName forState:UIControlStateNormal];
-//    _walletSelector.selectedItemIndex = abc.currentWalletID;
+//    _walletSelector.selectedItemIndex = abcUser.currentWalletID;
 }
 
 - (void)didTapTitle: (UIButton *)sender
@@ -194,7 +194,7 @@
 {
     NSIndexPath *indexPath = [[NSIndexPath alloc]init];
     indexPath = [NSIndexPath indexPathForItem:itemIndex inSection:0];
-    [abc makeCurrentWalletWithIndex:indexPath];
+    [abcUser makeCurrentWalletWithIndex:indexPath];
     
     bWalletListDropped = false;
 }

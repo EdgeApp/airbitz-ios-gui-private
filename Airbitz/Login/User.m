@@ -76,10 +76,10 @@ static User *singleton = nil;  // this will be the one and only object this stat
     {
         [self clear];
     }
-    abc.settings.denomination = 100000000;
-    abc.settings.denominationType = ABCDenominationUBTC;
-    abc.settings.denominationLabel = @"bits";
-    abc.settings.denominationLabelShort = @"Ƀ ";
+    abcUser.settings.denomination = 100000000;
+    abcUser.settings.denominationType = ABCDenominationUBTC;
+    abcUser.settings.denominationLabel = @"bits";
+    abcUser.settings.denominationLabelShort = @"Ƀ ";
     self.sendInvalidEntryCount = 0;
     self.sendState = kNormal;
     self.runLoop = [NSRunLoop currentRunLoop];

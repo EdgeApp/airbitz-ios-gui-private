@@ -1026,18 +1026,18 @@ MainViewController *singleton;
     NSString *walletsLoading;
     if (![User isLoggedIn]) return;
     
-    if (!abc.arrayWallets || abc.arrayWallets.count == 0)
+    if (!abcUser.arrayWallets || abcUser.arrayWallets.count == 0)
     {
         walletsLoading = [NSString stringWithFormat:@"%@\n\n%@",
                           loadingAccountText,
                           loadingWalletsNewDeviceText];
     }
-    else if (!abc.bAllWalletsLoaded && abc.arrayWallets && abc.numTotalWallets > 0)
+    else if (!abcUser.bAllWalletsLoaded && abcUser.arrayWallets && abcUser.numTotalWallets > 0)
     {
         walletsLoading = [NSString stringWithFormat:@"%@\n\n%d of %d\n\n%@",
                           loadingWalletsText,
-                          abc.numWalletsLoaded + 1,
-                          abc.numTotalWallets,
+                          abcUser.numWalletsLoaded + 1,
+                          abcUser.numTotalWallets,
                           loadingWalletsNewDeviceText];
     }
     else
@@ -1282,13 +1282,13 @@ MainViewController *singleton;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
         if ([User isLoggedIn] &&
-                abc.arrayWallets != nil &&
+                abcUser.arrayWallets != nil &&
                 abc.arrayArchivedWallets != nil)
         {
             int transactionCount = 0;
             NSDate *date = [NSDate date];
 
-            for (ABCWallet *curWallet in abc.arrayWallets)
+            for (ABCWallet *curWallet in abcUser.arrayWallets)
             {
                 transactionCount += [curWallet.arrayTransactions count];
                 for (ABCTransaction *t in curWallet.arrayTransactions) {
@@ -1325,18 +1325,18 @@ MainViewController *singleton;
     NSString *walletsLoading;
     if (![User isLoggedIn]) return;
     
-    if (!abc.arrayWallets || abc.arrayWallets.count == 0)
+    if (!abcUser.arrayWallets || abcUser.arrayWallets.count == 0)
     {
         walletsLoading = [NSString stringWithFormat:@"%@\n\n%@",
                           loadingAccountText,
                           loadingWalletsNewDeviceText];
     }
-    else if (!abc.bAllWalletsLoaded && abc.arrayWallets && abc.numTotalWallets > 0)
+    else if (!abcUser.bAllWalletsLoaded && abcUser.arrayWallets && abcUser.numTotalWallets > 0)
     {
         walletsLoading = [NSString stringWithFormat:@"%@\n\n%d of %d\n\n%@",
                           loadingWalletsText,
-                          abc.numWalletsLoaded + 1,
-                          abc.numTotalWallets,
+                          abcUser.numWalletsLoaded + 1,
+                          abcUser.numTotalWallets,
                           loadingWalletsNewDeviceText];
     }
     else
@@ -1472,7 +1472,7 @@ MainViewController *singleton;
     
     ABCRequest *request = [[ABCRequest alloc] init];
     
-    request.payeeName = abc.settings.fullName;
+    request.payeeName = abcUser.settings.fullName;
 
     ABCConditionCode ccode = [abcUser.currentWallet createReceiveRequestWithDetails:request complete:^
     {
@@ -1516,13 +1516,13 @@ MainViewController *singleton;
     double currency;
     int64_t satoshi = transaction.amountSatoshi;
     
-    if ([abc satoshiToCurrency:satoshi currencyNum:wallet.currencyNum currency:&currency] == ABCConditionCodeOk)
-        fiat = [abc formatCurrency:currency withCurrencyNum:wallet.currencyNum withSymbol:true];
+    if ([abcUser satoshiToCurrency:satoshi currencyNum:wallet.currencyNum currency:&currency] == ABCConditionCodeOk)
+        fiat = [abcUser formatCurrency:currency withCurrencyNum:wallet.currencyNum withSymbol:true];
     
     currency = fabs(transaction.amountFiat);
     
     if ([abc currencyToSatoshi:currency currencyNum:wallet.currencyNum satoshi:&satoshi] == ABCConditionCodeOk)
-        coin = [abc formatSatoshi:satoshi withSymbol:false cropDecimals:[abc currencyDecimalPlaces]];
+        coin = [abcUser formatSatoshi:satoshi withSymbol:false cropDecimals:[abc currencyDecimalPlaces]];
 
 
     if (receiveCount <= 2 && ([LocalSettings controller].bMerchantMode == false))
@@ -1787,7 +1787,7 @@ MainViewController *singleton;
         {
             NSDictionary *dictData = [notification userInfo];
             _strWalletUUID = [dictData objectForKey:KEY_TX_DETAILS_EXITED_WALLET_UUID];
-            [abc makeCurrentWalletWithUUID:_strWalletUUID];
+            [abcUser makeCurrentWalletWithUUID:_strWalletUUID];
         }
 
 //        [_transactionsViewController resetViews];

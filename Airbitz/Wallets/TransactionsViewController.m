@@ -275,7 +275,7 @@
 
 - (void)updateViews:(NSNotification *)notification
 {
-    if (abc.arrayWallets
+    if (abcUser.arrayWallets
             && abcUser.currentWallet
             && abcUser.currentWallet.loaded)
     {
@@ -292,8 +292,8 @@
 {
     [self.walletsTable reloadData];
 
-    [self.balanceHeaderView.segmentedControlBTCUSD setTitle:abc.settings.denominationLabel forSegmentAtIndex:0];
-    [self.balanceHeaderView.segmentedControlBTCUSD setTitle:[abc currencyAbbrevLookup:abc.settings.defaultCurrencyNum]
+    [self.balanceHeaderView.segmentedControlBTCUSD setTitle:abcUser.settings.denominationLabel forSegmentAtIndex:0];
+    [self.balanceHeaderView.segmentedControlBTCUSD setTitle:[abc currencyAbbrevLookup:abcUser.settings.defaultCurrencyNum]
                                           forSegmentAtIndex:1];
 
     if (_balanceView.barIsUp)
@@ -305,7 +305,7 @@
     //
     // Update balance view in the wallet dropdown.
     //
-    for(ABCWallet * wallet in abc.arrayWallets)
+    for(ABCWallet * wallet in abcUser.arrayWallets)
     {
         totalSatoshi += wallet.balance;
     }
@@ -416,7 +416,7 @@
 
 - (void)updateBalanceView //
 {
-    if (nil == abc.arrayWallets ||
+    if (nil == abcUser.arrayWallets ||
             nil == abcUser.currentWallet)
         return;
 
@@ -425,14 +425,14 @@
     {
         totalSatoshi += tx.amountSatoshi;
     }
-    _balanceView.topAmount.text = [abc formatSatoshi: totalSatoshi];
+    _balanceView.topAmount.text = [abcUser formatSatoshi: totalSatoshi];
 
     double currency;
 
-    [abc satoshiToCurrency:totalSatoshi currencyNum:abcUser.currentWallet.currencyNum currency:&currency];
-    _balanceView.botAmount.text = [abc formatCurrency:currency
+    [abcUser satoshiToCurrency:totalSatoshi currencyNum:abcUser.currentWallet.currencyNum currency:&currency];
+    _balanceView.botAmount.text = [abcUser formatCurrency:currency
                                              withCurrencyNum:abcUser.currentWallet.currencyNum];
-    _balanceView.topDenomination.text = abc.settings.denominationLabel;
+    _balanceView.topDenomination.text = abcUser.settings.denominationLabel;
     NSAssert(abcUser.currentWallet.currencyAbbrev.length > 0, @"currencyAbbrev not set");
     _balanceView.botDenomination.text = abcUser.currentWallet.currencyAbbrev;
 
@@ -491,7 +491,7 @@
     if (wallet)
         return [self formatAmount:satoshi useFiat:bFiat currencyNum:wallet.currencyNum];
     else
-        return [self formatAmount:satoshi useFiat:bFiat currencyNum:abc.settings.defaultCurrencyNum];
+        return [self formatAmount:satoshi useFiat:bFiat currencyNum:abcUser.settings.defaultCurrencyNum];
 }
 
 
@@ -514,13 +514,13 @@
     if (bFiat)
     {
         double currency;
-        [abc satoshiToCurrency:satoshi currencyNum:currencyNum currency:&currency];
-        return [abc formatCurrency:currency
+        [abcUser satoshiToCurrency:satoshi currencyNum:currencyNum currency:&currency];
+        return [abcUser formatCurrency:currency
                           withCurrencyNum:currencyNum];
     }
     else
     {
-        return [abc formatSatoshi:satoshi];
+        return [abcUser formatSatoshi:satoshi];
     }
 }
 
@@ -732,7 +732,7 @@
             return NO;
         if (indexPath.section == WALLET_SECTION_ACTIVE)
         {
-            if ([abc.arrayWallets count] == 1)
+            if ([abcUser.arrayWallets count] == 1)
                 return NO;
             else
                 return YES;
@@ -749,7 +749,7 @@
     // If there is only 1 wallet left in the active wallets table, prohibit moving
     if (tableView == self.walletsTable)
     {
-        if (sourceIndexPath.section == WALLET_SECTION_ACTIVE && sourceIndexPath.row == 0 && [abc.arrayWallets count] == 1)
+        if (sourceIndexPath.section == WALLET_SECTION_ACTIVE && sourceIndexPath.row == 0 && [abcUser.arrayWallets count] == 1)
         {
             return sourceIndexPath;
         }
@@ -795,7 +795,7 @@
         }
         else if (section == WALLET_SECTION_ARCHIVED)
         {
-            if (([abc.arrayArchivedWallets count] >= 1) || ([abc.arrayWallets count] > 1))
+            if (([abc.arrayArchivedWallets count] >= 1) || ([abcUser.arrayWallets count] > 1))
                 return [Theme Singleton].heightWalletHeader;
         }
 
@@ -863,7 +863,7 @@
             case WALLET_SECTION_BALANCE:
                 return 0;
             case WALLET_SECTION_ACTIVE:
-                return abc.arrayWallets.count;
+                return abcUser.arrayWallets.count;
 
             case WALLET_SECTION_ARCHIVED:
                 if(_archiveCollapsed)
@@ -1107,7 +1107,7 @@
         NSIndexPath *setIndexPath = [[NSIndexPath alloc]init];
         setIndexPath = [NSIndexPath indexPathForItem:indexPath.row inSection:indexPath.section - WALLET_SECTION_ACTIVE];
 
-        [abc makeCurrentWalletWithIndex:setIndexPath];
+        [abcUser makeCurrentWalletWithIndex:setIndexPath];
         [self toggleWalletDropdown:nil];
 
     }
@@ -1265,7 +1265,7 @@
         ABCLog(2,@"long press on table view at section %d, row %d", (int) indexPath.section, (int) indexPath.row);
         if (indexPath.section == WALLET_SECTION_ACTIVE)
         {
-            longTapWallet = [abc.arrayWallets objectAtIndex:indexPath.row];
+            longTapWallet = [abcUser.arrayWallets objectAtIndex:indexPath.row];
         }
         else if (indexPath.section == WALLET_SECTION_ARCHIVED)
         {
@@ -1274,7 +1274,7 @@
         NSString *deleteText = nil;
 
         // Only allow wallet delete if this wallet is archived or if there is another non-archived wallet
-        if ([abc.arrayWallets count] > 1 ||
+        if ([abcUser.arrayWallets count] > 1 ||
                 longTapWallet.archived)
         {
             deleteText = deleteWalletText;
@@ -1383,7 +1383,7 @@
 
     cell.selectionStyle = UITableViewCellSelectionStyleBlue;
 
-    if (nil == abc.arrayWallets)
+    if (nil == abcUser.arrayWallets)
         return cell;
 
     ABCWallet *wallet;
@@ -1394,7 +1394,7 @@
             NSAssert(0, @"No wallets in balance section");
             break;
         case WALLET_SECTION_ACTIVE:
-            wallet = [abc.arrayWallets objectAtIndex:row];
+            wallet = [abcUser.arrayWallets objectAtIndex:row];
             break;
         case WALLET_SECTION_ARCHIVED:
             wallet = [abc.arrayArchivedWallets objectAtIndex:row];
@@ -1415,7 +1415,7 @@
     cell.amount.text = [self formatAmount:wallet];
 
     // If there is only 1 wallet left in the active wallets table, prohibit moving
-    if (indexPath.section == WALLET_SECTION_ACTIVE && [abc.arrayWallets count] == 1)
+    if (indexPath.section == WALLET_SECTION_ACTIVE && [abcUser.arrayWallets count] == 1)
     {
         [cell setEditing:NO];
     }

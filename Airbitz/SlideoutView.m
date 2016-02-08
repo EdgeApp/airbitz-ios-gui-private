@@ -135,7 +135,7 @@
             [self.accountPicker setAccessoryImage:[UIImage imageNamed:@"btn_close.png"]];
             [self.accountPicker setRoundedAndShadowed:NO];
 
-            int num = abc.settings.defaultCurrencyNum;
+            int num = abcUser.settings.defaultCurrencyNum;
 
             self.conversionText.text = [abc conversionStringFromNum:num withAbbrev:YES];
 

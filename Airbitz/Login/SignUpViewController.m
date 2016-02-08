@@ -694,7 +694,7 @@
     if (success)
     {
         // set up the user password to the new one
-        NSString *username = abc.name;
+        NSString *username = abcUser.name;
         if (self.strUserName) {
             username = self.strUserName;
         }
