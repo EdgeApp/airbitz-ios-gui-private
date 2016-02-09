@@ -256,9 +256,9 @@
     [self.toolbarBlur setTranslucent:[Theme Singleton].bTranslucencyEnable];
     self.walletMakerView.alpha = 0;
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViews:) name:NOTIFICATION_WALLETS_CHANGED object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViews) name:NOTIFICATION_WALLETS_CHANGED object:nil];
 
-    [self updateViews:nil];
+    [self updateViews];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -277,7 +277,7 @@
     _bShowingWalletsLoadingAlert = NO;
 }
 
-- (void)updateViews:(NSNotification *)notification
+- (void)updateViews
 {
     if (abcUser.arrayWallets
             && abcUser.currentWallet
@@ -723,7 +723,7 @@
     [MainViewController changeNavBar:self title:helpButtonText side:NAV_BAR_RIGHT button:true enable:true action:@selector(info:) fromObject:self];
 
     [self dismissTransactionDetails];
-    [self updateViews:nil];
+    [self updateViews];
 
 }
 
@@ -1131,7 +1131,7 @@
 
 - (void)BalanceView:(BalanceView *)view changedStateTo:(tBalanceViewState)state
 {
-    [self updateViews:nil];
+    [self updateViews];
 }
 
 #pragma mark - UISearchBar delegates
@@ -1261,7 +1261,7 @@
     [MainViewController changeNavBar:self title:closeButtonText side:NAV_BAR_LEFT button:true enable:false action:@selector(Back:) fromObject:self];
     [MainViewController changeNavBar:self title:helpButtonText side:NAV_BAR_RIGHT button:true enable:true action:@selector(info:) fromObject:self];
 
-    [self updateViews:nil];
+    [self updateViews];
 
 }
 
@@ -1458,7 +1458,7 @@
         [_balanceView balanceViewSetFiat];
     }
 
-    [self updateViews:nil];
+    [self updateViews];
 
 }
 
@@ -1618,7 +1618,7 @@
     [self hideWalletMaker];
     [self removeBlockingButton];
 
-    [self updateViews:nil];
+    [self updateViews];
 }
 
 

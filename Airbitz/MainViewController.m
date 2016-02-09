@@ -1418,11 +1418,10 @@ MainViewController *singleton;
     }
 }
 
-- (void) abcUserIncomingBitcoin:(NSString *)walletUUID txid:(NSString *)txid;
+- (void) abcUserIncomingBitcoin:(ABCWallet *)wallet txid:(NSString *)txid;
 {
-    _strWalletUUID = walletUUID;
+    if (wallet) _strWalletUUID = wallet.strUUID;
     _strTxID = txid;
-    ABCWallet *wallet = [abcUser getWallet:walletUUID];
 
     ABCTransaction *transaction = [wallet getTransaction:_strTxID];
 
@@ -2088,7 +2087,7 @@ MainViewController *singleton;
 
 - (void)logout
 {
-    NSString *str = NSLocalizedString(@"Please wait while %@ gracefully exits your account. This may take a while on slow networks.", nil);
+    NSString *str = NSLocalizedString(@"Logging Out", nil);
 
     [FadingAlertView create:self.view
                     message:[NSString stringWithFormat:str, appTitle]

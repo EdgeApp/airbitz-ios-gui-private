@@ -538,6 +538,7 @@ static BOOL bInitialized = false;
                               otp:nil
                          complete:^(ABCUser *user)
          {
+             user.delegate = [MainViewController Singleton];
              [self signInComplete:user];
          }
                             error:^(ABCConditionCode ccode, NSString *errorString)
@@ -656,6 +657,7 @@ static BOOL bInitialized = false;
                       pin:pin
                  complete:^(ABCUser *user)
                  {
+                     user.delegate = [MainViewController Singleton];
                      [User login:user];
                      [self.delegate LoginViewControllerDidPINLogin];
 
@@ -1081,6 +1083,7 @@ static BOOL bInitialized = false;
          otp:secret
          complete:^(ABCUser *user)
          {
+             user.delegate = [MainViewController Singleton];
              [self signInComplete:user];
          }
          error:^(ABCConditionCode ccode, NSString *errorString)
