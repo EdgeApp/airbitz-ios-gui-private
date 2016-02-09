@@ -174,7 +174,6 @@
 {
     [self blockUser:YES];
     _bCreatingWallet = YES;
-    [abc clearSyncQueue];
 
     int currencyNum;
 
@@ -183,7 +182,7 @@
     else
         currencyNum = [[abc.arrayCurrencyNums objectAtIndex:_currencyChoice] intValue];
 
-    [abc createWallet:self.textField.text currencyNum:currencyNum complete:^(void)
+    [abcUser createWallet:self.textField.text currencyNum:currencyNum complete:^(void)
      {
          [self blockUser:NO];
          _bCreatingWallet = NO;

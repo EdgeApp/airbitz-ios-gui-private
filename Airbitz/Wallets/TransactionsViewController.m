@@ -71,6 +71,7 @@
     CGRect                              _frameTableWithSearchNoKeyboard;
     BOOL                        _walletMakerVisible;
     UIButton                    *_blockingButton;
+    NSOperationQueue                                *txSearchQueue;
 
 
 }
@@ -153,6 +154,9 @@
     _bShowingWalletsLoadingAlert = NO;
     _balanceView = [BalanceView CreateWithDelegate:self];
     [self.balanceViewPlaceholder addSubview:_balanceView];
+    
+    txSearchQueue = [[NSOperationQueue alloc] init];
+    [txSearchQueue setMaxConcurrentOperationCount:1];
 
     self.searchTextField.enablesReturnKeyAutomatically = NO;
 
@@ -575,15 +579,25 @@
      }];
 }
 
+- (void)postToTxSearchQueue:(void(^)(void))cb;
+{
+    [txSearchQueue addOperationWithBlock:cb];
+}
+
+- (void)clearTxSearchQueue;
+{
+    [txSearchQueue cancelAllOperations];
+}
+
 - (void)checkSearchArray
 {
     NSString *search = self.searchTextField.text;
     if (search != NULL && search.length > 0)
     {
-        [abc clearTxSearchQueue];
-        [abc postToTxSearchQueue:^{
+        [self clearTxSearchQueue];
+        [self postToTxSearchQueue:^{
             NSMutableArray *arraySearchTransactions = [[NSMutableArray alloc] init];
-            [abc searchTransactionsIn:abcUser.currentWallet query:search addTo:arraySearchTransactions];
+            [abcUser.currentWallet searchTransactionsIn:search addTo:arraySearchTransactions];
             dispatch_async(dispatch_get_main_queue(),^{
                 [self.arraySearchTransactions removeAllObjects];
                 self.arraySearchTransactions = arraySearchTransactions;
@@ -782,7 +796,7 @@
     srcIndexPath = [NSIndexPath indexPathForItem:sourceIndexPath.row inSection:sourceIndexPath.section - WALLET_SECTION_ACTIVE];
     dstIndexPath = [NSIndexPath indexPathForItem:destinationIndexPath.row inSection:destinationIndexPath.section - WALLET_SECTION_ACTIVE];
 
-    [abc reorderWallets:srcIndexPath toIndexPath:dstIndexPath];
+    [abcUser reorderWallets:srcIndexPath toIndexPath:dstIndexPath];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -795,7 +809,7 @@
         }
         else if (section == WALLET_SECTION_ARCHIVED)
         {
-            if (([abc.arrayArchivedWallets count] >= 1) || ([abcUser.arrayWallets count] > 1))
+            if (([abcUser.arrayArchivedWallets count] >= 1) || ([abcUser.arrayWallets count] > 1))
                 return [Theme Singleton].heightWalletHeader;
         }
 
@@ -872,7 +886,7 @@
                 }
                 else
                 {
-                    return abc.arrayArchivedWallets.count;
+                    return abcUser.arrayArchivedWallets.count;
                 }
         }
 
@@ -1207,7 +1221,7 @@
         if (buttonIndex == 1) {
             [MainViewController fadingAlert:deletingWalletText holdTime:FADING_ALERT_HOLD_TIME_FOREVER_WITH_SPINNER];
 
-            [abc walletRemove:longTapWallet complete:^
+            [abcUser walletRemove:longTapWallet complete:^
             {
                 [MainViewController fadingAlert:deleteWalletDeletedText];
 
@@ -1224,7 +1238,7 @@
             //        // need at least one character in a wallet name
             if ([textField.text length])
             {
-                [abc renameWallet:longTapWallet.strUUID newName:textField.text];
+                [abcUser renameWallet:longTapWallet.strUUID newName:textField.text];
             }
             else
             {
@@ -1269,7 +1283,7 @@
         }
         else if (indexPath.section == WALLET_SECTION_ARCHIVED)
         {
-            longTapWallet = [abc.arrayArchivedWallets objectAtIndex:indexPath.row];
+            longTapWallet = [abcUser.arrayArchivedWallets objectAtIndex:indexPath.row];
         }
         NSString *deleteText = nil;
 
@@ -1315,7 +1329,7 @@
 
 - (void)refresh:(id)sender
 {
-    [abc rotateWalletServer:abcUser.currentWallet.strUUID refreshData:NO notify:^
+    [abcUser.currentWallet refreshServer:NO notify:^
     {
         [(UIRefreshControl *) sender endRefreshing];
     }];
@@ -1397,7 +1411,7 @@
             wallet = [abcUser.arrayWallets objectAtIndex:row];
             break;
         case WALLET_SECTION_ARCHIVED:
-            wallet = [abc.arrayArchivedWallets objectAtIndex:row];
+            wallet = [abcUser.arrayArchivedWallets objectAtIndex:row];
             break;
     }
 
@@ -1454,7 +1468,7 @@
     {
         _archiveCollapsed = NO;
 
-        NSInteger countOfRowsToInsert = abc.arrayArchivedWallets.count;
+        NSInteger countOfRowsToInsert = abcUser.arrayArchivedWallets.count;
         NSMutableArray *indexPathsToInsert = [[NSMutableArray alloc] init];
         for (NSInteger i = 0; i < countOfRowsToInsert; i++)
         {
@@ -1471,7 +1485,7 @@
     else
     {
         _archiveCollapsed = YES;
-        NSInteger countOfRowsToDelete = abc.arrayArchivedWallets.count;
+        NSInteger countOfRowsToDelete = abcUser.arrayArchivedWallets.count;
         //ABCLog(2,@"Rows to collapse: %i", countOfRowsToDelete);
         if (countOfRowsToDelete > 0)
         {

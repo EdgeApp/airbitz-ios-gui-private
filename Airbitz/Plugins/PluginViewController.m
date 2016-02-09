@@ -213,7 +213,7 @@ static const NSString *PROTOCOL = @"bridge://";
     NSString *url = [request URL].absoluteString;
     if (![url containsString:@"debugLevel"])
         NSLog(@("url: %@"), url);
-    if ([[url lowercaseString] hasPrefix:PROTOCOL]) {
+    if ([[url lowercaseString] hasPrefix:(NSString *)PROTOCOL]) {
         url = [url substringFromIndex:PROTOCOL.length];
         url = [url stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 

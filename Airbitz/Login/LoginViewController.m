@@ -510,7 +510,7 @@ static BOOL bInitialized = false;
         //
         self.usernameSelector.textField.text = username;
     }
-    self.passwordTextField.text = abc.password;
+    self.passwordTextField.text = abcUser.password;
 
 }
 
@@ -654,13 +654,12 @@ static BOOL bInitialized = false;
     [abc
             signInWithPIN:[abc getLastAccessedAccount]
                       pin:pin
-                 complete:^(void)
+                 complete:^(ABCUser *user)
                  {
-                     [User login:[abc getLastAccessedAccount] password:NULL];
-//                [[User Singleton] resetPINLoginInvalidEntryCount];
+                     [User login:user];
                      [self.delegate LoginViewControllerDidPINLogin];
 
-                     if ([abc shouldAskUserToEnableTouchID])
+                     if ([abcUser shouldAskUserToEnableTouchID])
                      {
                          //
                          // Ask if they want TouchID enabled for this user on this device
@@ -1005,11 +1004,9 @@ static BOOL bInitialized = false;
 
 - (void)signInComplete:(ABCUser *)user
 {
-    abcUser = user;
     [self showSpinner:NO];
 
-    [User login:self.usernameSelector.textField.text
-       password:self.passwordTextField.text];
+    [User login:user];
     [self.delegate loginViewControllerDidLogin:NO newDevice:_bNewDeviceLogin usedTouchID:_bUsedTouchIDToLogin];
 
     if ([abcUser shouldAskUserToEnableTouchID])
@@ -1277,7 +1274,7 @@ static BOOL bInitialized = false;
         }
         else
         {
-            if ([abc.password length] > 0)
+            if ([abcUser.password length] > 0)
                 [abcUser.settings enableTouchID];
             else
             {
@@ -1390,7 +1387,7 @@ static BOOL bInitialized = false;
     BOOL bAuthenticated = [authenticated boolValue];
     if (bAuthenticated)
     {
-        abc.password = _tempPassword;
+        abcUser.password = _tempPassword;
         _tempPassword = nil;
         [MainViewController fadingAlert:NSLocalizedString(@"Touch ID Enabled", nil)];
 

@@ -294,7 +294,9 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     {
         return NO;
     }
-    ABCTransaction *transaction = [abcUser getTransaction:walletUUID withTx:txId];
+    ABCWallet *wallet = [abcUser getWallet:walletUUID];
+    
+    ABCTransaction *transaction = [wallet getTransaction:txId];
     for (ABCTxOutput *output in transaction.outputs)
     {
         if (!output.bInput 
@@ -376,7 +378,7 @@ static NSTimeInterval		lastPeripheralBLEPowerOffNotificationTime = 0;
     {
         _refreshButton.hidden = YES;
         _refreshSpinner.hidden = NO;
-        [abcUser rotateWalletServer:abcUser.currentWallet.strUUID refreshData:NO notify:^
+        [abcUser.currentWallet refreshServer:NO notify:^
         {
             [NSThread sleepForTimeInterval:2.0f];
             _refreshSpinner.hidden = YES;

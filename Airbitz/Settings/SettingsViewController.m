@@ -1035,7 +1035,7 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
 	if (section == SECTION_USERNAME)
 	{
 		label.text = NSLocalizedString(@"ACCOUNT: ", @"section header in settings table");
-        label.text = [NSString stringWithFormat:@"%@ %s", label.text, [abc.name UTF8String]];
+        label.text = [NSString stringWithFormat:@"%@ %s", label.text, [abcUser.name UTF8String]];
 	}
     if (section == SECTION_NAME)
 	{
@@ -1291,7 +1291,7 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
             // Check if we have a cached password. If so just enable touchID
             // If not, ask them for their password.
             //
-            if ([abc.password length] > 0)
+            if ([abcUser.password length] > 0)
             {
                 [abcUser.settings enableTouchID];
             }
@@ -1518,7 +1518,7 @@ tDenomination gaDenominations[DENOMINATION_CHOICES] = {
     BOOL bAuthenticated = [authenticated boolValue];
     if (bAuthenticated)
     {
-        abc.password = _tempPassword;
+        abcUser.password = _tempPassword;
         _tempPassword = nil;
         [MainViewController fadingAlert:NSLocalizedString(@"Touch ID Enabled", nil)];
 

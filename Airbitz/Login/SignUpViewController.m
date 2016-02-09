@@ -400,7 +400,6 @@
         NSMutableArray *ruleDescription;
         NSMutableArray *rulePassed;
         NSMutableString *checkResultsMessage;
-        ABCConditionCode ccode;
 
         bNewPasswordFieldsAreValid = [abc checkPasswordRules:self.passwordTextField.text
                                               secondsToCrack:&secondsToCrack
@@ -699,7 +698,7 @@
             username = self.strUserName;
         }
         [abc signIn:username password:self.passwordTextField.text otp:nil];
-        [User login:username password:self.passwordTextField.text];
+        [User login:abcUser];
 
         alert = [[UIAlertView alloc]
                  initWithTitle:self.title

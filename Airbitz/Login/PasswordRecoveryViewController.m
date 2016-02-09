@@ -428,9 +428,9 @@ typedef enum eAlertType
     if (self.mode == PassRecovMode_Change) {
         password = _passwordField.text;
     } else {
-        password = abc.password;
+        password = abcUser.password;
     }
-    if ([abcUser passwordExists] && ![abc passwordOk:password]) {
+    if ([abcUser passwordExists] && ![abcUser passwordOk:password]) {
         UIAlertView *alert = [[UIAlertView alloc]
                              initWithTitle:NSLocalizedString(@"Password mismatch", nil)
                              message:NSLocalizedString(@"Please enter your correct password.", nil)
@@ -443,7 +443,7 @@ typedef enum eAlertType
     [self blockUser:YES];
     [self showSpinner:YES];
 
-    [abc
+    [abcUser
             setRecoveryQuestions:password
                        questions:strQuestions
                          answers:strAnswers

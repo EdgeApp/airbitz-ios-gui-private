@@ -151,9 +151,8 @@
          [FadingAlertView dismiss:FadingAlertDismissFast];
          self.manager.strPassword = [NSString stringWithFormat:@"%@",self.passwordTextField.text];
          self.manager.strPIN = [NSString stringWithFormat:@"%@",self.pinTextField.text];
-         abcUser = user;
          
-         [User login:self.manager.strUserName password:self.passwordTextField.text];
+         [User login:user];
          [MainViewController createFirstWallet];
 
          [super next];

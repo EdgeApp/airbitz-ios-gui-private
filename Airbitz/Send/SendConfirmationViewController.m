@@ -395,7 +395,6 @@
     tPopupPicker2Position popupPosition = PopupPicker2Position_Full_Fading;
     NSString *headerText;
 
-    NSInteger curChoice = -1;
     NSArray *arrayPopupChoices = nil;
 
     arrayPopupChoices = abc.arrayCurrencyStrings;
@@ -423,8 +422,8 @@
         _selectedTextField = self.amountBTCTextField;
 
         // We use a serial queue for this calculation
-        [abcUser postToMiscQueue:^{
-            int64_t maxAmount = [_abcSpend maxSpendable:abcUser.currentWallet.strUUID];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+            int64_t maxAmount = [_abcSpend maxSpendable];
             dispatch_async(dispatch_get_main_queue(), ^{
                 _maxLocked = NO;
                 _maxAmount = maxAmount;
@@ -438,7 +437,7 @@
                     [self dismissKeyboard];
                 }
             });
-        }];
+        });
     }
 }
 
@@ -622,20 +621,20 @@
     else if (_selectedTextField == self.amountFiatTextField && [self.abcSpend isMutable])
     {
         currency = [self.amountFiatTextField.text doubleValue];
-        ABCConditionCode ccode = [abc currencyToSatoshi:currency currencyNum:_currencyNum satoshi:&satoshi];
+        ABCConditionCode ccode = [abcUser currencyToSatoshi:currency currencyNum:_currencyNum satoshi:&satoshi];
         if (ABCConditionCodeOk == ccode)
         {
             _abcSpend.amount = satoshi;
             self.amountBTCTextField.text = [abcUser formatSatoshi:satoshi
                                                           withSymbol:false
-                                                    cropDecimals:[abc currencyDecimalPlaces]];
+                                                    cropDecimals:[abcUser currencyDecimalPlaces]];
         }
     }
     self.amountBTCSymbol.text = abcUser.settings.denominationLabelShort;
     self.amountBTCLabel.text = abcUser.settings.denominationLabel;
     self.amountFiatSymbol.text = [abc currencySymbolLookup:_currencyNum];
     self.amountFiatLabel.text = [abc currencyAbbrevLookup:_currencyNum];
-    self.conversionLabel.text = [abc conversionStringFromNum:_currencyNum withAbbrev:YES];
+    self.conversionLabel.text = [abcUser conversionStringFromNum:_currencyNum withAbbrev:YES];
 
     [self checkAuthorization];
     [self startCalcFees];
@@ -657,7 +656,7 @@
     } else if (!_bAddressIsWalletUUID
                 && abcUser.settings.bSpendRequirePin
                 && _abcSpend.amount >= abcUser.settings.spendRequirePinSatoshis
-                && ![abc recentlyLoggedIn]) {
+                && ![abcUser recentlyLoggedIn]) {
         // Show PIN pad
         _pinRequired = YES;
         _labelPINTitle.hidden = NO;
@@ -677,7 +676,7 @@
     // Don't caculate fees until there is a value
     if (_abcSpend.amount == 0)
     {
-        self.conversionLabel.text = [abc conversionStringFromNum:_currencyNum withAbbrev:YES];
+        self.conversionLabel.text = [abcUser conversionStringFromNum:_currencyNum withAbbrev:YES];
         self.conversionLabel.textColor = [UIColor darkGrayColor];
         self.amountBTCTextField.textColor = [UIColor whiteColor];
         self.amountFiatTextField.textColor = [UIColor whiteColor];
@@ -734,7 +733,7 @@
         }
         self.amountBTCLabel.text = coinFeeString; 
         self.amountFiatLabel.text = fiatFeeString;
-        self.conversionLabel.text = [abc conversionStringFromNum:_currencyNum withAbbrev:YES];
+        self.conversionLabel.text = [abcUser conversionStringFromNum:_currencyNum withAbbrev:YES];
 
         self.helpButton.hidden = YES;
         self.conversionLabel.layer.shadowOpacity = 0.0f;
@@ -908,7 +907,7 @@
             [_confirmationSlider resetIn:1.0];
 
         } else if (_passwordRequired) {
-            BOOL matched = [abc passwordOk:self.withdrawlPIN.text];
+            BOOL matched = [abcUser passwordOk:self.withdrawlPIN.text];
             if (matched) {
                 [self continueChecks];
             } else {
@@ -925,12 +924,12 @@
 
 - (void)fadingAlertDelayed:(NSString *)message
 {
-    [abc postToMiscQueue:^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         [NSThread sleepForTimeInterval:0.2f];
         dispatch_async(dispatch_get_main_queue(), ^{
             [MainViewController fadingAlert:message];
         });
-    }];
+    });
 }
 
 - (void)continueChecks

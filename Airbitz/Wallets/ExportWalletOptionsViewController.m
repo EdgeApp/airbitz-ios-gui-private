@@ -466,10 +466,10 @@ typedef enum eExportOption
     {
         case WalletExportType_CSV:
         {
-            NSMutableString *str = [[NSMutableString alloc] init];
+            NSString *str;
             
-            ABCConditionCode ccode = [abc exportTransactionsToCSV:abcUser.currentWallet.strUUID csvString:str];
-            if (ABCConditionCodeOk == ccode)
+            str = [abcUser.currentWallet exportTransactionsToCSV];
+            if (nil != str)
             {
                 dataExport = [str dataUsingEncoding:NSUTF8StringEncoding];
             }
@@ -479,7 +479,7 @@ typedef enum eExportOption
                 title = NSLocalizedString(@"Export Wallet Transactions", nil);
                 UIAlertView *alert = [[UIAlertView alloc]
                                       initWithTitle:title
-                                      message:[abc getLastErrorString]
+                                      message:[abcUser.currentWallet getLastErrorString]
                                       delegate:nil
                                       cancelButtonTitle:okButtonText
                                       otherButtonTitles:nil];
@@ -511,10 +511,8 @@ typedef enum eExportOption
 
         case WalletExportType_PrivateSeed:
         {
-            NSMutableString *str = [[NSMutableString alloc] init];
-            
-            ABCConditionCode ccode = [abc exportWalletPrivateSeed:abcUser.currentWallet.strUUID seed:str];
-            if (ABCConditionCodeOk == ccode)
+            NSString *str = [abcUser.currentWallet exportWalletPrivateSeed];
+            if (nil != str)
             {
                 dataExport = [str dataUsingEncoding:NSUTF8StringEncoding];
             }
@@ -524,7 +522,7 @@ typedef enum eExportOption
                 title = NSLocalizedString(@"Export Private Seed", nil);
                 UIAlertView *alert = [[UIAlertView alloc]
                                       initWithTitle:title
-                                      message:[abc getLastErrorString]
+                                      message:[abcUser.currentWallet getLastErrorString]
                                       delegate:nil
                                       cancelButtonTitle:okButtonText
                                       otherButtonTitles:nil];
@@ -722,7 +720,7 @@ typedef enum eExportOption
     }
     else
     {
-        if ([abcUser passwordExists] && ![abc passwordOk:self.passwordTextField.text])
+        if ([abcUser passwordExists] && ![abcUser passwordOk:self.passwordTextField.text])
         {
             [MainViewController fadingAlert:NSLocalizedString(@"Incorrect password", nil)];
             [self.passwordTextField becomeFirstResponder];

@@ -194,7 +194,7 @@ typedef enum eRequestType
     [self.scrollableContentView addSubview:self.buttonBlocker];
     
     // update our array of categories
-    self.arrayCategories = abc.arrayCategories;
+    self.arrayCategories = abcUser.arrayCategories;
 
     // set the keyboard return button based upon mode
     self.nameTextField.returnKeyType = (self.bOldTransaction ? UIReturnKeyDone : UIReturnKeyNext);
@@ -486,7 +486,7 @@ typedef enum eRequestType
     [strFullCategory appendString:self.pickerTextCategory.textField.text];
         
     // add the category if we didn't have it
-    [abc addCategory:strFullCategory];
+    [abcUser addCategory:strFullCategory];
 
     if (![self.transaction.strCategory isEqualToString:strFullCategory])
     {
@@ -528,7 +528,7 @@ typedef enum eRequestType
 
     if (bSomethingChanged)
     {
-        [abc storeTransaction: self.transaction];
+        [self.transaction saveTransactionDetails];
     }
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
@@ -1153,8 +1153,8 @@ typedef enum eRequestType
             if (self.transaction)
             {
                 dictNotification = @{ KEY_TX_DETAILS_EXITED_TX            : self.transaction,
-                                                    KEY_TX_DETAILS_EXITED_WALLET_UUID   : self.transaction.strWalletUUID,
-                                                    KEY_TX_DETAILS_EXITED_WALLET_NAME   : self.transaction.strWalletName,
+                                                    KEY_TX_DETAILS_EXITED_WALLET_UUID   : self.transaction.wallet.strUUID,
+                                                    KEY_TX_DETAILS_EXITED_WALLET_NAME   : self.transaction.wallet.strName,
                                                     KEY_TX_DETAILS_EXITED_TX_ID         : self.transaction.strID
                                                     };
             }
@@ -1574,7 +1574,7 @@ typedef enum eRequestType
     NSInteger index = [self.arrayCategories indexOfObject:catString];
     if(index == NSNotFound) {
         ABCLog(2,@"ADD CATEGORY: adding category = %@", catString);
-        [abc addCategory:catString];
+        [abcUser addCategory:catString];
         NSMutableArray *array = [[NSMutableArray alloc] initWithArray:self.arrayCategories];
         [array addObject:catString];
         self.arrayCategories = [array sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];

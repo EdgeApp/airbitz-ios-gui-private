@@ -69,7 +69,7 @@ typedef enum eAppMode
                                   LoginViewControllerDelegate, SendViewControllerDelegate,
                                   TransactionDetailsViewControllerDelegate, UIAlertViewDelegate, FadingAlertViewDelegate, SlideoutViewDelegate,
                                   TwoFactorScanViewControllerDelegate, AddressRequestControllerDelegate, InfoViewDelegate, SignUpViewControllerDelegate,
-                                  MFMailComposeViewControllerDelegate, BuySellViewControllerDelegate,GiftCardViewControllerDelegate,AirbitzCoreDelegate>
+                                  MFMailComposeViewControllerDelegate, BuySellViewControllerDelegate,GiftCardViewControllerDelegate,ABCUserDelegate>
 {
 	DirectoryViewController     *_directoryViewController;
 	RequestViewController       *_requestViewController;
@@ -158,7 +158,6 @@ MainViewController *singleton;
     [FadingAlertView initAll];
 
     singleton = self;
-    abc.delegate = self;
 
     _bNewDeviceLogin = NO;
     _bShowingWalletsLoadingAlert = NO;
@@ -1105,7 +1104,7 @@ MainViewController *singleton;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         // Create the first wallet in the background
         // loginViewControllerDidLogin will create a spinner while wallet is loading so close it once wallet is done
-        [abc createFirstWalletIfNeeded];
+        [abcUser createFirstWalletIfNeeded];
         dispatch_async(dispatch_get_main_queue(), ^ {
             singleton.bCreatingFirstWallet = NO;
             [FadingAlertView dismiss:FadingAlertDismissGradual];
@@ -1151,7 +1150,7 @@ MainViewController *singleton;
     {
         // Make sure there's a wallet in this account. If not, create it
         int numWallets;
-        ABCConditionCode ccode = [abc getNumWalletsInAccount:&numWallets];
+        ABCConditionCode ccode = [abcUser getNumWalletsInAccount:&numWallets];
         if (ABCConditionCodeOk == ccode)
         {
             if (0 == numWallets)
@@ -1283,7 +1282,7 @@ MainViewController *singleton;
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void) {
         if ([User isLoggedIn] &&
                 abcUser.arrayWallets != nil &&
-                abc.arrayArchivedWallets != nil)
+                abcUser.arrayArchivedWallets != nil)
         {
             int transactionCount = 0;
             NSDate *date = [NSDate date];
@@ -1297,7 +1296,7 @@ MainViewController *singleton;
                     }
                 }
             }
-            for (ABCWallet *curWallet in abc.arrayArchivedWallets)
+            for (ABCWallet *curWallet in abcUser.arrayArchivedWallets)
             {
                 transactionCount += [curWallet.arrayTransactions count];
             }
@@ -1318,9 +1317,26 @@ MainViewController *singleton;
 {
 }
 
-#pragma mark - AirbitzCoreDelegates
+#pragma mark - abcUserDelegates
 
-- (void) airbitzCoreWalletsLoading;
+- (void) abcUserWalletChanged:(ABCWallet *)wallet;
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_WALLETS_CHANGED object:self userInfo:nil];
+}
+- (void) abcUserWalletsChanged;
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_WALLETS_CHANGED object:self userInfo:nil];
+}
+- (void) abcUserBlockHeightChanged;
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_WALLETS_CHANGED object:self userInfo:nil];
+}
+- (void) abcUserBalanceUpdate;
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_WALLETS_CHANGED object:self userInfo:nil];
+}
+
+- (void) abcUserWalletsLoading;
 {
     NSString *walletsLoading;
     if (![User isLoggedIn]) return;
@@ -1355,7 +1371,7 @@ MainViewController *singleton;
     _bShowingWalletsLoadingAlert = YES;
 
 }
-- (void) airbitzCoreWalletsLoaded;
+- (void) abcUserWalletsLoaded;
 {
     if (_bShowingWalletsLoadingAlert)
     {
@@ -1363,13 +1379,14 @@ MainViewController *singleton;
         _bShowingWalletsLoadingAlert = NO;
     }
 }
-- (void) airbitzCoreWalletsChanged;
+- (void) abcUserAccountChanged;
 {
     [self updateWidgetQRCode];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_WALLETS_CHANGED
-                                                        object:self userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_WALLETS_CHANGED object:self userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_DATA_SYNC_UPDATE object:self];
+
 }
-- (void)airbitzCoreLoggedOut
+- (void)abcUserLoggedOut:(ABCUser *)user;
 {
     [[User Singleton] clear];
     
@@ -1384,12 +1401,7 @@ MainViewController *singleton;
     abcUser = nil;
 }
 
-- (void) airbitzCoreDataSyncUpdate
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_DATA_SYNC_UPDATE object:self];
-}
-
-- (void) airbitzCoreRemotePasswordChange;
+- (void) abcUserRemotePasswordChange;
 {
     if (_passwordChangeAlert == nil && [User isLoggedIn])
     {
@@ -1406,12 +1418,13 @@ MainViewController *singleton;
     }
 }
 
-- (void) airbitzCoreIncomingBitcoin:(NSString *)walletUUID txid:(NSString *)txid;
+- (void) abcUserIncomingBitcoin:(NSString *)walletUUID txid:(NSString *)txid;
 {
     _strWalletUUID = walletUUID;
     _strTxID = txid;
+    ABCWallet *wallet = [abcUser getWallet:walletUUID];
 
-    ABCTransaction *transaction = [abc getTransaction:_strWalletUUID withTx:_strTxID];
+    ABCTransaction *transaction = [wallet getTransaction:_strTxID];
 
     /* If showing QR code, launch receiving screen*/
     if (_selectedViewController == _requestViewController 
@@ -1465,6 +1478,32 @@ MainViewController *singleton;
     }
 }
 
+- (void)abcUserOTPRequired;
+{
+    if (_otpRequiredAlert == nil) {
+        _otpRequiredAlert = [[UIAlertView alloc]
+                             initWithTitle:NSLocalizedString(@"Two Factor Authentication On", nil)
+                             message:NSLocalizedString(@"Two Factor Authentication (enchanced security) has been enabled from a different device for this account. Please enable 2 Factor Authentication for full access from this device.", nil)
+                             delegate:self
+                             cancelButtonTitle:NSLocalizedString(@"Remind Me Later", nil)
+                             otherButtonTitles:NSLocalizedString(@"Enable", nil), nil];
+        [_otpRequiredAlert show];
+    }
+}
+
+- (void)abcUserOTPSkew
+{
+    if (_otpSkewAlert == nil) {
+        _otpSkewAlert = [[UIAlertView alloc]
+                         initWithTitle:NSLocalizedString(@"Two Factor Invalid", nil)
+                         message:NSLocalizedString(@"The Two Factor Authentication token on this device is invalid. Either the token was changed by a different device our your clock is skewed. Please check your system time to ensure it is correct.", nil)
+                         delegate:self
+                         cancelButtonTitle:okButtonText
+                         otherButtonTitles:nil, nil];
+        [_otpSkewAlert show];
+    }
+}
+
 - (void)updateWidgetQRCode;
 {
     if (!abcUser.currentWallet || !abcUser.currentWallet.strUUID)
@@ -1474,25 +1513,22 @@ MainViewController *singleton;
     
     request.payeeName = abcUser.settings.fullName;
 
-    ABCConditionCode ccode = [abcUser.currentWallet createReceiveRequestWithDetails:request complete:^
+    [abcUser.currentWallet createReceiveRequestWithDetails:request complete:^
     {
-        if (ABCConditionCodeOk == ccode)
-        {
-            //
-            // Save QR and address in shared data so Widget can access it
-            //
-            static NSUserDefaults *tempSharedUserDefs = nil;
-            
-            if (!tempSharedUserDefs) tempSharedUserDefs = [[NSUserDefaults alloc] initWithSuiteName:APP_GROUP_ID];
-            
-            NSData *imageData = UIImagePNGRepresentation(request.qrCode);
-            
-            [tempSharedUserDefs setObject:imageData forKey:APP_GROUP_LAST_QR_IMAGE_KEY];
-            [tempSharedUserDefs setObject:request.address forKey:APP_GROUP_LAST_ADDRESS_KEY];
-            [tempSharedUserDefs setObject:abcUser.currentWallet.strName forKey:APP_GROUP_LAST_WALLET_KEY];
-            [tempSharedUserDefs setObject:abc.name forKey:APP_GROUP_LAST_ACCOUNT_KEY];
-            [tempSharedUserDefs synchronize];
-        }
+        //
+        // Save QR and address in shared data so Widget can access it
+        //
+        static NSUserDefaults *tempSharedUserDefs = nil;
+        
+        if (!tempSharedUserDefs) tempSharedUserDefs = [[NSUserDefaults alloc] initWithSuiteName:APP_GROUP_ID];
+        
+        NSData *imageData = UIImagePNGRepresentation(request.qrCode);
+        
+        [tempSharedUserDefs setObject:imageData forKey:APP_GROUP_LAST_QR_IMAGE_KEY];
+        [tempSharedUserDefs setObject:request.address forKey:APP_GROUP_LAST_ADDRESS_KEY];
+        [tempSharedUserDefs setObject:abcUser.currentWallet.strName forKey:APP_GROUP_LAST_WALLET_KEY];
+        [tempSharedUserDefs setObject:abcUser.name forKey:APP_GROUP_LAST_ACCOUNT_KEY];
+        [tempSharedUserDefs synchronize];
     } error:^(ABCConditionCode ccode, NSString *errorString) {
     }];
 }
@@ -1510,8 +1546,8 @@ MainViewController *singleton;
     NSString *coin;
     NSString *fiat;
     
-    ABCWallet *wallet = [abc getWallet:walletUUID];
-    ABCTransaction *transaction = [abc getTransaction:walletUUID withTx:txId];
+    ABCWallet *wallet = [abcUser getWallet:walletUUID];
+    ABCTransaction *transaction = [wallet getTransaction:txId];
     
     double currency;
     int64_t satoshi = transaction.amountSatoshi;
@@ -1521,8 +1557,8 @@ MainViewController *singleton;
     
     currency = fabs(transaction.amountFiat);
     
-    if ([abc currencyToSatoshi:currency currencyNum:wallet.currencyNum satoshi:&satoshi] == ABCConditionCodeOk)
-        coin = [abcUser formatSatoshi:satoshi withSymbol:false cropDecimals:[abc currencyDecimalPlaces]];
+    if ([abcUser currencyToSatoshi:currency currencyNum:wallet.currencyNum satoshi:&satoshi] == ABCConditionCodeOk)
+        coin = [abcUser formatSatoshi:satoshi withSymbol:false cropDecimals:[abcUser currencyDecimalPlaces]];
 
 
     if (receiveCount <= 2 && ([LocalSettings controller].bMerchantMode == false))
@@ -1558,8 +1594,8 @@ MainViewController *singleton;
 
 - (void)launchTransactionDetails:(NSString *)walletUUID withTx:(NSString *)txId
 {
-    ABCWallet *wallet = [abc getWallet:walletUUID];
-    ABCTransaction *transaction = [abc getTransaction:walletUUID withTx:txId];
+    ABCWallet *wallet = [abcUser getWallet:walletUUID];
+    ABCTransaction *transaction = [wallet getTransaction:txId];
 
     UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
     _txDetailsController = [mainStoryboard instantiateViewControllerWithIdentifier:@"TransactionDetailsViewController"];
@@ -1598,7 +1634,7 @@ MainViewController *singleton;
     else if (_passwordChangeAlert == alertView)
     {
         _passwordChangeAlert = nil;
-        [abc logout];
+        [abcUser logout];
         abcUser = nil;
     }
     else if (_otpRequiredAlert == alertView && buttonIndex == 1)
@@ -1747,34 +1783,6 @@ MainViewController *singleton;
     [alert show];
     
     [[controller presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-}
-
-#pragma mark - Custom Notification Handlers
-
-- (void)notifyOtpRequired:(NSArray *)params
-{
-    if (_otpRequiredAlert == nil) {
-        _otpRequiredAlert = [[UIAlertView alloc]
-                                initWithTitle:NSLocalizedString(@"Two Factor Authentication On", nil)
-                                message:NSLocalizedString(@"Two Factor Authentication (enchanced security) has been enabled from a different device for this account. Please enable 2 Factor Authentication for full access from this device.", nil)
-                                delegate:self
-                                cancelButtonTitle:NSLocalizedString(@"Remind Me Later", nil)
-                                otherButtonTitles:NSLocalizedString(@"Enable", nil), nil];
-        [_otpRequiredAlert show];
-    }
-}
-
-- (void)notifyOtpSkew:(NSArray *)params
-{
-    if (_otpSkewAlert == nil) {
-        _otpSkewAlert = [[UIAlertView alloc]
-            initWithTitle:NSLocalizedString(@"Two Factor Invalid", nil)
-            message:NSLocalizedString(@"The Two Factor Authentication token on this device is invalid. Either the token was changed by a different device our your clock is skewed. Please check your system time to ensure it is correct.", nil)
-            delegate:self
-            cancelButtonTitle:okButtonText
-            otherButtonTitles:nil, nil];
-        [_otpSkewAlert show];
-    }
 }
 
 // called when the stats have been updated
@@ -2085,12 +2093,12 @@ MainViewController *singleton;
     [FadingAlertView create:self.view
                     message:[NSString stringWithFormat:str, appTitle]
                    holdTime:FADING_ALERT_HOLD_TIME_FOREVER_WITH_SPINNER notify:^{
-                // Log the user out and reset UI
-                [abc logout];
+                       // Log the user out and reset UI
+                       [abcUser logout];
                        abcUser = nil;
-
-                [FadingAlertView dismiss:FadingAlertDismissFast];
-            }];
+                       
+                       [FadingAlertView dismiss:FadingAlertDismissFast];
+                   }];
 }
 
 #pragma mark - Slideout Methods
