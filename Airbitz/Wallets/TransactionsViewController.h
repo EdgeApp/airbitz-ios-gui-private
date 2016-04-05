@@ -15,10 +15,9 @@
 @interface TransactionsViewController : AirbitzViewController
 
 - (void) dropdownWallets:(BOOL)bDropdown;
-- (void) dismissTransactionDetails;
 - (void) setNewDeviceLogin:(BOOL)bNewDeviceLogin;
 
-@property (assign) id<TransactionsViewControllerDelegate> delegate;
+//@property (assign) id<TransactionsViewControllerDelegate> delegate;
 //@property (nonatomic, strong) Wallet *wallet;
 
 @end

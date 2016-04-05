@@ -21,7 +21,6 @@ typedef enum eTDMode
 
 @interface TransactionDetailsViewController : AirbitzViewController
 
-@property (assign)            id<TransactionDetailsViewControllerDelegate>  delegate;
 @property (nonatomic, strong) ABCTransaction *transaction;
 @property (nonatomic, strong) ABCWallet *wallet;
 @property (nonatomic, assign) tTDMode                                       transactionDetailsMode;

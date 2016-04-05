@@ -92,10 +92,10 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self forceUpdateNavBar];
+    [self airbitzViewControllerUpdateNavBar];
 }
 
-- (void)forceUpdateNavBar;
+- (void)airbitzViewControllerUpdateNavBar;
 {
     [MainViewController changeNavBarOwner:self];
     [self updateNavBar];
@@ -290,7 +290,7 @@
 {
     [MainViewController animateOut:controller withBlur:NO complete:^(void) {
         self.exportWalletOptionsViewController = nil;
-        [self forceUpdateNavBar];
+        [self airbitzViewControllerUpdateNavBar];
     }];
 }
 

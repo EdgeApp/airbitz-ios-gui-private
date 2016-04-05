@@ -9,10 +9,23 @@
 #import <UIKit/UIKit.h>
 #import "AB.h"
 
+@protocol AirbitzViewControllerDelegate;
+
 @interface AirbitzViewController : UIViewController
 
+@property (assign)            id<AirbitzViewControllerDelegate> delegate;
 @property (nonatomic, strong) NSLayoutConstraint * leftConstraint;
 
-- (void)forceUpdateNavBar;
+- (void)closeViewController;
+- (void)airbitzViewControllerUpdateNavBar;
+
+@end
+
+@protocol AirbitzViewControllerDelegate <NSObject>
+
+@required
+
+- (void)airbitzViewControllerDidFinish:(AirbitzViewController *)controller;
+- (void)airbitzViewControllerUpdateNavBar;
 
 @end

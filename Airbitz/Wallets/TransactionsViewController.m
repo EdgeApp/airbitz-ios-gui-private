@@ -57,8 +57,8 @@ const int PromoIndex15to20offAmazon = 4;
 const int NumPromoRows              = 5;
 
 
-@interface TransactionsViewController () <BalanceViewDelegate, UITableViewDataSource, UITableViewDelegate, TransactionsViewControllerDelegate, WalletHeaderViewDelegate, WalletMakerViewDelegate,
-        TransactionDetailsViewControllerDelegate, UISearchBarDelegate, UIAlertViewDelegate, ExportWalletViewControllerDelegate, UIGestureRecognizerDelegate>
+@interface TransactionsViewController () <BalanceViewDelegate, UITableViewDataSource, UITableViewDelegate, WalletHeaderViewDelegate, WalletMakerViewDelegate,
+        AirbitzViewControllerDelegate, UISearchBarDelegate, UIAlertViewDelegate, ExportWalletViewControllerDelegate, UIGestureRecognizerDelegate>
 {
     BalanceView                         *_balanceView;
     ABCWallet *longTapWallet;
@@ -201,6 +201,11 @@ const int NumPromoRows              = 5;
 
 - (void) dropdownWallets:(BOOL)bDropdown;
 {
+    if (bDropdown)
+    {
+        if (self.transactionDetailsController)
+            [self.transactionDetailsController closeViewController];
+    }
     if (bDropdown && !_bWalletsShowing)
     {
         [self toggleWalletDropdown:nil];
@@ -259,7 +264,8 @@ const int NumPromoRows              = 5;
     [self.tableView reloadData];
     [self updateBalanceView];
 }
-- (void)forceUpdateNavBar;
+
+- (void)airbitzViewControllerUpdateNavBar;
 {
     [MainViewController changeNavBarOwner:self];
     [self updateNavBar];
@@ -609,25 +615,6 @@ const int NumPromoRows              = 5;
     [MainViewController animateSlideIn:self.transactionDetailsController];
 }
 
--(void)dismissTransactionDetails
-{
-    [UIView animateWithDuration:0.35
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^
-     {
-         self.transactionDetailsController.leftConstraint.constant = [MainViewController getLargestDimension];
-         [self.view layoutIfNeeded];
-     }
-                     completion:^(BOOL finished)
-     {
-         [self.transactionDetailsController.view removeFromSuperview];
-         [self.transactionDetailsController removeFromParentViewController];
-
-         self.transactionDetailsController = nil;
-     }];
-}
-
 - (void)postToTxSearchQueue:(void(^)(void))cb;
 {
     [txSearchQueue addOperationWithBlock:cb];
@@ -784,17 +771,20 @@ const int NumPromoRows              = 5;
 
 #pragma mark - TransactionDetailsViewControllerDelegates
 
--(void)TransactionDetailsViewControllerDone:(TransactionDetailsViewController *)controller
+-(void)airbitzViewControllerDidFinish:(AirbitzViewController *)avc
 {
-    // if we got a new photo
-    if (controller.transaction.metaData.bizId && controller.photo && controller.photoUrl)
+    if (avc == self.transactionDetailsController)
     {
-        [MainViewController Singleton].dictImageURLFromBizID[[NSNumber numberWithInt:controller.transaction.metaData.bizId]] = controller.photoUrl;
-    }
+        TransactionDetailsViewController *controller = (TransactionDetailsViewController *)avc;
+        // if we got a new photo
+        if (controller.transaction.metaData.bizId && controller.photo && controller.photoUrl)
+        {
+            [MainViewController Singleton].dictImageURLFromBizID[[NSNumber numberWithInt:controller.transaction.metaData.bizId]] = controller.photoUrl;
+        }
+        self.transactionDetailsController = nil;
 
-    [self dismissTransactionDetails];
-    [self forceUpdateNavBar];
-    [self updateViews:nil];
+        [self updateViews:nil];
+    }
 
 }
 
@@ -1476,7 +1466,7 @@ const int NumPromoRows              = 5;
     [MainViewController animateOut:controller withBlur:NO complete:^(void)
     {
         self.exportWalletViewController = nil;
-        [self forceUpdateNavBar];
+        [self airbitzViewControllerUpdateNavBar];
         [self updateViews:nil];
     }];
 }

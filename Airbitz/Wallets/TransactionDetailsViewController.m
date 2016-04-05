@@ -1150,7 +1150,7 @@ typedef enum eRequestType
     if (!_bDoneSentToDelegate)
     {
         _bDoneSentToDelegate = YES;
-        [self.delegate TransactionDetailsViewControllerDone:self];
+        [super closeViewController];
         if (bNotifyExit) {
             NSDictionary *dictNotification;
             if (self.transaction)

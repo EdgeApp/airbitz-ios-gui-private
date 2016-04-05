@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MainViewController.h"
 #import "AirbitzViewController.h"
 
 @interface AirbitzViewController ()
@@ -17,5 +18,27 @@
 @end
 
 @implementation AirbitzViewController
+
+- (void)airbitzViewControllerUpdateNavBar;
+{
+    
+}
+
+- (void)closeViewController;
+{
+    [MainViewController animateOut:self withBlur:NO complete:^(void) {
+        if (self.delegate)
+        {
+            if([self.delegate respondsToSelector:@selector(airbitzViewControllerUpdateNavBar)])
+                [self.delegate airbitzViewControllerUpdateNavBar];
+            if([self.delegate respondsToSelector:@selector(airbitzViewControllerDidFinish:)])
+                [self.delegate airbitzViewControllerDidFinish:self];
+        }
+        
+    }];
+}
+
+
+
 
 @end

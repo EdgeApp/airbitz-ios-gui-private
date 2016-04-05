@@ -1074,7 +1074,7 @@ MainViewController *singleton;
     [MainViewController showNavBarAnimated:YES];
 	[_loginViewController.view removeFromSuperview];
     [_loginViewController removeFromParentViewController];
-    [_directoryViewController forceUpdateNavBar];
+    [_directoryViewController airbitzViewControllerUpdateNavBar];
 }
 
 + (void)createFirstWallet;
@@ -2132,7 +2132,6 @@ MainViewController *singleton;
 {
     if (_selectedViewController == _transactionsViewController)
     {
-        [_transactionsViewController dismissTransactionDetails];
         [_transactionsViewController dropdownWallets:YES];
     }
     else
@@ -2228,7 +2227,7 @@ MainViewController *singleton;
     
     if (_selectedViewController == _transactionsViewController)
     {
-        [_selectedViewController forceUpdateNavBar];
+        [_selectedViewController airbitzViewControllerUpdateNavBar];
     }
 }
 

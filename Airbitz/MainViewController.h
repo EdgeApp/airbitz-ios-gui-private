@@ -23,7 +23,7 @@ typedef enum eNavBarSide
     NAV_BAR_RIGHT
 } tNavBarSide;
 
-@interface MainViewController : AirbitzViewController
+@interface MainViewController : UIViewController
 
 @property (nonatomic, strong)        NSArray                *arrayContacts;
 

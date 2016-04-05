@@ -232,7 +232,7 @@ static bool bInitialized = false;
     self.afmanager = [MainViewController createAFManager];
 }
 
-- (void) forceUpdateNavBar;
+- (void) airbitzViewControllerUpdateNavBar;
 {
     [MainViewController changeNavBarOwner:self];
     [self setupNavBar];
@@ -2077,7 +2077,7 @@ static bool bInitialized = false;
     {
         [self dismissBusinessDetails];
     }
-    [self forceUpdateNavBar];
+    [self airbitzViewControllerUpdateNavBar];
 }
 
 #pragma mark MoreCategoriesViewControllerDelegates
@@ -2088,7 +2088,7 @@ static bool bInitialized = false;
     if (category)
     {
         [self transitionMode:DIRECTORY_MODE_SEARCH];
-        [self forceUpdateNavBar];
+        [self airbitzViewControllerUpdateNavBar];
         [self.searchBarLocation becomeFirstResponder];
         self.searchBarSearch.text = category;
     }
