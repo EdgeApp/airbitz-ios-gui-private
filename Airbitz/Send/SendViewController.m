@@ -60,7 +60,7 @@ typedef enum eScanMode
 
 static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
 
-@interface SendViewController () <SendConfirmationViewControllerDelegate, UIAlertViewDelegate,FlashSelectViewDelegate, UITextFieldDelegate, PopupPickerView2Delegate,ButtonSelector2Delegate, CBCentralManagerDelegate, CBPeripheralDelegate
+@interface SendViewController () <AirbitzViewControllerDelegate, UIAlertViewDelegate,FlashSelectViewDelegate, UITextFieldDelegate, PopupPickerView2Delegate,ButtonSelector2Delegate, CBCentralManagerDelegate, CBPeripheralDelegate
  ,ZBarReaderDelegate, ZBarReaderViewDelegate, AddressRequestControllerDelegate
 >
 {
@@ -166,7 +166,6 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
 - (void)viewWillAppear:(BOOL)animated
 {
     [self scanBLEstartCamera];
-    [MainViewController changeNavBarOwner:self];
 
     [segmentedControl setEnabled:YES forSegmentAtIndex:0];
 
@@ -218,7 +217,7 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
     self.zBarSymbolSet = nil;
     self.loopbackState = LoopbackState_None;
 
-    [self setupNavBar];
+    [self airbitzViewControllerUpdateNavBar];
 
     self.topTextLabel.text = scanQrToSendFundsText;
     if ([[LocalSettings controller] offerSendHelp])
@@ -242,6 +241,12 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
 - (void)rotateZbar:(UIInterfaceOrientation) orientation
 {
     [_readerView willRotateToInterfaceOrientation:orientation duration:0.35];
+}
+
+- (void)airbitzViewControllerUpdateNavBar;
+{
+    [MainViewController changeNavBarOwner:self];
+    [self setupNavBar];
 }
 
 - (void)setupNavBar
@@ -1505,27 +1510,30 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
 #endif
 }
 
-#pragma mark - SendConfirmationViewController Delegates
+#pragma mark - AirbitzViewController Delegates
 
-- (void)sendConfirmationViewControllerDidFinish:(SendConfirmationViewController *)controller
+- (void)airbitzViewControllerDidFinish:(AirbitzViewController *)avc;
 {
-    [_readerView start];
-    [self startQRReader];
-
-    //[self startCameraScanner:nil];
-	[_sendConfirmationViewController.view removeFromSuperview];
-    [_sendConfirmationViewController removeFromParentViewController];
-	_sendConfirmationViewController = nil;
-	
-    scanMode = SCAN_MODE_UNINITIALIZED;
-    if ([LocalSettings controller].bDisableBLE == NO) {
-        [self enableAll];
+    if (avc == _sendConfirmationViewController)
+    {
+        [_readerView start];
+        [self startQRReader];
+        
+        _sendConfirmationViewController = nil;
+        
+        scanMode = SCAN_MODE_UNINITIALIZED;
+        if ([LocalSettings controller].bDisableBLE == NO) {
+            [self enableAll];
+        }
+        
+        [self enableTableSelection];
+        [self updateViews:nil];
     }
-
-    [self enableTableSelection];
-    [MainViewController changeNavBarOwner:self];
-    [self setupNavBar];
-    [self updateViews:nil];
+    else if (avc == _addressRequestController)
+    {
+        _addressRequestController = nil;
+        [self updateViews:nil];
+    }
 }
 
 #pragma mark - ButtonSelectorView2 delegates
@@ -1646,18 +1654,6 @@ static NSTimeInterval lastCentralBLEPowerOffNotificationTime = 0;
     // Did not get successfully processed. Throw error
     [MainViewController fadingAlert:invalidQRCode holdTime:FADING_ALERT_HOLD_TIME_FOREVER_ALLOW_TAP];
 }
-
--(void)AddressRequestControllerDone:(AddressRequestController *)vc
-{
-    [MainViewController animateOut:vc withBlur:NO complete:^(void) {
-        _addressRequestController = nil;
-        [MainViewController changeNavBarOwner:self];
-        [self setupNavBar];
-        [self updateViews:nil];
-    }];
-    
-}
-
 
 - (void)doProcessParsedURI:(ABCParsedURI *)parsedURI
 {

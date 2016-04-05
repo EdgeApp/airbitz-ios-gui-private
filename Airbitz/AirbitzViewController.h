@@ -25,7 +25,7 @@
 
 @required
 
-- (void)airbitzViewControllerDidFinish:(AirbitzViewController *)controller;
+- (void)airbitzViewControllerDidFinish:(AirbitzViewController *)avc;
 - (void)airbitzViewControllerUpdateNavBar;
 
 @end

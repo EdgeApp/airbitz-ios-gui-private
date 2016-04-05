@@ -169,13 +169,13 @@
         }
     }
     // finish
-    [self.delegate AddressRequestControllerDone:self];
+    [super closeViewController];
 }
 
 - (IBAction)cancel
 {
     // finish
-    [self.delegate AddressRequestControllerDone:self];
+    [super closeViewController];
 }
 
 #pragma mark - ButtonSelectorView delegates

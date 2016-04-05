@@ -20,7 +20,7 @@
 
 static const NSString *PROTOCOL = @"bridge://";
 
-@interface PluginViewController () <UIWebViewDelegate, ButtonSelector2Delegate, SendConfirmationViewControllerDelegate, UINavigationControllerDelegate,UIImagePickerControllerDelegate, UIAlertViewDelegate>
+@interface PluginViewController () <UIWebViewDelegate, ButtonSelector2Delegate, AirbitzViewControllerDelegate, UINavigationControllerDelegate,UIImagePickerControllerDelegate, UIAlertViewDelegate>
 {
     FadingAlertView                *_fadingAlert;
     SendConfirmationViewController *_sendConfirmationViewController;
@@ -119,12 +119,18 @@ static const NSString *PROTOCOL = @"bridge://";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 
     [self resizeFrame:YES];
-    [MainViewController changeNavBarOwner:self];
 
 	self.buttonSelector.delegate = self;
     [self.buttonSelector disableButton];
 
     [self notifyDenominationChange];
+    [self airbitzViewControllerUpdateNavBar];
+}
+
+- (void)airbitzViewControllerUpdateNavBar;
+{
+    [MainViewController changeNavBarOwner:self];
+    [self updateViews:nil];
 }
 
 - (void)updateViews:(NSNotification *)notification
@@ -335,11 +341,12 @@ static const NSString *PROTOCOL = @"bridge://";
 - (IBAction)Back:(id)sender
 {
     if (_sendConfirmationViewController != nil) {
-        [self sendConfirmationViewControllerDidFinish:_sendConfirmationViewController
-                                             withBack:YES
-                                            withError:NO
-                                          transaction:nil
-                                         withUnsentTx:nil];
+        
+        [self finishSendConfirmationCallJS:YES
+                                 withError:NO
+                               transaction:nil
+                              withUnsentTx:nil];
+        
     } else if ([_navStack count] == 0) {
         self.view.alpha = 1.0;
         [UIView animateWithDuration:0.35
@@ -926,39 +933,41 @@ static const NSString *PROTOCOL = @"bridge://";
 
 #pragma - SendConfirmationViewControllerDelegate
 
-- (void)sendConfirmationViewControllerDidFinish:(SendConfirmationViewController *)controller
+- (void)airbitzViewControllerDidFinish:(AirbitzViewController *)avc;
 {
-    [self sendConfirmationViewControllerDidFinish:controller withBack:NO withError:YES transaction:nil withUnsentTx:nil];
+    if (avc == _sendConfirmationViewController)
+    {
+        [self finishSendConfirmationCallJS:_sendConfirmationViewController.retBack
+                                 withError:_sendConfirmationViewController.retError
+                               transaction:_sendConfirmationViewController.retTransaction
+                              withUnsentTx:_sendConfirmationViewController.retUnsentTx];
+    }
 }
 
-- (void)sendConfirmationViewControllerDidFinish:(SendConfirmationViewController *)controller
-                                       withBack:(BOOL)bBack
-                                      withError:(BOOL)bError
-                                    transaction:(ABCTransaction *)transaction
-                                   withUnsentTx:(ABCUnsentTx *)unsentTx;
+- (void)finishSendConfirmationCallJS:(BOOL)bBack
+                           withError:(BOOL)bError
+                         transaction:(ABCTransaction *)transaction
+                        withUnsentTx:(ABCUnsentTx *)unsentTx;
 {
-    [Util animateOut:_sendConfirmationViewController parentController:self complete:^(void) {
-        // hide calculator
-        if (bBack) {
-            [self callJsFunction:_sendCbid withArgs:[self jsonResult:@{@"back": @"true"}]];
-        } else if (bError) {
-            [self callJsFunction:_sendCbid withArgs:[self jsonError]];
+    // hide calculator
+    if (bBack) {
+        [self callJsFunction:_sendCbid withArgs:[self jsonResult:@{@"back": @"true"}]];
+    } else if (bError) {
+        [self callJsFunction:_sendCbid withArgs:[self jsonError]];
+    } else {
+        if (unsentTx) {
+            _unsentTx = unsentTx;
+            [self callJsFunction:_sendCbid withArgs:[self jsonResult:unsentTx.base16]];
+        } else if (transaction) {
+            [self callJsFunction:_sendCbid withArgs:[self jsonResult:transaction.txid]];
         } else {
-            if (unsentTx) {
-                _unsentTx = unsentTx;
-                [self callJsFunction:_sendCbid withArgs:[self jsonResult:unsentTx.base16]];
-            } else if (transaction) {
-                [self callJsFunction:_sendCbid withArgs:[self jsonResult:transaction.txid]];
-            } else {
-                [self callJsFunction:_sendCbid withArgs:[self jsonError]];
-            }
+            [self callJsFunction:_sendCbid withArgs:[self jsonError]];
         }
-        // clean up
-        _sendConfirmationViewController = nil;
-        _sendCbid = nil;
-        [MainViewController changeNavBarOwner:self];
-        [self updateViews:[NSNotification notificationWithName:@"Skip" object:nil]];
-    }];
+    }
+    // clean up
+    _sendConfirmationViewController = nil;
+    _sendCbid = nil;
+    [self updateViews:[NSNotification notificationWithName:@"Skip" object:nil]];
 }
 
 

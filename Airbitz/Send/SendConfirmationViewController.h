@@ -11,12 +11,9 @@
 #import "ABCSpend.h"
 #import "AirbitzViewController.h"
 
-@protocol SendConfirmationViewControllerDelegate;
-
 @interface SendConfirmationViewController : AirbitzViewController
 
 
-@property (assign)              id<SendConfirmationViewControllerDelegate>  delegate;
 @property (nonatomic, strong)   ABCParsedURI                                *parsedURI;
 @property (nonatomic, strong)   ABCWallet                                   *destWallet;
 @property (nonatomic, strong)   ABCPaymentRequest                           *paymentRequest;
@@ -27,19 +24,9 @@
 @property (nonatomic, assign)   BOOL                                        bSignOnly;
 @property (nonatomic, assign)   BOOL                                        bAmountImmutable;
 
-@end
-
-
-@protocol SendConfirmationViewControllerDelegate <NSObject>
-
-@required
--(void)sendConfirmationViewControllerDidFinish:(SendConfirmationViewController *)controller;
-
-@optional
--(void)sendConfirmationViewControllerDidFinish:(SendConfirmationViewController *)controller
-                                      withBack:(BOOL)bBack
-                                     withError:(BOOL)bError
-                                   transaction:(ABCTransaction *)transaction
-                                  withUnsentTx:(ABCUnsentTx *)unsentTx;
+@property (nonatomic, assign)   BOOL                                        retBack;
+@property (nonatomic, assign)   BOOL                                        retError;
+@property (nonatomic, strong)   ABCTransaction                              *retTransaction;
+@property (nonatomic, strong)   ABCUnsentTx                                 *retUnsentTx;
 
 @end

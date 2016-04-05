@@ -401,24 +401,12 @@
     [self dismissErrorMessage];
 
     [self.withdrawlPIN resignFirstResponder];
-    [UIView animateWithDuration:0.35
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^
-     {
-         CGRect frame = self.view.frame;
-         frame.origin.x = frame.size.width;
-         self.view.frame = frame;
-     }
-     completion:^(BOOL finished)
-     {
-            if ([self.delegate respondsToSelector:@selector(sendConfirmationViewControllerDidFinish:withBack:withError:transaction:withUnsentTx:)]) {
-                [self.delegate sendConfirmationViewControllerDidFinish:self withBack:YES withError:NO transaction:nil withUnsentTx:nil];
-            } else {
-                [self.delegate sendConfirmationViewControllerDidFinish:self];
-            }
-            [self dismissKeyboard];
-     }];
+    [self dismissKeyboard];
+    self.retBack = YES;
+    self.retError = NO;
+    self.retTransaction = nil;
+    self.retUnsentTx = nil;
+    [super closeViewController];
 }
 
 - (IBAction)ChangeFiatButton:(id)sender
@@ -981,19 +969,25 @@
     [self updateTextFieldContents:YES];
 }
 
-#pragma mark - TransactionDetailsViewController delegates
+#pragma mark - AirbitzViewController delegates
 
-- (void)TransactionDetailsViewControllerDone:(TransactionDetailsViewController *)controller
+- (void)airbitzViewControllerDidFinish:(AirbitzViewController *)avc;
 {
-    [controller.view removeFromSuperview];
-    [controller removeFromParentViewController];
-    self.transactionDetailsController = nil;
+    if (avc == self.transactionDetailsController)
+    {
+        self.transactionDetailsController = nil;
+        
+        [self.sendStatusController.view removeFromSuperview];
+        [self.sendStatusController removeFromParentViewController];
+        self.sendStatusController = nil;
 
-    [self.sendStatusController.view removeFromSuperview];
-    [self.sendStatusController removeFromParentViewController];
-    self.sendStatusController = nil;
+        self.retBack = NO;
+        self.retError = NO;
+        self.retTransaction = nil;
+        self.retUnsentTx = nil;
 
-    [self.delegate sendConfirmationViewControllerDidFinish:self];
+        [super closeViewController];
+    }
 }
 
 #pragma mark - ABC Callbacks
@@ -1009,13 +1003,13 @@
         if (_bAdvanceToTx) {
             [self showTransactionDetails:wallet transaction:transaction];
         } else {
-            if ([self.delegate respondsToSelector:@selector(sendConfirmationViewControllerDidFinish:withBack:withError:transaction:withUnsentTx:)]) {
-                
-                [self.delegate sendConfirmationViewControllerDidFinish:self withBack:NO withError:NO transaction:transaction withUnsentTx:unsentTx];
-            } else {
-                [self.delegate sendConfirmationViewControllerDidFinish:self];
-            }
-            [self hideSendStatus];
+            self.retBack = NO;
+            self.retError = NO;
+            self.retTransaction = transaction;
+            self.retUnsentTx = unsentTx;
+            [super closeViewController];
+            
+           [self hideSendStatus];
         }
         [_confirmationSlider resetIn:1.0];
     });
@@ -1030,11 +1024,12 @@
         if (_bAdvanceToTx) {
             [self performSelectorOnMainThread:@selector(failedToSend:) withObject:params waitUntilDone:FALSE];
         } else {
-            if ([self.delegate respondsToSelector:@selector(sendConfirmationViewControllerDidFinish:withBack:withError:withUnsentTx:)]) {
-                [self.delegate sendConfirmationViewControllerDidFinish:self withBack:NO withError:NO transaction:nil withUnsentTx:nil];
-            } else {
-                [self.delegate sendConfirmationViewControllerDidFinish:self];
-            }
+            self.retBack = NO;
+            self.retError = YES;
+            self.retTransaction = nil;
+            self.retUnsentTx = nil;
+            [super closeViewController];
+
             [self hideSendStatus];
         }
 //    });
