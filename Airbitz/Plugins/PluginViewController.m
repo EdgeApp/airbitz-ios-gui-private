@@ -17,10 +17,11 @@
 #import "CommonTypes.h"
 #import "ABCSpend.h"
 #import "MainViewController.h"
+#import "WebKit/WebKit.h"
 
 static const NSString *PROTOCOL = @"bridge://";
 
-@interface PluginViewController () <UIWebViewDelegate, ButtonSelector2Delegate, SendConfirmationViewControllerDelegate, UINavigationControllerDelegate,UIImagePickerControllerDelegate, UIAlertViewDelegate>
+@interface PluginViewController () <WKScriptMessageHandler, WKNavigationDelegate, ButtonSelector2Delegate, SendConfirmationViewControllerDelegate, UINavigationControllerDelegate,UIImagePickerControllerDelegate, UIAlertViewDelegate>
 {
     FadingAlertView                *_fadingAlert;
     SendConfirmationViewController *_sendConfirmationViewController;
@@ -36,9 +37,11 @@ static const NSString *PROTOCOL = @"bridge://";
     BOOL                           bWalletListDropped;
 }
 
-@property (nonatomic, retain) IBOutlet UILabel            *titleLabel;
-@property (nonatomic, retain) IBOutlet UIButton           *backButton;
-@property (nonatomic, retain) IBOutlet UIWebView          *webView;
+@property (weak, nonatomic)     IBOutlet    UIView          *contentView;
+@property (nonatomic, retain)   IBOutlet    UILabel         *titleLabel;
+@property (nonatomic, retain)   IBOutlet    UIButton        *backButton;
+//@property (nonatomic, retain) IBOutlet UIWebView          *webView;
+@property (nonatomic, strong)               WKWebView       *wkWebView;
 @property (nonatomic, weak)   IBOutlet ButtonSelectorView2 *buttonSelector; //wallet dropdown
 
 @end
@@ -95,10 +98,10 @@ static const NSString *PROTOCOL = @"bridge://";
               @"launchExternal":NSStringFromSelector(@selector(launchExternal:))
     };
 
+    WKPreferences *preferences = [[WKPreferences alloc] init];
+    preferences.javaScriptEnabled = YES;
+    
     [NSHTTPCookieStorage sharedHTTPCookieStorage].cookieAcceptPolicy = NSHTTPCookieAcceptPolicyAlways;
-    _webView.delegate = self;
-    _webView.backgroundColor = [UIColor clearColor];
-    _webView.opaque = NO;
 
     NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:_plugin.sourceFile ofType:_plugin.sourceExtension]];
     NSString *localFilePath = [url absoluteString];  
@@ -107,16 +110,25 @@ static const NSString *PROTOCOL = @"bridge://";
         localFilePath = [NSString stringWithFormat:@"%@?%@", localFilePath, _uri.query];
     }
 
-    NSURLRequest *localRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:localFilePath]];
-    [_webView loadRequest:localRequest];
+    NSURLRequest *localRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:localFilePath]];//    [_webView loadRequest:localRequest];
+    
+    WKWebViewConfiguration *theConfiguration = [[WKWebViewConfiguration alloc] init];
+    [theConfiguration.userContentController addScriptMessageHandler:self name:@"abcbridge"];
+    theConfiguration.preferences = preferences;
+    
+    _wkWebView = [[WKWebView alloc] initWithFrame:self.view.frame
+                                     configuration:theConfiguration];
+    _wkWebView.navigationDelegate = self;
+    _wkWebView.backgroundColor = [UIColor clearColor];
+    _wkWebView.opaque = NO;
+    [_wkWebView loadRequest:localRequest];
+    [self.contentView addSubview:_wkWebView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateViews:) name:NOTIFICATION_WALLETS_CHANGED object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 
     [self resizeFrame:YES];
     [MainViewController changeNavBarOwner:self];
@@ -124,7 +136,8 @@ static const NSString *PROTOCOL = @"bridge://";
 	self.buttonSelector.delegate = self;
     [self.buttonSelector disableButton];
 
-    [self notifyDenominationChange];
+#pragma warning xxx fix me -paul
+//    [self notifyDenominationChange];
 }
 
 - (void)updateViews:(NSNotification *)notification
@@ -139,7 +152,8 @@ static const NSString *PROTOCOL = @"bridge://";
         [MainViewController changeNavBarTitleWithButton:self title:walletName action:@selector(didTapTitle:) fromObject:self];
 
         if (notification == nil || ![notification.name isEqualToString:@"Skip"]) {
-            [self notifyWalletChanged];
+#pragma warning xxx fix me -paul
+//            [self notifyWalletChanged];
         }
     }
     if (bWalletListDropped) {
@@ -186,15 +200,15 @@ static const NSString *PROTOCOL = @"bridge://";
 
 - (void)resizeFrame:(BOOL)withTabBar
 {
-    CGRect webFrame = _webView.frame;
+    CGRect webFrame = _wkWebView.frame;
     CGRect screenFrame = [[UIScreen mainScreen] bounds];
     webFrame.size.height = screenFrame.size.height - HEADER_HEIGHT;
     if (withTabBar) {
         webFrame.size.height -= TOOLBAR_HEIGHT;
     }
 
-    _webView.frame = webFrame;
-    [_webView setNeedsLayout];
+    _wkWebView.frame = webFrame;
+    [_wkWebView setNeedsLayout];
 }
 
 - (void)dealloc
@@ -202,55 +216,92 @@ static const NSString *PROTOCOL = @"bridge://";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mark - WebView Methods
+#pragma mark - WkWebView Methods
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView
+- (void)userContentController:(WKUserContentController *)userContentController
+      didReceiveScriptMessage:(WKScriptMessage *)message
+{
+    NSDictionary *callInfo = (NSDictionary*)message.body;
+    
+    
+    NSString *functionName = [callInfo objectForKey:@"functionName"];
+    if (functionName == nil) {
+        ABCLog(2,@"Missing function name");
+    }
+    
+    NSString *cbid = [callInfo objectForKey:@"cbid"];
+    NSDictionary *args = [callInfo objectForKey:@"args"];
+    [self execFunction:functionName withCbid:cbid withArgs:args];
+// XXX Fix me
+//    } else if ([[url lowercaseString] hasPrefix:@"airbitz://plugin"]) {
+//        NSURL *base = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:_plugin.sourceFile
+//                                                                             ofType:_plugin.sourceExtension]];
+//        NSString *newUrlString = [NSString stringWithFormat:@"%@?%@", [base absoluteString], [request URL].query];
+//        NSURL *newUrl = [NSURL URLWithString:newUrlString];
+//        [_webView loadRequest:[NSURLRequest requestWithURL:newUrl]];
+//        return NO;
+//    }
+
+}
+
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
     NSString *padding = @"document.body.style.margin='0';document.body.style.padding = '0'";
-    [_webView stringByEvaluatingJavaScriptFromString:padding];
-    [self updateViews:nil];
+    
+    [webView evaluateJavaScript:padding completionHandler:^(id result, NSError *error) {
+        NSLog(@"Result %@", result);
+        [self updateViews:nil];
+    }];
 }
 
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-{
-    NSString *url = [request URL].absoluteString;
-    if (![url containsString:@"debugLevel"])
-        NSLog(@("url: %@"), url);
-    if ([[url lowercaseString] hasPrefix:(NSString *)PROTOCOL]) {
-        url = [url substringFromIndex:PROTOCOL.length];
-        url = [url stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-
-        NSError *jsonError;
-        NSDictionary *callInfo = [NSJSONSerialization
-                                  JSONObjectWithData:[url dataUsingEncoding:NSUTF8StringEncoding]
-                                  options:kNilOptions
-                                  error:&jsonError];
-        if (jsonError != nil) {
-            ABCLog(2,@"Error parsing JSON for the url %@",url);
-            return NO;
-        }
-
-        NSString *functionName = [callInfo objectForKey:@"functionName"];
-        if (functionName == nil) {
-            ABCLog(2,@"Missing function name");
-            return NO;
-        }
-
-        NSString *cbid = [callInfo objectForKey:@"cbid"];
-        NSDictionary *args = [callInfo objectForKey:@"args"];
-        [self execFunction:functionName withCbid:cbid withArgs:args];
-        return NO;
-    } else if ([[url lowercaseString] hasPrefix:@"airbitz://plugin"]) {
-        NSURL *base = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:_plugin.sourceFile
-                                                                             ofType:_plugin.sourceExtension]];
-        NSString *newUrlString = [NSString stringWithFormat:@"%@?%@", [base absoluteString], [request URL].query];
-        NSURL *newUrl = [NSURL URLWithString:newUrlString];
-        [_webView loadRequest:[NSURLRequest requestWithURL:newUrl]];
-        return NO;
-    }
-    return YES;
-}
-
+#pragma mark - WebView Methods
+//- (void)webViewDidFinishLoad:(UIWebView *)webView
+//{
+//    NSString *padding = @"document.body.style.margin='0';document.body.style.padding = '0'";
+//    [_webView stringByEvaluatingJavaScriptFromString:padding];
+//    [self updateViews:nil];
+//}
+//
+//- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+//{
+//    NSString *url = [request URL].absoluteString;
+//    if (![url containsString:@"debugLevel"])
+//        NSLog(@("url: %@"), url);
+//    if ([[url lowercaseString] hasPrefix:(NSString *)PROTOCOL]) {
+//        url = [url substringFromIndex:PROTOCOL.length];
+//        url = [url stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//
+//        NSError *jsonError;
+//        NSDictionary *callInfo = [NSJSONSerialization
+//                                  JSONObjectWithData:[url dataUsingEncoding:NSUTF8StringEncoding]
+//                                  options:kNilOptions
+//                                  error:&jsonError];
+//        if (jsonError != nil) {
+//            ABCLog(2,@"Error parsing JSON for the url %@",url);
+//            return NO;
+//        }
+//
+//        NSString *functionName = [callInfo objectForKey:@"functionName"];
+//        if (functionName == nil) {
+//            ABCLog(2,@"Missing function name");
+//            return NO;
+//        }
+//
+//        NSString *cbid = [callInfo objectForKey:@"cbid"];
+//        NSDictionary *args = [callInfo objectForKey:@"args"];
+//        [self execFunction:functionName withCbid:cbid withArgs:args];
+//        return NO;
+//    } else if ([[url lowercaseString] hasPrefix:@"airbitz://plugin"]) {
+//        NSURL *base = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:_plugin.sourceFile
+//                                                                             ofType:_plugin.sourceExtension]];
+//        NSString *newUrlString = [NSString stringWithFormat:@"%@?%@", [base absoluteString], [request URL].query];
+//        NSURL *newUrl = [NSURL URLWithString:newUrlString];
+//        [_webView loadRequest:[NSURLRequest requestWithURL:newUrl]];
+//        return NO;
+//    }
+//    return YES;
+//}
+//
 - (NSDictionary *)jsonResponse:(BOOL)success
 {
     NSMutableDictionary *d = [[NSMutableDictionary alloc] init];
@@ -307,7 +358,19 @@ static const NSString *PROTOCOL = @"bridge://";
         ABCLog(2,@"resp is null. count = %d", (unsigned int)[args count]);
     }
     dispatch_async(dispatch_get_main_queue(), ^ {
-        [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz._results[%@]=%@", cbid, resp]];
+        NSString *jsCmd = [NSString stringWithFormat:@"Airbitz._results[%@]=%@", cbid, resp];
+        [_wkWebView evaluateJavaScript:jsCmd completionHandler:^(id result, NSError *error) {
+            if (error)
+            {
+                ABCLog(1, @"Calling JS %@ error:%@", jsCmd, error.userInfo[NSLocalizedDescriptionKey]);
+            }
+            else
+            {
+                ABCLog(1, @"Calling JS %@", jsCmd);
+            }
+        }];
+
+//        [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz._results[%@]=%@", cbid, resp]];
     });
 }
 
@@ -326,7 +389,18 @@ static const NSString *PROTOCOL = @"bridge://";
         ABCLog(2,@"resp is null. count = %d", (int)[args count]);
     }
     dispatch_async(dispatch_get_main_queue(), ^ {
-        [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz._callbacks[%@]('%@');", cbid, resp]];
+        NSString *jsCmd = [NSString stringWithFormat:@"Airbitz._callbacks[%@]('%@');", cbid, resp];
+        [_wkWebView evaluateJavaScript:jsCmd completionHandler:^(id result, NSError *error) {
+            if (error)
+            {
+                ABCLog(1, @"Calling JS %@ error:%@", jsCmd, error.userInfo[NSLocalizedDescriptionKey]);
+            }
+            else
+            {
+                ABCLog(1, @"Calling JS %@", jsCmd);
+            }
+        }];
+//        [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz._callbacks[%@]('%@');", cbid, resp]];
     });
 }
 
@@ -352,7 +426,8 @@ static const NSString *PROTOCOL = @"bridge://";
         }];
     } else {
         // Press back button
-        [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz.ui.back();"]];
+#pragma warning xxx fix me -paul
+//        [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz.ui.back();"]];
     }
 }
 
@@ -405,9 +480,19 @@ static const NSString *PROTOCOL = @"bridge://";
     if (resp == nil) {
         ABCLog(2,@"resp is null. count = %d", (unsigned int)[data count]);
     }
-    if (_webView) {
-        [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz._bridge.walletChanged('%@');", resp]];
-        [self notifyDenominationChange];
+    if (_wkWebView) {
+        NSString *jsCmd = [NSString stringWithFormat:@"Airbitz._bridge.walletChanged('%@');", resp];
+        [_wkWebView evaluateJavaScript:jsCmd completionHandler:^(id result, NSError *error) {
+            if (error)
+            {
+                ABCLog(1, @"Calling JS %@ error:%@", jsCmd, error.userInfo[NSLocalizedDescriptionKey]);
+            }
+            else
+            {
+                ABCLog(1, @"Calling JS %@", jsCmd);
+            }
+            [self notifyDenominationChange];
+        }];
     }
 }
 
@@ -429,7 +514,17 @@ static const NSString *PROTOCOL = @"bridge://";
     if (resp == nil) {
         ABCLog(2,@"resp is null. count = %d", (unsigned int)[data count]);
     }
-    [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz._bridge.denominationUpdate('%@');", resp]];
+    NSString *jsCmd = [NSString stringWithFormat:@"Airbitz._bridge.denominationUpdate('%@');", resp];
+    [_wkWebView evaluateJavaScript:jsCmd completionHandler:^(id result, NSError *error) {
+        if (error)
+        {
+            ABCLog(1, @"Calling JS %@ error:%@", jsCmd, error.userInfo[NSLocalizedDescriptionKey]);
+        }
+        else
+        {
+            ABCLog(1, @"Calling JS %@", jsCmd);
+        }
+    }];
 }
 
 - (void)selectedWallet:(NSDictionary *)params
@@ -636,15 +731,26 @@ static const NSString *PROTOCOL = @"bridge://";
     
     int SLICE_SIZE = 500;
     size_t len = [encodedString length];
-    [_webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"Airbitz.bufferClear();"]];
-    for (int i = 0; i < len / SLICE_SIZE; ++i) {
-        size_t start = i * SLICE_SIZE;
-        size_t size = start + SLICE_SIZE > len ? len - start : SLICE_SIZE;
-
-        NSString *chunk = [encodedString substringWithRange:NSMakeRange(start, size)];
-        [_webView stringByEvaluatingJavaScriptFromString:
-            [NSString stringWithFormat:@"Airbitz.bufferAdd('%@');", chunk]];
-    }
+    NSString *jsCmd = [NSString stringWithFormat:@"Airbitz.bufferClear();"];
+    [_wkWebView evaluateJavaScript:jsCmd completionHandler:^(id result, NSError *error) {
+        if (error)
+        {
+            ABCLog(1, @"Calling JS %@ error:%@", jsCmd, error.userInfo[NSLocalizedDescriptionKey]);
+        }
+        else
+        {
+            ABCLog(1, @"Calling JS %@", jsCmd);
+        }
+        for (int i = 0; i < len / SLICE_SIZE; ++i)
+        {
+            size_t start = i * SLICE_SIZE;
+            size_t size = start + SLICE_SIZE > len ? len - start : SLICE_SIZE;
+            
+            NSString *chunk = [encodedString substringWithRange:NSMakeRange(start, size)];
+            NSString *jsCmd = [NSString stringWithFormat:@"Airbitz.bufferAdd('%@');", chunk];
+            [_wkWebView evaluateJavaScript:jsCmd completionHandler:^(id result, NSError *error) {}];
+        }
+    }];
 
     [self dismissViewControllerAnimated:YES completion:nil];
     
@@ -755,6 +861,10 @@ static const NSString *PROTOCOL = @"bridge://";
     [self setJsResults:cbid withArgs:[self jsonResult:abcAccount.settings.denomination.label]];
 }
 
+//////////////////////////
+
+
+
 //- (void)satoshiToCurrency:(NSDictionary *)params
 //{
 //    NSString *cbid = [params objectForKey:@"cbid"];
@@ -812,6 +922,10 @@ static const NSString *PROTOCOL = @"bridge://";
 //    [self setJsResults:cbid withArgs:[self jsonResult:res]];
 //}
 //
+
+////////////////////
+
+
 - (void)getConfig:(NSDictionary *)params
 {
     NSString *cbid = [params objectForKey:@"cbid"];
@@ -980,135 +1094,136 @@ static const NSString *PROTOCOL = @"bridge://";
 
 // Snagged from https://github.com/apache/cordova-plugins
 
-- (void)keyboardWillShow:(NSNotification *)notification
-{
-    // [self performSelector:@selector(stylizeKeyboard) withObject:nil afterDelay:0];
-}
+//- (void)keyboardWillShow:(NSNotification *)notification
+//{
+//    // [self performSelector:@selector(stylizeKeyboard) withObject:nil afterDelay:0];
+//}
+//
+//- (void)keyboardWillHide:(NSNotification *)notification
+//{
+//}
 
-- (void)keyboardWillHide:(NSNotification *)notification
-{
-}
+//- (void)stylizeKeyboard
+//{
+//    UIWindow *keyboardWindow = nil;
+//    for (UIWindow *windows in [[UIApplication sharedApplication] windows]) {
+//        if (![[windows class] isEqual:[UIWindow class]]) {
+//            keyboardWindow = windows;
+//            break;
+//        }
+//    }
+//
+//    BOOL picker = NO;
+//    for (UIView* peripheralView in [self getKeyboardViews:keyboardWindow]) {
+//        if ([[peripheralView description] hasPrefix:@"<UIWebSelectSinglePicker"]
+//                || [[peripheralView description] hasPrefix:@"<UIDatePicker"]) {
+//            picker = YES;
+//            break;
+//        }
+//    }
+//    if (picker) {
+//        [self modPicker:keyboardWindow];
+//    } else {
+//#pragma warning xxx fix me -paul
+////        [self modKeyboard:keyboardWindow];
+//    }
+//    [self resizeFrame:YES];
+//}
 
-- (void)stylizeKeyboard
-{
-    UIWindow *keyboardWindow = nil;
-    for (UIWindow *windows in [[UIApplication sharedApplication] windows]) {
-        if (![[windows class] isEqual:[UIWindow class]]) {
-            keyboardWindow = windows;
-            break;
-        }
-    }
+//- (void)modPicker:(UIWindow *)keyboardWindow {
+//    for (UIView* peripheralView in [self getKeyboardViews:keyboardWindow]) {
+//        if ([[peripheralView description] hasPrefix:@"<UIKBInputBackdropView"]) {
+//            [[peripheralView layer] setOpacity:1.0];
+//        }
+//        if ([[peripheralView description] hasPrefix:@"<UIImageView"]) {
+//            [[peripheralView layer] setOpacity:1.0];
+//        }
+//        if ([[peripheralView description] hasPrefix:@"<UIWebFormAccessory"]) {
+//            [[peripheralView layer] setOpacity:1.0];
+//
+//            UIView *view = [peripheralView.subviews objectAtIndex:0];
+//            if (view == nil) {
+//                continue;
+//            }
+//            UIView *toolbar = [view.subviews objectAtIndex:0];
+//            if (toolbar == nil) {
+//                continue;
+//            }
+//            for (UIView *subview in toolbar.subviews) {
+//                if ([[subview description] hasPrefix:@"<UIToolbarButton"]) {
+//                    subview.hidden = YES;
+//                }
+//            }
+//        }
+//    }
+//}
 
-    BOOL picker = NO;
-    for (UIView* peripheralView in [self getKeyboardViews:keyboardWindow]) {
-        if ([[peripheralView description] hasPrefix:@"<UIWebSelectSinglePicker"]
-                || [[peripheralView description] hasPrefix:@"<UIDatePicker"]) {
-            picker = YES;
-            break;
-        }
-    }
-    if (picker) {
-        [self modPicker:keyboardWindow];
-    } else {
-        [self modKeyboard:keyboardWindow];
-    }
-    [self resizeFrame:YES];
-}
+//- (void)modKeyboard:(UIWindow *)keyboardWindow {
+//    for (UIView* peripheralView in [self getKeyboardViews:keyboardWindow]) {
+//        // hides the backdrop (iOS 7)
+//        if ([[peripheralView description] hasPrefix:@"<UIKBInputBackdropView"]) {
+//            // sparing the backdrop behind the main keyboard
+//            CGRect rect = peripheralView.frame;
+//            if (rect.origin.y == 0) {
+//                [[peripheralView layer] setOpacity:0.0];
+//            }
+//        }
+//        
+//        // hides the accessory bar
+//        if ([[peripheralView description] hasPrefix:@"<UIWebFormAccessory"]) {
+//            //remove the extra scroll space for the form accessory bar
+//            CGRect newFrame = self.webView.scrollView.frame;
+//            newFrame.size.height += peripheralView.frame.size.height;
+//            self.webView.scrollView.frame = newFrame;
+//            
+//            // remove the form accessory bar
+//            if ([self IsAtLeastiOSVersion8]) {
+//                [[peripheralView layer] setOpacity:0.0];
+//            } else {
+//                [peripheralView removeFromSuperview];
+//            }
+//        }
+//        // hides the thin grey line used to adorn the bar (iOS 6)
+//        if ([[peripheralView description] hasPrefix:@"<UIImageView"]) {
+//            [[peripheralView layer] setOpacity:0.0];
+//        }
+//    }
+//}
 
-- (void)modPicker:(UIWindow *)keyboardWindow {
-    for (UIView* peripheralView in [self getKeyboardViews:keyboardWindow]) {
-        if ([[peripheralView description] hasPrefix:@"<UIKBInputBackdropView"]) {
-            [[peripheralView layer] setOpacity:1.0];
-        }
-        if ([[peripheralView description] hasPrefix:@"<UIImageView"]) {
-            [[peripheralView layer] setOpacity:1.0];
-        }
-        if ([[peripheralView description] hasPrefix:@"<UIWebFormAccessory"]) {
-            [[peripheralView layer] setOpacity:1.0];
+//- (NSArray*)getKeyboardViews:(UIView*)viewToSearch{
+//    NSArray *subViews = [[NSArray alloc] init];
+//    for (UIView *possibleFormView in viewToSearch.subviews) {
+//        if ([[possibleFormView description] hasPrefix: self.getKeyboardFirstLevelIdentifier]) {
+//            if([self IsAtLeastiOSVersion8]){
+//                for (UIView* subView in possibleFormView.subviews) {
+//                    return subView.subviews;
+//                }
+//            }else{
+//                return possibleFormView.subviews;
+//            }
+//        }
+//        
+//    }
+//    return subViews;
+//}
+//
+//- (NSString*)getKeyboardFirstLevelIdentifier{
+//    if(![self IsAtLeastiOSVersion8]){
+//        return @"<UIPeripheralHostView";
+//    }else{
+//        return @"<UIInputSetContainerView";
+//    }
+//}
 
-            UIView *view = [peripheralView.subviews objectAtIndex:0];
-            if (view == nil) {
-                continue;
-            }
-            UIView *toolbar = [view.subviews objectAtIndex:0];
-            if (toolbar == nil) {
-                continue;
-            }
-            for (UIView *subview in toolbar.subviews) {
-                if ([[subview description] hasPrefix:@"<UIToolbarButton"]) {
-                    subview.hidden = YES;
-                }
-            }
-        }
-    }
-}
-
-- (void)modKeyboard:(UIWindow *)keyboardWindow {
-    for (UIView* peripheralView in [self getKeyboardViews:keyboardWindow]) {
-        // hides the backdrop (iOS 7)
-        if ([[peripheralView description] hasPrefix:@"<UIKBInputBackdropView"]) {
-            // sparing the backdrop behind the main keyboard
-            CGRect rect = peripheralView.frame;
-            if (rect.origin.y == 0) {
-                [[peripheralView layer] setOpacity:0.0];
-            }
-        }
-        
-        // hides the accessory bar
-        if ([[peripheralView description] hasPrefix:@"<UIWebFormAccessory"]) {
-            //remove the extra scroll space for the form accessory bar
-            CGRect newFrame = self.webView.scrollView.frame;
-            newFrame.size.height += peripheralView.frame.size.height;
-            self.webView.scrollView.frame = newFrame;
-            
-            // remove the form accessory bar
-            if ([self IsAtLeastiOSVersion8]) {
-                [[peripheralView layer] setOpacity:0.0];
-            } else {
-                [peripheralView removeFromSuperview];
-            }
-        }
-        // hides the thin grey line used to adorn the bar (iOS 6)
-        if ([[peripheralView description] hasPrefix:@"<UIImageView"]) {
-            [[peripheralView layer] setOpacity:0.0];
-        }
-    }
-}
-
-- (NSArray*)getKeyboardViews:(UIView*)viewToSearch{
-    NSArray *subViews = [[NSArray alloc] init];
-    for (UIView *possibleFormView in viewToSearch.subviews) {
-        if ([[possibleFormView description] hasPrefix: self.getKeyboardFirstLevelIdentifier]) {
-            if([self IsAtLeastiOSVersion8]){
-                for (UIView* subView in possibleFormView.subviews) {
-                    return subView.subviews;
-                }
-            }else{
-                return possibleFormView.subviews;
-            }
-        }
-        
-    }
-    return subViews;
-}
-
-- (NSString*)getKeyboardFirstLevelIdentifier{
-    if(![self IsAtLeastiOSVersion8]){
-        return @"<UIPeripheralHostView";
-    }else{
-        return @"<UIInputSetContainerView";
-    }
-}
-
-- (BOOL)IsAtLeastiOSVersion8
-{
-#ifdef __IPHONE_8_0
-    return YES;
-#else
-    return NO;
-#endif
-
-}
+//- (BOOL)IsAtLeastiOSVersion8
+//{
+//#ifdef __IPHONE_8_0
+//    return YES;
+//#else
+//    return NO;
+//#endif
+//
+//}
 
 
 @end
